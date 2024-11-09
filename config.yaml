@@ -1,0 +1,73 @@
+websites:
+  - name: "Instagram"
+    base_url: "https://instagram.com/@{}"
+    url_probe: ""
+    errorType: "errorMsg" 
+    errorMsg: "<title>Instagram</title>"
+
+  - name: "Twitter/X"
+    base_url: "https://twitter.com/{}"
+    url_probe: ""
+    errorType: "unknown"
+    errorCode: 403
+
+  - name: "GitHub"
+    base_url: "https://github.com/{}"
+    url_probe: ""
+    errorType: "status_code" 
+    errorCode: 404
+
+  - name: "Reddit"
+    base_url: "https://www.reddit.com/user/{}"
+    url_probe: ""
+    errorType: "errorMsg"
+    errorMsg: "<title>Reddit - Dive into anything</title>"
+
+  - name: "Facebook"
+    base_url: "https://www.facebook.com/{}"
+    url_probe: ""
+    errorType: "errorMsg" 
+    errorMsg: "<title>Facebook</title>"
+
+  - name: "YouTube"
+    base_url: "https://www.youtube.com/c/{}"
+    url_probe: ""
+    errorType: "status_code"
+    errorCode: 404
+
+  - name: "TikTok"
+    base_url: "https://www.tiktok.com/@{}"
+    url_probe: ""
+    errorType: "errorMsg"
+    errorMsg: ""
+
+  - name: "About Me"
+    base_url: "https://about.me/{}"
+    url_probe: ""
+    errorType: "status_code"
+    errorCode: 404
+
+  - name: "Independent Academia"
+    base_url: "https://independent.academia.edu/{}"
+    url_probe: ""
+    errorType: "status_code"
+    errorCode: 404
+  
+  - name: "Airbit"
+    base_url: "https://airbit.com/{}"
+    url_probe: ""
+    errorType: "status_code"
+    errorCode: 404
+
+  - name: "Airliners"
+    base_url: "https://www.airliners.net/user/{}/profile/photos"
+    url_probe: ""
+    errorType: "status_code"
+    errorCode: 404
+
+  - name: "Duolingo"
+    base_url: "https://www.duolingo.com/profile/{}"
+    url_probe: "https://www.duolingo.com/2017-06-30/users?username={}"
+    errorType: "errorMsg"
+    errorMsg: "{\"users\":[]}"
+  
