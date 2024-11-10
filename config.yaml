@@ -93,7 +93,7 @@ websites:
     base_url: "https://www.threads.net/@{}"
     url_probe: ""
     errrorType: "errorMsg"
-    errorMsg: "<title>Threads</title>"
+    errorMsg: "<!--EF-->"
 
   - name: "Tumblr"
     base_url: "https://www.tumblr.com/{}"
