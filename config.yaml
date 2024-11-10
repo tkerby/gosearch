@@ -165,3 +165,17 @@ websites:
     url_probe: ""
     errorType: "status_code"
     errorCode: 404
+
+  - name: "Wakatime"
+    base_url: "https://wakatime.com/@{}"
+    url_probe: ""
+    errorType: "status_code"
+    errorCode: 404
+
+  - name: "Twitch"
+    base_url: "https://twitch.tv/{}"
+    url_probe: ""
+    errorType: "errorMsg"
+    errorMsg: "<meta property='og:description' content='Twitch is the world&#39;s leading video platform and community for gamers.'>"
+
+  
