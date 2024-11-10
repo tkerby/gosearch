@@ -88,3 +88,80 @@ websites:
     url_probe: ""
     errorType: "status_code"
     errorCode: 404
+
+  - name: "Threads"
+    base_url: "https://www.threads.net/@{}"
+    url_probe: ""
+    errrorType: "errorMsg"
+    errorMsg: "<title>Threads</title>"
+
+  - name: "Tumblr"
+    base_url: "https://www.tumblr.com/{}"
+    url_probe: ""
+    errorType: "status_code"
+    errorCode: 404
+
+  - name: "Keybase"
+    base_url: "https://keybase.io/{}"
+    url_probe: ""
+    errorType: "status_code"
+    errorCode: 404
+
+  - name: "Wattpad"
+    base_url: "https://www.wattpad.com/user/{}"
+    url_probe: ""
+    errorType: "status_code"
+    errorCode: 404
+
+  - name: "Mastodon Social"
+    base_url: "https://mastodon.social/@{}"
+    url_probe: ""
+    errorType: "status_code"
+    errorCode: 404
+
+  - name: "MSTDN Social"
+    base_url: "https://mstdn.social/@{}"
+    url_probe: ""
+    errorType: "status_code"
+    errorCode: 404
+
+  - name: "Mas.to"
+    base_url: "https://mas.to/@{}"
+    url_probe: ""
+    errorType: "status_code"
+    errorCode: 404
+
+  - name: "Mastodon World"
+    base_url: "https://mastodon.world/@{}"
+    url_probe: ""
+    errorType: "status_code"
+    errorCode: 404
+  - name: "Fosstodon"
+    base_url: "https://fosstodon.org/@{}"
+    url_probe: ""
+    errorType: "status_code"
+    errorCode: 404
+
+  - name: "Hachyderm"
+    base_url: "https://hachyderm.io/@{}"
+    url_probe: ""
+    errorType: "status_code"
+    errorCode: 404
+
+  - name: "Vivaldi Social"
+    base_url: "https://social.vivaldi.net/@{}"
+    url_probe: ""
+    errorType: "status_code"
+    errorCode: 404
+
+  - name: "Techhub Social"
+    base_url: "https://techhub.social/@{}"
+    url_probe: ""
+    errorType: "status_code"
+    errorCode: 404
+
+  - name: "Techhub Social"
+    base_url: "https://techhub.social/@{}"
+    url_probe: ""
+    errorType: "status_code"
+    errorCode: 404
