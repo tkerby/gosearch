@@ -13,7 +13,6 @@ import (
 	"os"
 	"strings"
 	"sync"
-
 	"github.com/inancgumus/screen"
 	"gopkg.in/yaml.v3"
 )
@@ -47,13 +46,37 @@ type Config struct {
 }
 
 func UnmarshalYAML() (Config, error) {
-	yamlFile, err := os.ReadFile("config.yaml")
+
+	// GoSearch relies on config.yaml to determine the websites to search for.
+	// Instead of forcing uers to manually download the config.yaml file, we will fetch the latest version from the repository.
+	// Thereforeore, we will do the following:
+	// 1. Delete the existing config.yaml file if it exists as it will be outdated in the future
+	// 2. Read the latest config.yaml file from the repository
+	// Bonus: it does not download the config.yaml file, it just reads it from the repository.
+
+	err := os.Remove("config.yaml")
+	if err != nil && !os.IsNotExist(err) {
+		return Config{}, fmt.Errorf("error deleting old config.yaml: %w", err)
+	}
+
+	url := "https://raw.githubusercontent.com/ibnaleem/gosearch/refs/heads/main/config.yaml"
+	resp, err := http.Get(url)
 	if err != nil {
-		return Config{}, fmt.Errorf("error reading YAML file: %w", err)
+		return Config{}, fmt.Errorf("error downloading config.yaml: %w", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return Config{}, fmt.Errorf("failed to download config.yaml, status code: %d", resp.StatusCode)
+	}
+
+	yamlData, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return Config{}, fmt.Errorf("error reading downloaded content: %w", err)
 	}
 
 	var config Config
-	err = yaml.Unmarshal(yamlFile, &config)
+	err = yaml.Unmarshal(yamlData, &config)
 	if err != nil {
 		return Config{}, fmt.Errorf("error unmarshaling YAML: %w", err)
 	}
