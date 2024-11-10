@@ -51,3 +51,20 @@ For YouTube:
 Again, `{}` is inserted after `/c/`.
 
 The `url_probe` field is used for cases where a website returns the same response (e.g., HTTP/200) for all requests, regardless of whether the account exists. For example, Duolingo always returns a `200 OK` response, even for non-existent usernames. Even inspecting the response body, we find that Duolingo returns the same response body for all requests (minus the username inside the response body). In such cases, use `url_probe` to specify a URL or endpoint that helps verify username existence.
+
+In some cases, a platform may not have a `url_probe`, return identical response bodies for all requests to prevent bots, and use the same status code for both existing and non-existing accounts. In these cases, set the `errorType` to `"unknown"`:
+
+```yaml
+  - name: "Twitter/X"
+    base_url: "https://twitter.com/{}"
+    url_probe: ""
+    errorType: "unknown"
+    errorCode: 403
+```
+
+For example, Twitter returns a 403 status code for both existing and non-existing accounts. This means GoSearch must analyse the response body to find a unique phrase (specified in the `errorMsg` field) that only appears for non-existent accounts (e.g., "account does not exist"). Since there's no unique phrase in the response body to distinguish them, we set the `errorType` to `"unknown"`. This indicates that GoSearch cannot definitively determine whether the account exists, reporting possible false positives or negatives.
+
+To contribute, follow the template above, open a PR, and I'll merge it if GoSearch can successfully detect the accounts.
+
+## LICENSE
+This project is licensed under the GNU General Public License - see the [LICENSE](https://github.com/ibnaleem/gosearch/blob/main/LICENSE) file for details.
