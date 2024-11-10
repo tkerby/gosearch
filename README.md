@@ -1,3 +1,4 @@
+![build](https://github.com/ibnaleem/gosearch/actions/workflows/go.yml/badge.svg?event=push)
 # GoSearch
 OSINT tool for searching usernames across social networks, written in Go. This project heavily relies on contributors, please see [Contributing](#contributing) for more details.
 
