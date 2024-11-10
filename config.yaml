@@ -1,6 +1,6 @@
 websites:
   - name: "Instagram"
-    base_url: "https://instagram.com/@{}"
+    base_url: "https://instagram.com/{}"
     url_probe: ""
     errorType: "errorMsg" 
     errorMsg: "<title>Instagram</title>"
@@ -90,7 +90,7 @@ websites:
     errorCode: 404
 
   - name: "Threads"
-    base_url: "https://threads.net/@{}"
+    base_url: "https://threads.net/{}"
     url_probe: ""
     errrorType: "errorMsg"
     errorMsg: "<title>Threads</title>"
