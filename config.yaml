@@ -30,7 +30,7 @@ websites:
     errorMsg: "<title>Facebook</title>"
 
   - name: "YouTube"
-    base_url: "https://www.youtube.com/c/{}"
+    base_url: "https://www.youtube.com/@{}"
     url_probe: ""
     errorType: "status_code"
     errorCode: 404
