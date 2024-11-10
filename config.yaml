@@ -90,10 +90,10 @@ websites:
     errorCode: 404
 
   - name: "Threads"
-    base_url: "https://www.threads.net/@{}"
+    base_url: "https://threads.net/@{}"
     url_probe: ""
     errrorType: "errorMsg"
-    errorMsg: "<!--EF-->"
+    errorMsg: "<title>Threads</title>"
 
   - name: "Tumblr"
     base_url: "https://www.tumblr.com/{}"
