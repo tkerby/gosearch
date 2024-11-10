@@ -178,4 +178,8 @@ websites:
     errorType: "errorMsg"
     errorMsg: "<meta property='og:description' content='Twitch is the world&#39;s leading video platform and community for gamers.'>"
 
-  
+  - name: "Rumble"
+    base_url: "https:///rumble.com/c/{}"
+    url_probe: ""
+    errorType: "status_code"
+    errorCode: 404
