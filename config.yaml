@@ -70,4 +70,9 @@ websites:
     url_probe: "https://www.duolingo.com/2017-06-30/users?username={}"
     errorType: "errorMsg"
     errorMsg: "{\"users\":[]}"
-  
+
+  - name: "Pinterest"
+    base_url: "https://www.pinterest.com/{}"
+    url_probe: ""
+    errorType: "unknown"
+    errorCode: 308
