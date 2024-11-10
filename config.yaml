@@ -76,3 +76,15 @@ websites:
     url_probe: ""
     errorType: "unknown"
     errorCode: 308
+
+  - name: "VSCO"
+    base_url: "https://vsco.co/{}"
+    url_probe: ""
+    errorType: "unknown"
+    errorCode: 301
+
+  - name: "Snapchat"
+    base_url: "https://www.snapchat.com/add/{}"
+    url_probe: ""
+    errorType: "status_code"
+    errorCode: 404
