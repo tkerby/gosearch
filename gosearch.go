@@ -172,7 +172,7 @@ func Search(config Config, username string) {
 
 func main() {
 	if len(os.Args) < 2 {
-		fmt.Println("Usage: go run main.go <username>")
+		fmt.Println("Usage: gosearch <username>")
 		return
 	}
 	var username string = os.Args[1]
