@@ -197,9 +197,8 @@ websites:
     errorType: "status code"
     errorCode: 404
 
-      - name: "YVision KZ"
+  - name: "YVision KZ"
     base_url: "https://yvision.kz/u/{}"
     url_probe: ""
     errorType: "status code"
     errorCode: 404
-    
