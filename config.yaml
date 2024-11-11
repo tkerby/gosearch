@@ -190,3 +190,16 @@ websites:
     url_probe: ""
     errorType: "unknown"
     errorCode: 403
+    
+  - name: "Yandex Dzen"
+    base_url: "https://dzen.ru/{}"
+    url_probe: ""
+    errorType: "status code"
+    errorCode: 404
+
+      - name: "YVision KZ"
+    base_url: "https://yvision.kz/u/{}"
+    url_probe: ""
+    errorType: "status code"
+    errorCode: 404
+    
