@@ -51,20 +51,46 @@ There are 3 error types
 2. `errorMsg` - a custom error message the website displays that is unique to usernames that do not exist
 3. `unknown` - when there is no way of ascertaining the difference between a username that exists and does not exist on the website
 #### `status_code`
-The easiest to contribute, simply find an existing profile and make the following `cURL` request:
+The easiest to contribute, simply find an existing profile and make a request with the following code:
+```go
+package main
+
+import (
+    "fmt"
+    "log"
+    "net/http"
+    "os"
+)
+
+func MakeRequest(url string) {
+    resp, err := http.Get(url)
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    defer resp.Body.Close()
+
+    fmt.Println("Response:", resp.Status)
+}
+
+func main() {
+    var url string = os.Args[1]
+    MakeRequest(url)
+}
 ```
-$ curl -I https://website.com/username
-HTTP/2 200
-content-type: text/html
-...
+```
+$ go build
+```
+```
+$ ./request https://yourwebsite.com/username
+Response: 200 OK
 ```
 Where username is the existing username on the website. Then, make the same request with a username that does not exist on the website:
 ```
-$ curl -I https://website.com/username
-HTTP/2 404
-content-type: text/html
+$ ./request https://yourwebsite.com/usernamedoesnotexist
+Response: 404 Not Found
 ```
-Copy the code next to `HTTP/2` and set `errorCode`, the field under `errorType`, as that. 
+Copy and set `errorCode`, the field under `errorType`, as the code that's printed to the terminal (in this case it's `404`). 
 #### `errorMsg`
 This is more tricky, so what you must do is download the response body to a file. Luckily I've already written the code for you:
 ```go
