@@ -202,3 +202,9 @@ websites:
     url_probe: ""
     errorType: "status code"
     errorCode: 404
+
+  - name: "Giphy"
+    base_url: "https://giphy.com/channel/{}"
+    url_probe: ""
+    errorType: "status code"
+    errorCode: 404
