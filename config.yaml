@@ -196,6 +196,10 @@ websites:
     url_probe: ""
     errorType: "status code"
     errorCode: 404
+    cookies:
+    - name: "zen_sso_checked"
+      value: "1"
+
 
   - name: "YVision KZ"
     base_url: "https://yvision.kz/u/{}"
