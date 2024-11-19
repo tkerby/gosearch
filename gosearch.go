@@ -39,10 +39,16 @@ type Website struct {
 	ErrorType string `yaml:"errorType"`
 	ErrorMsg  string `yaml:"errorMsg,omitempty"`
 	ErrorCode int    `yaml:"errorCode,omitempty"`
+	Cookies   []Cookie `yaml:"cookies,omitempty"` // New field for cookies
 }
 
 type Config struct {
 	Websites []Website `yaml:"websites"`
+}
+
+type Cookie struct {
+	Name  string `yaml:"name"`
+	Value string `yaml:"value"`
 }
 
 func UnmarshalYAML() (Config, error) {
@@ -99,6 +105,38 @@ func WriteToFile(filename string, content string) {
 
 func BuildURL(baseURL, username string) string {
 	return strings.Replace(baseURL, "{}", username, 1)
+}
+
+func MakeRequestWithCookies(url string, cookies [] Cookie, WebsiteErrorCode int, wg *sync.WaitGroup) {
+	defer wg.Done()
+
+	client := &http.Client{}
+	req, err := http.NewRequest("GET", url, nil)
+	
+	if err != nil {
+		fmt.Printf("Error creating request in function MakeRequestWithCookies: %v\n", err)
+		return
+	}
+
+	for _, cookie := range cookies {
+		cookieObj := &http.Cookie{
+			Name:  cookie.Name,
+			Value: cookie.Value,
+		}
+		req.AddCookie(cookieObj)
+	}
+
+	resp, err := client.Do(req)
+	if err != nil {
+		fmt.Printf("Error making request to %s: %v\n", url, err)
+		return
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != WebsiteErrorCode {
+		fmt.Println(Green + "::", url + Reset)
+		WriteToFile("results.txt", url + "\n")
+	}
 }
 
 func MakeRequestWithoutErrorMsg(url string, WebsiteErrorCode int, wg *sync.WaitGroup) {
@@ -160,13 +198,16 @@ func Search(config Config, username string) {
 		} else if website.ErrorType == "unknown" {
 			fmt.Println(Yellow + ":: [?]", url + Reset)
 			WriteToFile("results.txt", "[?] " + url + "\n")
-		} else {
+		
+		} else if website.Cookies != nil {
+				wg.Add(1)
+				go MakeRequestWithCookies(url, website.Cookies, website.ErrorCode, &wg)
+			} else {
 			wg.Add(1)
 			go MakeRequestWithoutErrorMsg(url, website.ErrorCode, &wg)
 		}
 	}
 
-	// Wait for all goroutines to finish
 	wg.Wait()
 }
 
