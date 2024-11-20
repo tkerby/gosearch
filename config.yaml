@@ -2,185 +2,216 @@ websites:
   - name: "Instagram"
     base_url: "https://instagram.com/{}"
     url_probe: ""
+    follow_redirects: true
     errorType: "errorMsg" 
     errorMsg: "<title>Instagram</title>"
 
   - name: "Twitter/X"
     base_url: "https://twitter.com/{}"
     url_probe: ""
+    follow_redirects: true
     errorType: "unknown"
     errorCode: 403
 
   - name: "GitHub"
     base_url: "https://github.com/{}"
     url_probe: ""
+    follow_redirects: true
     errorType: "status_code" 
     errorCode: 404
 
   - name: "Reddit"
     base_url: "https://www.reddit.com/user/{}"
     url_probe: ""
+    follow_redirects: true
     errorType: "errorMsg"
     errorMsg: "<title>Reddit - Dive into anything</title>"
 
   - name: "Facebook"
     base_url: "https://www.facebook.com/{}"
     url_probe: ""
+    follow_redirects: true
     errorType: "errorMsg" 
     errorMsg: "<title>Facebook</title>"
 
   - name: "YouTube"
     base_url: "https://www.youtube.com/@{}"
     url_probe: ""
+    follow_redirects: true
     errorType: "status_code"
     errorCode: 404
 
   - name: "TikTok"
     base_url: "https://www.tiktok.com/@{}"
     url_probe: ""
+    follow_redirects: true
     errorType: "errorMsg"
     errorMsg: ""
 
   - name: "About Me"
     base_url: "https://about.me/{}"
     url_probe: ""
+    follow_redirects: true
     errorType: "status_code"
     errorCode: 404
 
   - name: "Independent Academia"
     base_url: "https://independent.academia.edu/{}"
     url_probe: ""
+    follow_redirects: true
     errorType: "status_code"
     errorCode: 404
   
   - name: "Airbit"
     base_url: "https://airbit.com/{}"
     url_probe: ""
+    follow_redirects: true
     errorType: "status_code"
     errorCode: 404
 
   - name: "Airliners"
     base_url: "https://www.airliners.net/user/{}/profile/photos"
     url_probe: ""
+    follow_redirects: true
     errorType: "status_code"
     errorCode: 404
 
   - name: "Duolingo"
     base_url: "https://www.duolingo.com/profile/{}"
     url_probe: "https://www.duolingo.com/2017-06-30/users?username={}"
+    follow_redirects: true
     errorType: "errorMsg"
     errorMsg: "{\"users\":[]}"
 
   - name: "Pinterest"
     base_url: "https://www.pinterest.com/{}"
     url_probe: ""
+    follow_redirects: true
     errorType: "errorMsg"
     errorMsg: "<title></title>"
 
   - name: "VSCO"
     base_url: "https://vsco.co/{}/gallery"
     url_probe: ""
+    follow_redirects: true
     errorType: "status_code"
     errorCode: 404
 
   - name: "Snapchat"
     base_url: "https://www.snapchat.com/add/{}"
     url_probe: ""
+    follow_redirects: true
     errorType: "status_code"
     errorCode: 404
 
   - name: "Threads"
     base_url: "https://www.threads.net/{}"
     url_probe: ""
+    follow_redirects: true
     errrorType: "errorMsg"
     errorMsg: "<title>Threads</title>"
 
   - name: "Tumblr"
     base_url: "https://www.tumblr.com/{}"
     url_probe: ""
+    follow_redirects: true
     errorType: "status_code"
     errorCode: 404
 
   - name: "Keybase"
     base_url: "https://keybase.io/{}"
     url_probe: ""
+    follow_redirects: true
     errorType: "status_code"
     errorCode: 404
 
   - name: "Wattpad"
     base_url: "https://www.wattpad.com/user/{}"
     url_probe: ""
+    follow_redirects: true
     errorType: "status_code"
     errorCode: 404
 
   - name: "Mastodon Social"
     base_url: "https://mastodon.social/@{}"
     url_probe: ""
+    follow_redirects: true
     errorType: "status_code"
     errorCode: 404
 
   - name: "MSTDN Social"
     base_url: "https://mstdn.social/@{}"
     url_probe: ""
+    follow_redirects: true
     errorType: "status_code"
     errorCode: 404
 
   - name: "Mas.to"
     base_url: "https://mas.to/@{}"
     url_probe: ""
+    follow_redirects: true
     errorType: "status_code"
     errorCode: 404
 
   - name: "Mastodon World"
     base_url: "https://mastodon.world/@{}"
     url_probe: ""
+    follow_redirects: true
     errorType: "status_code"
     errorCode: 404
   - name: "Fosstodon"
     base_url: "https://fosstodon.org/@{}"
     url_probe: ""
+    follow_redirects: true
     errorType: "status_code"
     errorCode: 404
 
   - name: "Hachyderm"
     base_url: "https://hachyderm.io/@{}"
     url_probe: ""
+    follow_redirects: true
     errorType: "status_code"
     errorCode: 404
 
   - name: "Vivaldi Social"
     base_url: "https://social.vivaldi.net/@{}"
     url_probe: ""
+    follow_redirects: true
     errorType: "status_code"
     errorCode: 404
 
   - name: "Techhub Social"
     base_url: "https://techhub.social/@{}"
     url_probe: ""
+    follow_redirects: true
     errorType: "status_code"
     errorCode: 404
 
   - name: "Techhub Social"
     base_url: "https://techhub.social/@{}"
     url_probe: ""
+    follow_redirects: true
     errorType: "status_code"
     errorCode: 404
 
   - name: "Wakatime"
     base_url: "https://wakatime.com/@{}"
     url_probe: ""
+    follow_redirects: true
     errorType: "status_code"
     errorCode: 404
 
   - name: "Twitch"
     base_url: "https://twitch.tv/{}"
     url_probe: ""
+    follow_redirects: true
     errorType: "errorMsg"
     errorMsg: "<meta property='og:description' content='Twitch is the world&#39;s leading video platform and community for gamers.'>"
 
   - name: "Rumble"
     base_url: "https://rumble.com/c/{}"
     url_probe: ""
+    follow_redirects: true
     errorType: "status_code"
     errorCode: 404
 
@@ -188,12 +219,14 @@ websites:
   - name: "Kick"
     base_url: "https://kick.com/{}"
     url_probe: ""
+    follow_redirects: true
     errorType: "unknown"
     errorCode: 403
     
   - name: "Yandex Dzen"
     base_url: "https://dzen.ru/{}"
     url_probe: ""
+    follow_redirects: true
     errorType: "status code"
     errorCode: 404
     cookies:
@@ -204,41 +237,48 @@ websites:
   - name: "YVision KZ"
     base_url: "https://yvision.kz/u/{}"
     url_probe: ""
+    follow_redirects: true
     errorType: "status_code"
     errorCode: 404
 
   - name: "Giphy"
     base_url: "https://giphy.com/channel/{}"
     url_probe: ""
+    follow_redirects: true
     errorType: "status_code"
     errorCode: 404
 
   - name: "Bluesky"
     base_url: "https://bsky.app/profile/{}.bsky.social"
     url_probe: "https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile?actor={}.bsky.social"
+    follow_redirects: true
     errorType: "errorMsg"
     errorMsg: "{\"error\":\"InvalidRequest\",\"message\":\"Profile not found\"}"
 
   - name: "9GAG"
     base_url: "https://9gag.com/u/{}"
     url_probe: ""
+    follow_redirects: true
     errorType: "status_code"
     errorCode: 404
 
   - name: "Flickr"
     base_url: "https://flickr.com/photos/{}"
     url_probe: ""
+    follow_redirects: true
     errorType: "status_code"
     errorCode: 404
 
   - name: "Behance"
     base_url: "https://behance.net/{}"
     url_probe: ""
+    follow_redirects: true
     errorType: "status_code"
     errorCode: 404
   
   - name: "Buy Me a Coffee"
     base_url: "https://buymeacoffee.com/{}"
     url_probe: ""
+    follow_redirects: true
     errorType: "status_code"
     errorCode: 404
