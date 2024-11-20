@@ -386,7 +386,7 @@ func MakeRequestWithCookiesAndErrorMsg(website Website, url string, cookies [] C
 	
 	defer resp.Body.Close()
 
-	body, err := io.ReadAll(req.Body)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		fmt.Printf("Error reading response body: %v\n", err)
 		return
