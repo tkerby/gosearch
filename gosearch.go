@@ -141,6 +141,51 @@ func MakeRequestWithCookies(url string, cookies [] Cookie, WebsiteErrorCode int,
 	}
 }
 
+func MakeRequestWithCookiesAndErrorMsg(website Website, url string, cookies [] Cookie, errorMsg string, username string, wg *sync.WaitGroup) {
+	defer wg.Done()
+
+	client := &http.Client{}
+	req, err := http.NewRequest("GET", url, nil)
+	
+	if err != nil {
+		fmt.Printf("Error creating request in function MakeRequestWithCookiesAndErrorMsg: %v\n", err)
+		return
+	}
+
+	req.Header.Set("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:125.0) Gecko/20100101 Firefox/125.0")
+
+	for _, cookie := range cookies {
+		cookieObj := &http.Cookie{
+			Name:  cookie.Name,
+			Value: cookie.Value,
+		}
+		req.AddCookie(cookieObj)
+	}
+
+	resp, err := client.Do(req)
+	if err != nil {
+		fmt.Printf("Error making request to %s: %v\n", url, err)
+		return
+	}
+	
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(req.Body)
+	if err != nil {
+		fmt.Printf("Error reading response body: %v\n", err)
+		return
+	}
+
+	bodyStr := string(body)
+	if !strings.Contains(bodyStr, errorMsg) {
+		if website.URLProbe != "" {
+			url = BuildURL(website.BaseURL, username)
+		}
+		fmt.Println(Green + "::", url + Reset)
+		WriteToFile("results.txt", url + "\n")
+	}
+}
+
 func MakeRequestWithoutErrorMsg(url string, WebsiteErrorCode int, wg *sync.WaitGroup) {
 	defer wg.Done()
 
