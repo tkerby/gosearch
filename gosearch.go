@@ -1,5 +1,4 @@
 // Created by Ibn Aleem (github.com/ibnaleem)
-// Updated Saturday 20 November, 2024 @ 06:20 GMT
 // Repository: https://github.com/ibnaleem/gosearch
 // Issues: https://github.com/ibnaleem/search/issues
 // License: https://github.com/ibnaleem/gosearch/blob/main/LICENSE
