@@ -236,3 +236,9 @@ websites:
     url_probe: ""
     errorType: "status_code"
     errorCode: 404
+  
+  - name: "Buy Me a Coffee"
+    base_url: "https://buymeacoffee.com/{}"
+    url_probe: ""
+    errorType: "status_code"
+    errorCode: 404
