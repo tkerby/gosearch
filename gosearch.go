@@ -257,27 +257,26 @@ func Search(config Config, username string) {
 	for _, website := range config.Websites {
 		url = BuildURL(website.BaseURL, username)
 
-		// Launch goroutines based on the ErrorType
-		if website.ErrorType == "errorMsg" {
+		if (website.ErrorType == "errorMsg") && (website.Cookies != nil) {
 			if website.URLProbe != "" {
 				url = BuildURL(website.URLProbe, username)
 			}
 			wg.Add(1)
-			go MakeRequestWithErrorMsg(website, url, website.ErrorMsg, username, &wg)
+			go MakeRequestWithCookiesAndErrorMsg(website, url, website.Cookies, website.ErrorMsg, username, &wg)
 		} else if website.ErrorType == "unknown" {
 			fmt.Println(Yellow + ":: [?]", url + Reset)
 			WriteToFile("results.txt", "[?] " + url + "\n")
-		
+
 		} else if website.Cookies != nil {
-				wg.Add(1)
-				go MakeRequestWithCookies(url, website.Cookies, website.ErrorCode, &wg)
-			} else {
+			wg.Add(1)
+			go MakeRequestWithCookies(url, website.Cookies, website.ErrorCode, &wg)
+		} else {
 			wg.Add(1)
 			go MakeRequestWithoutErrorMsg(url, website.ErrorCode, &wg)
 		}
-	}
 
 	wg.Wait()
+}
 }
 
 func main() {
