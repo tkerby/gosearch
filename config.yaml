@@ -187,13 +187,6 @@ websites:
     errorType: "status_code"
     errorCode: 404
 
-  - name: "Techhub Social"
-    base_url: "https://techhub.social/@{}"
-    url_probe: ""
-    follow_redirects: true
-    errorType: "status_code"
-    errorCode: 404
-
   - name: "Wakatime"
     base_url: "https://wakatime.com/@{}"
     url_probe: ""
