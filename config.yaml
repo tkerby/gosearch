@@ -90,7 +90,7 @@ websites:
     errorCode: 404
 
   - name: "Threads"
-    base_url: "https://threads.net/{}"
+    base_url: "https://www.threads.net/{}"
     url_probe: ""
     errrorType: "errorMsg"
     errorMsg: "<title>Threads</title>"
