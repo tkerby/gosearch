@@ -78,10 +78,10 @@ websites:
     errorMsg: "<title></title>"
 
   - name: "VSCO"
-    base_url: "https://vsco.co/{}"
+    base_url: "https://vsco.co/{}/gallery"
     url_probe: ""
-    errorType: "unknown"
-    errorCode: 301
+    errorType: "status_code"
+    errorCode: 404
 
   - name: "Snapchat"
     base_url: "https://www.snapchat.com/add/{}"
