@@ -281,8 +281,8 @@ func Search(config Config, username string) {
 
 func main() {
 	if len(os.Args) < 2 {
-		fmt.Println("Usage: gosearch <username>")
-		return
+		fmt.Println("Usage: gosearch <username>\nIssues: https://github.com/ibnaleem/gosearch/issues")
+		os.Exit(1)
 	}
 	var username string = os.Args[1]
 
