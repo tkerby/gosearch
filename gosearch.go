@@ -142,11 +142,22 @@ func MakeRequestWithCookies(url string, cookies [] Cookie, WebsiteErrorCode int,
 func MakeRequestWithoutErrorMsg(url string, WebsiteErrorCode int, wg *sync.WaitGroup) {
 	defer wg.Done()
 
-	res, err := http.Get(url)
+	client := &http.Client{}
+	req, err := http.NewRequest("GET", url, nil)
+	
+	if err != nil {
+		fmt.Printf("Error creating request in function MakeRequestWithCookies: %v\n", err)
+		return
+	}
+
+	req.Header.Set("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:125.0) Gecko/20100101 Firefox/125.0")
+
+	res, err := client.Do(req)
 	if err != nil {
 		fmt.Printf("Error making GET request to %s: %v\n", url, err)
 		return
 	}
+	
 	defer res.Body.Close()
 
 	if res.StatusCode != WebsiteErrorCode {
@@ -158,11 +169,22 @@ func MakeRequestWithoutErrorMsg(url string, WebsiteErrorCode int, wg *sync.WaitG
 func MakeRequestWithErrorMsg(website Website, url string, errorMsg string, username string, wg *sync.WaitGroup) {
 	defer wg.Done()
 
-	res, err := http.Get(url)
+	client := &http.Client{}
+	req, err := http.NewRequest("GET", url, nil)
+	
+	if err != nil {
+		fmt.Printf("Error creating request in function MakeRequestWithCookies: %v\n", err)
+		return
+	}
+
+	req.Header.Set("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:125.0) Gecko/20100101 Firefox/125.0")
+
+	res, err := client.Do(req)
 	if err != nil {
 		fmt.Printf("Error making GET request to %s: %v\n", url, err)
 		return
 	}
+	
 	defer res.Body.Close()
 
 	body, err := io.ReadAll(res.Body)
