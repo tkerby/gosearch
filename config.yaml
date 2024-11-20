@@ -224,3 +224,9 @@ websites:
     url_probe: ""
     errorType: "status_code"
     errorCode: 404
+
+  - name: "Flickr"
+    base_url: "https://flickr.com/photos/{}"
+    url_probe: ""
+    errorType: "status_code"
+    errorCode: 404
