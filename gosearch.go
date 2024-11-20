@@ -14,6 +14,7 @@ import (
 	"sync"
 	"github.com/inancgumus/screen"
 	"gopkg.in/yaml.v3"
+	"crypto/tls"
 )
 
 var Reset = "\033[0m"
@@ -109,7 +110,16 @@ func BuildURL(baseURL, username string) string {
 func MakeRequestWithCookies(url string, cookies [] Cookie, WebsiteErrorCode int, wg *sync.WaitGroup) {
 	defer wg.Done()
 
-	client := &http.Client{}
+	transport := &http.Transport{
+    	TLSClientConfig: &tls.Config{
+        	MinVersion: tls.VersionTLS12,
+    		},
+	}
+
+	client := &http.Client{
+	Transport: transport,
+	}
+	
 	req, err := http.NewRequest("GET", url, nil)
 	
 	if err != nil {
@@ -143,7 +153,16 @@ func MakeRequestWithCookies(url string, cookies [] Cookie, WebsiteErrorCode int,
 func MakeRequestWithCookiesAndErrorMsg(website Website, url string, cookies [] Cookie, errorMsg string, username string, wg *sync.WaitGroup) {
 	defer wg.Done()
 
-	client := &http.Client{}
+	transport := &http.Transport{
+    	TLSClientConfig: &tls.Config{
+        	MinVersion: tls.VersionTLS12,
+    		},
+	}
+
+	client := &http.Client{
+	Transport: transport,
+	}
+	
 	req, err := http.NewRequest("GET", url, nil)
 	
 	if err != nil {
@@ -188,7 +207,16 @@ func MakeRequestWithCookiesAndErrorMsg(website Website, url string, cookies [] C
 func MakeRequestWithoutErrorMsg(url string, WebsiteErrorCode int, wg *sync.WaitGroup) {
 	defer wg.Done()
 
-	client := &http.Client{}
+	transport := &http.Transport{
+    	TLSClientConfig: &tls.Config{
+        	MinVersion: tls.VersionTLS12,
+    		},
+	}
+
+	client := &http.Client{
+	Transport: transport,
+	}
+	
 	req, err := http.NewRequest("GET", url, nil)
 	
 	if err != nil {
@@ -215,7 +243,16 @@ func MakeRequestWithoutErrorMsg(url string, WebsiteErrorCode int, wg *sync.WaitG
 func MakeRequestWithErrorMsg(website Website, url string, errorMsg string, username string, wg *sync.WaitGroup) {
 	defer wg.Done()
 
-	client := &http.Client{}
+	transport := &http.Transport{
+    	TLSClientConfig: &tls.Config{
+        	MinVersion: tls.VersionTLS12,
+    		},
+	}
+
+	client := &http.Client{
+	Transport: transport,
+	}
+	
 	req, err := http.NewRequest("GET", url, nil)
 	
 	if err != nil {
