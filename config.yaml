@@ -204,13 +204,13 @@ websites:
   - name: "YVision KZ"
     base_url: "https://yvision.kz/u/{}"
     url_probe: ""
-    errorType: "status code"
+    errorType: "status_code"
     errorCode: 404
 
   - name: "Giphy"
     base_url: "https://giphy.com/channel/{}"
     url_probe: ""
-    errorType: "status code"
+    errorType: "status_code"
     errorCode: 404
 
   - name: "Bluesky"
@@ -218,3 +218,9 @@ websites:
     url_probe: "https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile?actor={}.bsky.social"
     errorType: "errorMsg"
     errorMsg: "{\"error\":\"InvalidRequest\",\"message\":\"Profile not found\"}"
+
+  - name: "9GAG"
+    base_url: "https://9gag.com/u/{}"
+    url_probe: ""
+    errorType: "status_code"
+    errorCode: 404
