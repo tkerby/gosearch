@@ -1,5 +1,5 @@
 // Created by Ibn Aleem (github.com/ibnaleem)
-// Updated Saturday 09 November, 2024 @ 23:50 GMT
+// Updated Saturday 20 November, 2024 @ 06:20 GMT
 // Repository: https://github.com/ibnaleem/gosearch
 // Issues: https://github.com/ibnaleem/search/issues
 // License: https://github.com/ibnaleem/gosearch/blob/main/LICENSE
@@ -184,7 +184,7 @@ func MakeRequestWithErrorMsg(website Website, url string, errorMsg string, usern
 		fmt.Printf("Error making GET request to %s: %v\n", url, err)
 		return
 	}
-	
+
 	defer res.Body.Close()
 
 	body, err := io.ReadAll(res.Body)
