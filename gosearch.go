@@ -36,10 +36,11 @@ type Website struct {
 	Name      string `yaml:"name"`
 	BaseURL   string `yaml:"base_url"`
 	URLProbe  string `yaml:"url_probe,omitempty"`
+	FollowRedirects  bool `yaml:"follow_redirects,omitempty"`
 	ErrorType string `yaml:"errorType"`
 	ErrorMsg  string `yaml:"errorMsg,omitempty"`
 	ErrorCode int    `yaml:"errorCode,omitempty"`
-	Cookies   []Cookie `yaml:"cookies,omitempty"` // New field for cookies
+	Cookies   []Cookie `yaml:"cookies,omitempty"`
 }
 
 type Config struct {
@@ -105,6 +106,203 @@ func WriteToFile(filename string, content string) {
 
 func BuildURL(baseURL, username string) string {
 	return strings.Replace(baseURL, "{}", username, 1)
+}
+
+func NoRedirects(url string, WebsiteErrorCode int, wg *sync.WaitGroup) {
+
+	defer wg.Done()
+
+	transport := &http.Transport{
+    	TLSClientConfig: &tls.Config{
+        	MinVersion: tls.VersionTLS12,
+    	},
+	}
+
+	client := &http.Client{
+		Transport: transport,
+		CheckRedirect: func(req *http.Request, via []*http.Request) error {
+			return http.ErrUseLastResponse // Prevent following redirects
+		},
+	}
+
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		fmt.Printf("Error creating request: %v\n", err)
+		os.Exit(1)
+	}
+
+	req.Header.Set("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:125.0) Gecko/20100101 Firefox/125.0")
+
+	resp, err := client.Do(req)
+	if err != nil {
+		fmt.Printf("Error making request to %s: %v\n", url, err)
+		os.Exit(1)
+	}
+	
+	defer resp.Body.Close()
+
+	if resp.StatusCode != WebsiteErrorCode {
+		fmt.Println(Green + "::", url + Reset)
+		WriteToFile("results.txt", url + "\n")
+	}
+}
+
+func NoRedirectsWithCookies(url string, WebsiteErrorCode int, cookies [] Cookie, wg *sync.WaitGroup) {
+
+	defer wg.Done()
+
+	transport := &http.Transport{
+    	TLSClientConfig: &tls.Config{
+        	MinVersion: tls.VersionTLS12,
+    	},
+	}
+
+	client := &http.Client{
+		Transport: transport,
+		CheckRedirect: func(req *http.Request, via []*http.Request) error {
+			return http.ErrUseLastResponse // Prevent following redirects
+		},
+	}
+
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		fmt.Printf("Error creating request: %v\n", err)
+		os.Exit(1)
+	}
+
+	req.Header.Set("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:125.0) Gecko/20100101 Firefox/125.0")
+
+	for _, cookie := range cookies {
+		cookieObj := &http.Cookie{
+			Name:  cookie.Name,
+			Value: cookie.Value,
+		}
+		req.AddCookie(cookieObj)
+	}
+
+	resp, err := client.Do(req)
+	if err != nil {
+		fmt.Printf("Error making request to %s: %v\n", url, err)
+		os.Exit(1)
+	}
+	
+	defer resp.Body.Close()
+
+	if resp.StatusCode != WebsiteErrorCode {
+		fmt.Println(Green + "::", url + Reset)
+		WriteToFile("results.txt", url + "\n")
+	}
+}
+
+func NoRedirectsWithErrorMsg(website Website, url string, errorMsg string, username string, wg *sync.WaitGroup) {
+
+	defer wg.Done()
+
+	transport := &http.Transport{
+    	TLSClientConfig: &tls.Config{
+        	MinVersion: tls.VersionTLS12,
+    	},
+	}
+
+	client := &http.Client{
+		Transport: transport,
+		CheckRedirect: func(req *http.Request, via []*http.Request) error {
+			return http.ErrUseLastResponse
+		},
+	}
+
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		fmt.Printf("Error creating request: %v\n", err)
+		os.Exit(1)
+	}
+
+	req.Header.Set("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:125.0) Gecko/20100101 Firefox/125.0")
+
+	resp, err := client.Do(req)
+	if err != nil {
+		fmt.Printf("Error making request to %s: %v\n", url, err)
+		os.Exit(1)
+	}
+	
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+
+	if err != nil {
+		fmt.Printf("Error reading response body: %v\n", err)
+		os.Exit(1)
+	}
+
+	bodyString := string(body)
+
+	if !strings.Contains(bodyString, errorMsg) {
+		if website.URLProbe != "" {
+			url = BuildURL(website.BaseURL, username)
+		}
+		fmt.Println(Green + "::", url + Reset)
+		WriteToFile("results.txt", url + "\n")
+	}
+}
+
+
+func NoRedirectsWithErrorMsgAndCookies(website Website, url string, errorMsg string, cookies [] Cookie, username string, wg *sync.WaitGroup) {
+
+	defer wg.Done()
+
+	transport := &http.Transport{
+    	TLSClientConfig: &tls.Config{
+        	MinVersion: tls.VersionTLS12,
+    	},
+	}
+
+	client := &http.Client{
+		Transport: transport,
+		CheckRedirect: func(req *http.Request, via []*http.Request) error {
+			return http.ErrUseLastResponse
+		},
+	}
+
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		fmt.Printf("Error creating request: %v\n", err)
+		os.Exit(1)
+	}
+
+	req.Header.Set("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:125.0) Gecko/20100101 Firefox/125.0")
+
+	for _, cookie := range cookies {
+		cookieObj := &http.Cookie{
+			Name:  cookie.Name,
+			Value: cookie.Value,
+		}
+		req.AddCookie(cookieObj)
+	}
+
+	resp, err := client.Do(req)
+	if err != nil {
+		fmt.Printf("Error making request to %s: %v\n", url, err)
+		os.Exit(1)
+	}
+	
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+
+	if err != nil {
+		fmt.Printf("Error reading response body: %v\n", err)
+		os.Exit(1)
+	}
+
+	bodyString := string(body)
+
+	if !strings.Contains(bodyString, errorMsg) {
+		if website.URLProbe != "" {
+			url = BuildURL(website.BaseURL, username)
+		}
+		fmt.Println(Green + "::", url + Reset)
+		WriteToFile("results.txt", url + "\n")
+	}
 }
 
 func MakeRequestWithCookies(url string, cookies [] Cookie, WebsiteErrorCode int, wg *sync.WaitGroup) {
@@ -292,8 +490,24 @@ func Search(config Config, username string) {
 
 	for _, website := range config.Websites {
 		url = BuildURL(website.BaseURL, username)
-
-		if (website.ErrorType == "errorMsg") && (website.Cookies != nil) {
+																            // if client should not follow redirects
+		if (website.ErrorType == "errorMsg") && (website.Cookies != nil) && (!website.FollowRedirects) {
+			if website.URLProbe != "" {
+				url = BuildURL(website.URLProbe, username)
+			}
+			wg.Add(1)
+			go NoRedirectsWithErrorMsgAndCookies(website, url, website.ErrorMsg, website.Cookies, username, &wg)
+								      												  // if client should not follow redirects
+		} else if (website.ErrorType == "status_code") && (website.Cookies != nil) && (!website.FollowRedirects) {
+			if website.URLProbe != "" {
+				url = BuildURL(website.URLProbe, username)
+			}
+			wg.Add(1)
+			go NoRedirectsWithCookies(url, website.ErrorCode, website.Cookies, &wg)
+		} else if (website.ErrorType == "status_code") && (!website.FollowRedirects) { // if client should not follow redirects
+			wg.Add(1)
+			go NoRedirects(url, website.ErrorCode, &wg)
+		} else if (website.ErrorType == "errorMsg") && (website.Cookies == nil) {
 			if website.URLProbe != "" {
 				url = BuildURL(website.URLProbe, username)
 			}
