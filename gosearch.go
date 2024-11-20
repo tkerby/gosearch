@@ -302,4 +302,5 @@ func main() {
 	fmt.Println(":: A yellow link indicates that I was unable to verify whether the username exists on the platform.")
 	
 	Search(config, username)
+	os.Exit(0)
 }
