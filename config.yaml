@@ -74,8 +74,8 @@ websites:
   - name: "Pinterest"
     base_url: "https://www.pinterest.com/{}"
     url_probe: ""
-    errorType: "unknown"
-    errorCode: 308
+    errorType: "errorMsg"
+    errorMsg: "<title></title>"
 
   - name: "VSCO"
     base_url: "https://vsco.co/{}"
