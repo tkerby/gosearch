@@ -289,7 +289,7 @@ func main() {
 	config, err := UnmarshalYAML()
 	if err != nil {
 		fmt.Printf("Error unmarshaling YAML: %v\n", err)
-		return
+		os.Exit(1)
 	}
 
 	screen.Clear()
