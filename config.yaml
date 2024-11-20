@@ -230,3 +230,9 @@ websites:
     url_probe: ""
     errorType: "status_code"
     errorCode: 404
+
+  - name: "Behance"
+    base_url: "https://behance.net/{}"
+    url_probe: ""
+    errorType: "status_code"
+    errorCode: 404
