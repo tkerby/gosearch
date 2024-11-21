@@ -110,8 +110,6 @@ func BuildURL(baseURL, username string) string {
 
 func NoRedirects(url string, WebsiteErrorCode int, wg *sync.WaitGroup) {
 
-	defer wg.Done()
-
 	transport := &http.Transport{
     	TLSClientConfig: &tls.Config{
         	MinVersion: tls.VersionTLS12,
@@ -148,8 +146,6 @@ func NoRedirects(url string, WebsiteErrorCode int, wg *sync.WaitGroup) {
 }
 
 func NoRedirectsWithCookies(url string, WebsiteErrorCode int, cookies [] Cookie, wg *sync.WaitGroup) {
-
-	defer wg.Done()
 
 	transport := &http.Transport{
     	TLSClientConfig: &tls.Config{
@@ -195,8 +191,6 @@ func NoRedirectsWithCookies(url string, WebsiteErrorCode int, cookies [] Cookie,
 }
 
 func NoRedirectsWithErrorMsg(website Website, url string, errorMsg string, username string, wg *sync.WaitGroup) {
-
-	defer wg.Done()
 
 	transport := &http.Transport{
     	TLSClientConfig: &tls.Config{
@@ -248,8 +242,6 @@ func NoRedirectsWithErrorMsg(website Website, url string, errorMsg string, usern
 
 func NoRedirectsWithErrorMsgAndCookies(website Website, url string, errorMsg string, cookies [] Cookie, username string, wg *sync.WaitGroup) {
 
-	defer wg.Done()
-
 	transport := &http.Transport{
     	TLSClientConfig: &tls.Config{
         	MinVersion: tls.VersionTLS12,
@@ -305,8 +297,7 @@ func NoRedirectsWithErrorMsgAndCookies(website Website, url string, errorMsg str
 	}
 }
 
-func MakeRequestWithCookies(url string, cookies [] Cookie, WebsiteErrorCode int, wg *sync.WaitGroup) {
-	defer wg.Done()
+func MakeRequestWithCookies(url string, cookies [] Cookie, WebsiteErrorCode int, wg *sync.WaitGroup) 
 
 	transport := &http.Transport{
     	TLSClientConfig: &tls.Config{
@@ -348,8 +339,7 @@ func MakeRequestWithCookies(url string, cookies [] Cookie, WebsiteErrorCode int,
 	}
 }
 
-func MakeRequestWithCookiesAndErrorMsg(website Website, url string, cookies [] Cookie, errorMsg string, username string, wg *sync.WaitGroup) {
-	defer wg.Done()
+func MakeRequestWithCookiesAndErrorMsg(website Website, url string, cookies [] Cookie, errorMsg string, username string, wg *sync.WaitGroup) 
 
 	transport := &http.Transport{
     	TLSClientConfig: &tls.Config{
@@ -402,8 +392,7 @@ func MakeRequestWithCookiesAndErrorMsg(website Website, url string, cookies [] C
 	}
 }
 
-func MakeRequestWithoutErrorMsg(url string, WebsiteErrorCode int, wg *sync.WaitGroup) {
-	defer wg.Done()
+func MakeRequestWithoutErrorMsg(url string, WebsiteErrorCode int, wg *sync.WaitGroup) 
 
 	transport := &http.Transport{
     	TLSClientConfig: &tls.Config{
@@ -438,8 +427,7 @@ func MakeRequestWithoutErrorMsg(url string, WebsiteErrorCode int, wg *sync.WaitG
 	}
 }
 
-func MakeRequestWithErrorMsg(website Website, url string, errorMsg string, username string, wg *sync.WaitGroup) {
-	defer wg.Done()
+func MakeRequestWithErrorMsg(website Website, url string, errorMsg string, username string, wg *sync.WaitGroup) 
 
 	transport := &http.Transport{
     	TLSClientConfig: &tls.Config{
