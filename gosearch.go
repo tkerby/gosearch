@@ -15,6 +15,7 @@ import (
 	"github.com/inancgumus/screen"
 	"gopkg.in/yaml.v3"
 	"crypto/tls"
+	"time"
 )
 
 var Reset = "\033[0m"
@@ -108,7 +109,8 @@ func BuildURL(baseURL, username string) string {
 	return strings.Replace(baseURL, "{}", username, 1)
 }
 
-func NoRedirects(url string, WebsiteErrorCode int, wg *sync.WaitGroup) {
+func NoRedirects(url string, WebsiteErrorCode int) {
+
 
 	transport := &http.Transport{
     	TLSClientConfig: &tls.Config{
@@ -145,7 +147,8 @@ func NoRedirects(url string, WebsiteErrorCode int, wg *sync.WaitGroup) {
 	}
 }
 
-func NoRedirectsWithCookies(url string, WebsiteErrorCode int, cookies [] Cookie, wg *sync.WaitGroup) {
+func NoRedirectsWithCookies(url string, WebsiteErrorCode int, cookies [] Cookie) {
+
 
 	transport := &http.Transport{
     	TLSClientConfig: &tls.Config{
@@ -190,7 +193,8 @@ func NoRedirectsWithCookies(url string, WebsiteErrorCode int, cookies [] Cookie,
 	}
 }
 
-func NoRedirectsWithErrorMsg(website Website, url string, errorMsg string, username string, wg *sync.WaitGroup) {
+func NoRedirectsWithErrorMsg(website Website, url string, errorMsg string, username string) {
+
 
 	transport := &http.Transport{
     	TLSClientConfig: &tls.Config{
@@ -240,7 +244,8 @@ func NoRedirectsWithErrorMsg(website Website, url string, errorMsg string, usern
 }
 
 
-func NoRedirectsWithErrorMsgAndCookies(website Website, url string, errorMsg string, cookies [] Cookie, username string, wg *sync.WaitGroup) {
+func NoRedirectsWithErrorMsgAndCookies(website Website, url string, errorMsg string, cookies [] Cookie, username string) {
+
 
 	transport := &http.Transport{
     	TLSClientConfig: &tls.Config{
@@ -297,7 +302,7 @@ func NoRedirectsWithErrorMsgAndCookies(website Website, url string, errorMsg str
 	}
 }
 
-func MakeRequestWithCookies(url string, cookies [] Cookie, WebsiteErrorCode int, wg *sync.WaitGroup) 
+func MakeRequestWithCookies(url string, cookies [] Cookie, WebsiteErrorCode int) {
 
 	transport := &http.Transport{
     	TLSClientConfig: &tls.Config{
@@ -339,7 +344,7 @@ func MakeRequestWithCookies(url string, cookies [] Cookie, WebsiteErrorCode int,
 	}
 }
 
-func MakeRequestWithCookiesAndErrorMsg(website Website, url string, cookies [] Cookie, errorMsg string, username string, wg *sync.WaitGroup) 
+func MakeRequestWithCookiesAndErrorMsg(website Website, url string, cookies [] Cookie, errorMsg string, username string) {
 
 	transport := &http.Transport{
     	TLSClientConfig: &tls.Config{
@@ -392,7 +397,7 @@ func MakeRequestWithCookiesAndErrorMsg(website Website, url string, cookies [] C
 	}
 }
 
-func MakeRequestWithoutErrorMsg(url string, WebsiteErrorCode int, wg *sync.WaitGroup) 
+func MakeRequestWithoutErrorMsg(url string, WebsiteErrorCode int) {
 
 	transport := &http.Transport{
     	TLSClientConfig: &tls.Config{
@@ -427,7 +432,7 @@ func MakeRequestWithoutErrorMsg(url string, WebsiteErrorCode int, wg *sync.WaitG
 	}
 }
 
-func MakeRequestWithErrorMsg(website Website, url string, errorMsg string, username string, wg *sync.WaitGroup) 
+func MakeRequestWithErrorMsg(website Website, url string, errorMsg string, username string) {
 
 	transport := &http.Transport{
     	TLSClientConfig: &tls.Config{
@@ -472,49 +477,38 @@ func MakeRequestWithErrorMsg(website Website, url string, errorMsg string, usern
 	}
 }
 
-func Search(config Config, username string) {
-	var wg sync.WaitGroup
-	var url string
+func Search(config Config, username string, wg *sync.WaitGroup) {
+    var url string
 
-	for _, website := range config.Websites {
-		url = BuildURL(website.BaseURL, username)
-																            // if client should not follow redirects
-		if (website.ErrorType == "errorMsg") && (website.Cookies != nil) && (!website.FollowRedirects) {
-			if website.URLProbe != "" {
-				url = BuildURL(website.URLProbe, username)
-			}
-			wg.Add(1)
-			go NoRedirectsWithErrorMsgAndCookies(website, url, website.ErrorMsg, website.Cookies, username, &wg)
-								      												  // if client should not follow redirects
-		} else if (website.ErrorType == "status_code") && (website.Cookies != nil) && (!website.FollowRedirects) {
-			if website.URLProbe != "" {
-				url = BuildURL(website.URLProbe, username)
-			}
-			wg.Add(1)
-			go NoRedirectsWithCookies(url, website.ErrorCode, website.Cookies, &wg)
-		} else if (website.ErrorType == "status_code") && (!website.FollowRedirects) { // if client should not follow redirects
-			wg.Add(1)
-			go NoRedirects(url, website.ErrorCode, &wg)
-		} else if (website.ErrorType == "errorMsg") && (website.Cookies == nil) {
-			if website.URLProbe != "" {
-				url = BuildURL(website.URLProbe, username)
-			}
-			wg.Add(1)
-			go MakeRequestWithCookiesAndErrorMsg(website, url, website.Cookies, website.ErrorMsg, username, &wg)
-		} else if website.ErrorType == "unknown" {
-			fmt.Println(Yellow + ":: [?]", url + Reset)
-			WriteToFile("results.txt", "[?] " + url + "\n")
+    for _, website := range config.Websites {
+        go func(website Website) {
+            defer wg.Done()  // Ensure the goroutine signals that it's done after completion
 
-		} else if website.Cookies != nil {
-			wg.Add(1)
-			go MakeRequestWithCookies(url, website.Cookies, website.ErrorCode, &wg)
-		} else {
-			wg.Add(1)
-			go MakeRequestWithoutErrorMsg(url, website.ErrorCode, &wg)
-		}
+            if website.URLProbe != "" {
+                url = BuildURL(website.URLProbe, username)
+            } else {
+                url = BuildURL(website.BaseURL, username)
+            }
 
-	wg.Wait()
-}
+            // Your logic to handle different website types goes here, e.g.:
+            if website.ErrorType == "errorMsg" && website.Cookies != nil && !website.FollowRedirects {
+                NoRedirectsWithErrorMsgAndCookies(website, url, website.ErrorMsg, website.Cookies, username)
+            } else if website.ErrorType == "status_code" && website.Cookies != nil && !website.FollowRedirects {
+                NoRedirectsWithCookies(url, website.ErrorCode, website.Cookies)
+            } else if website.ErrorType == "status_code" && !website.FollowRedirects {
+                NoRedirects(url, website.ErrorCode)
+            } else if website.ErrorType == "errorMsg" && website.Cookies == nil {
+                MakeRequestWithCookiesAndErrorMsg(website, url, website.Cookies, website.ErrorMsg, username)
+            } else if website.ErrorType == "unknown" {
+                fmt.Println(Yellow + ":: [?]", url + Reset)
+                WriteToFile("results.txt", "[?] " + url + "\n")
+            } else if website.Cookies != nil {
+                MakeRequestWithCookies(url, website.Cookies, website.ErrorCode)
+            } else {
+                MakeRequestWithoutErrorMsg(url, website.ErrorCode)
+            }
+        }(website)  // Pass the website to the goroutine
+	}
 }
 
 func main() {
@@ -523,6 +517,7 @@ func main() {
 		os.Exit(1)
 	}
 	var username string = os.Args[1]
+	var wg sync.WaitGroup
 
 	config, err := UnmarshalYAML()
 	if err != nil {
@@ -538,7 +533,16 @@ func main() {
 	fmt.Println(":: Websites                              : ", len(config.Websites))
 	fmt.Println(strings.Repeat("⎯", 60))
 	fmt.Println(":: A yellow link indicates that I was unable to verify whether the username exists on the platform.")
+
+	start := time.Now()
+
+	wg.Add(len(config.Websites))
+	go Search(config, username, &wg)
+	wg.Wait()
+
+	elapsed := time.Since(start)
+	fmt.Println(strings.Repeat("⎯", 60))
+	fmt.Println(":: Total time taken                      : ", elapsed)
 	
-	Search(config, username)
 	os.Exit(0)
 }
