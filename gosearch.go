@@ -32,6 +32,7 @@ var ASCII string = `
                        \|_________|
 `
 var VERSION string = "v1.0.0"
+var count uint16 = 0 // Maximum value for count is 65,535
 
 type Website struct {
 	Name      string `yaml:"name"`
@@ -144,6 +145,8 @@ func NoRedirects(url string, WebsiteErrorCode int) {
 	if resp.StatusCode != WebsiteErrorCode {
 		fmt.Println(Green + "::", url + Reset)
 		WriteToFile("results.txt", url + "\n")
+		
+		count++
 	}
 }
 
@@ -190,6 +193,8 @@ func NoRedirectsWithCookies(url string, WebsiteErrorCode int, cookies [] Cookie)
 	if resp.StatusCode != WebsiteErrorCode {
 		fmt.Println(Green + "::", url + Reset)
 		WriteToFile("results.txt", url + "\n")
+
+		count++
 	}
 }
 
@@ -240,6 +245,8 @@ func NoRedirectsWithErrorMsg(website Website, url string, errorMsg string, usern
 		}
 		fmt.Println(Green + "::", url + Reset)
 		WriteToFile("results.txt", url + "\n")
+
+		count++
 	}
 }
 
@@ -299,6 +306,8 @@ func NoRedirectsWithErrorMsgAndCookies(website Website, url string, errorMsg str
 		}
 		fmt.Println(Green + "::", url + Reset)
 		WriteToFile("results.txt", url + "\n")
+
+		count++
 	}
 }
 
@@ -341,6 +350,8 @@ func MakeRequestWithCookies(url string, cookies [] Cookie, WebsiteErrorCode int)
 	if resp.StatusCode != WebsiteErrorCode {
 		fmt.Println(Green + "::", url + Reset)
 		WriteToFile("results.txt", url + "\n")
+
+		count++
 	}
 }
 
@@ -394,6 +405,8 @@ func MakeRequestWithCookiesAndErrorMsg(website Website, url string, cookies [] C
 		}
 		fmt.Println(Green + "::", url + Reset)
 		WriteToFile("results.txt", url + "\n")
+
+		count++
 	}
 }
 
@@ -429,6 +442,8 @@ func MakeRequestWithoutErrorMsg(url string, WebsiteErrorCode int) {
 	if res.StatusCode != WebsiteErrorCode {
 		fmt.Println(Green + "::", url + Reset)
 		WriteToFile("results.txt", url + "\n")
+
+		count++
 	}
 }
 
@@ -474,6 +489,8 @@ func MakeRequestWithErrorMsg(website Website, url string, errorMsg string, usern
 		}
 		fmt.Println(Green + "::", url + Reset)
 		WriteToFile("results.txt", url + "\n")
+
+		count++
 	}
 }
 
@@ -502,6 +519,7 @@ func Search(config Config, username string, wg *sync.WaitGroup) {
             } else if website.ErrorType == "unknown" {
                 fmt.Println(Yellow + ":: [?]", url + Reset)
                 WriteToFile("results.txt", "[?] " + url + "\n")
+				count++
             } else if website.Cookies != nil {
                 MakeRequestWithCookies(url, website.Cookies, website.ErrorCode)
             } else {
@@ -542,6 +560,7 @@ func main() {
 
 	elapsed := time.Since(start)
 	fmt.Println(strings.Repeat("⎯", 60))
+	fmt.Println(":: Number of profiles found              : ", count)
 	fmt.Println(":: Total time taken                      : ", elapsed)
 	
 	os.Exit(0)
