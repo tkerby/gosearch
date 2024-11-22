@@ -340,3 +340,10 @@ websites:
     follow_redirects: true
     errorType: "status_code"
     errorCode: 404
+
+  - name: "Patreon"
+    base_url: "https://www.patreon.com/{}"
+    url_probe: ""
+    follow_redirects: true
+    errorType: "status_code"
+    errorCode: 404
