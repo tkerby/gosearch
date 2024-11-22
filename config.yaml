@@ -298,3 +298,10 @@ websites:
     follow_redirects: true
     errorType: "unknown"
     errorCode: 999
+
+  - name: "Vimeo"
+    base_url: "https://vimeo.com/{}"
+    url_probe: ""
+    follow_redirects: true
+    errorType: "status_code"
+    errorCode: 404
