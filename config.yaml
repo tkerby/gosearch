@@ -289,3 +289,12 @@ websites:
     follow_redirects: true
     errorType: "errorMsg"
     errorMsg: '<title data-react-helmet="true">Tinder | Dating, Make Friends &amp; Meet New People</title>'
+
+  # LinkedIn requires authorisation for some profiles; therefore it is reported as an "unknown" to avoid false negatives
+  # For example, https://www.linkedin.com/in/ben can be viewed without authorisation but mine cannot.
+  - name: "LinkedIn"
+    base_url: "https://www.linkedin.com/in/{}"
+    url_probe: ""
+    follow_redirects: true
+    errorType: "unknown"
+    errorCode: 999
