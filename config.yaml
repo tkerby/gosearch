@@ -361,3 +361,53 @@ websites:
     follow_redirects: true
     errorType: "status_code"
     errorCode: 202
+
+
+  - name: "Linktree"
+    base_url: "https://www.linktr.ee/{}"
+    url_probe: ""
+    follow_redirects: true
+    errorType: "errorMsg"
+    errorMsg: '"statusCode":404'
+
+  - name: "Beacons.ai"
+    base_url: "https://beacons.ai/{}"
+    url_probe: ""
+    follow_redirects: true
+    errorType: "status_code"
+    errorCode: 403
+
+  - name: "Bio.link"
+    base_url: "https://bio.link/{}"
+    url_probe: ""
+    follow_redirects: true
+    errorType: "status_code"
+    errorCode: 404
+
+  - name: "Milkshake"
+    base_url: "https://msha.ke/{}"
+    url_probe: ""
+    follow_redirects: true
+    errorType: "status_code"
+    errorCode: 404
+
+  - name: "Snipfeed"
+    base_url: "https://snipfeed.co/{}"
+    url_probe: ""
+    follow_redirects: true
+    errorType: "status_code"
+    errorCode: 404
+
+  - name: "Ayo.so"
+    base_url: "https://ayo.so/{}"
+    url_probe: ""
+    follow_redirects: true
+    errorType: "status_code"
+    errorCode: 404
+
+  - name: "Carrd"
+    base_url: "https://{}.carrd.co"
+    url_probe: ""
+    follow_redirects: true
+    errorType: "status_code"
+    errorCode: 404
