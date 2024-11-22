@@ -312,3 +312,24 @@ websites:
     follow_redirects: true
     errorType: "errorMsg"
     errorMsg: '<title data-rh="true">Medium</title>'
+
+  - name: "Spotify"
+    base_url: "https://open.spotify.com/user/{}"
+    url_probe: ""
+    follow_redirects: true
+    errorType: "status_code"
+    errorCode: 404
+  
+  - name: "Clubhouse"
+    base_url: "https://www.joinclubhouse.com/@{}"
+    url_probe: ""
+    follow_redirects: true
+    errorType: "status_code"
+    errorCode: 404
+
+  - name: "Foursquare"
+    base_url: "https://foursquare.com/{}"
+    url_probe: ""
+    follow_redirects: true
+    errorType: "status_code"
+    errorCode: 404
