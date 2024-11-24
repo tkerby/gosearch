@@ -120,6 +120,7 @@ func NoRedirects(url string, WebsiteErrorCode int) {
 	}
 
 	client := &http.Client{
+		Timeout: 60 * time.Second,
 		Transport: transport,
 		CheckRedirect: func(req *http.Request, via []*http.Request) error {
 			return http.ErrUseLastResponse // Prevent following redirects
@@ -160,6 +161,7 @@ func NoRedirectsWithCookies(url string, WebsiteErrorCode int, cookies [] Cookie)
 	}
 
 	client := &http.Client{
+		Timeout: 60 * time.Second,
 		Transport: transport,
 		CheckRedirect: func(req *http.Request, via []*http.Request) error {
 			return http.ErrUseLastResponse // Prevent following redirects
@@ -208,6 +210,7 @@ func NoRedirectsWithErrorMsg(website Website, url string, errorMsg string, usern
 	}
 
 	client := &http.Client{
+		Timeout: 60 * time.Second,
 		Transport: transport,
 		CheckRedirect: func(req *http.Request, via []*http.Request) error {
 			return http.ErrUseLastResponse
@@ -261,6 +264,7 @@ func NoRedirectsWithErrorMsgAndCookies(website Website, url string, errorMsg str
 	}
 
 	client := &http.Client{
+		Timeout: 60 * time.Second,
 		Transport: transport,
 		CheckRedirect: func(req *http.Request, via []*http.Request) error {
 			return http.ErrUseLastResponse
@@ -320,6 +324,7 @@ func MakeRequestWithCookies(url string, cookies [] Cookie, WebsiteErrorCode int)
 	}
 
 	client := &http.Client{
+	Timeout: 60 * time.Second,
 	Transport: transport,
 	}
 	
@@ -364,6 +369,7 @@ func MakeRequestWithCookiesAndErrorMsg(website Website, url string, cookies [] C
 	}
 
 	client := &http.Client{
+	Timeout: 60 * time.Second,
 	Transport: transport,
 	}
 	
@@ -419,6 +425,7 @@ func MakeRequestWithoutErrorMsg(url string, WebsiteErrorCode int) {
 	}
 
 	client := &http.Client{
+	Timeout: 60 * time.Second,
 	Transport: transport,
 	}
 	
@@ -456,6 +463,7 @@ func MakeRequestWithErrorMsg(website Website, url string, errorMsg string, usern
 	}
 
 	client := &http.Client{
+	Timeout: 60 * time.Second,
 	Transport: transport,
 	}
 	
