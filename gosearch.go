@@ -50,6 +50,14 @@ type Cookie struct {
 }
 
 func UnmarshalYAML() (Config, error) {
+
+	// GoSearch relies on config.yaml to determine the websites to search for.
+	// Instead of forcing uers to manually download the config.yaml file, we will fetch the latest version from the repository.
+	// Thereforeore, we will do the following:
+	// 1. Delete the existing config.yaml file if it exists as it will be outdated in the future
+	// 2. Read the latest config.yaml file from the repository
+	// Bonus: it does not download the config.yaml file, it just reads it from the repository.
+
 	err := os.Remove("config.yaml")
 	if err != nil && !os.IsNotExist(err) {
 		return Config{}, fmt.Errorf("error deleting old config.yaml: %w", err)
