@@ -1,8 +1,3 @@
-// Created by Ibn Aleem (github.com/ibnaleem)
-// Repository: https://github.com/ibnaleem/gosearch
-// Issues: https://github.com/ibnaleem/search/issues
-// License: https://github.com/ibnaleem/gosearch/blob/main/LICENSE
-
 package main
 
 import (
@@ -35,14 +30,14 @@ var VERSION string = "v1.0.0"
 var count uint16 = 0 // Maximum value for count is 65,535
 
 type Website struct {
-	Name      string `yaml:"name"`
-	BaseURL   string `yaml:"base_url"`
-	URLProbe  string `yaml:"url_probe,omitempty"`
-	FollowRedirects  bool `yaml:"follow_redirects,omitempty"`
-	ErrorType string `yaml:"errorType"`
-	ErrorMsg  string `yaml:"errorMsg,omitempty"`
-	ErrorCode int    `yaml:"errorCode,omitempty"`
-	Cookies   []Cookie `yaml:"cookies,omitempty"`
+	Name             string   `yaml:"name"`
+	BaseURL          string   `yaml:"base_url"`
+	URLProbe         string   `yaml:"url_probe,omitempty"`
+	FollowRedirects  bool     `yaml:"follow_redirects,omitempty"`
+	ErrorType        string   `yaml:"errorType"`
+	ErrorMsg         string   `yaml:"errorMsg,omitempty"`
+	ErrorCode        int      `yaml:"errorCode,omitempty"`
+	Cookies          []Cookie `yaml:"cookies,omitempty"`
 }
 
 type Config struct {
@@ -55,14 +50,6 @@ type Cookie struct {
 }
 
 func UnmarshalYAML() (Config, error) {
-
-	// GoSearch relies on config.yaml to determine the websites to search for.
-	// Instead of forcing uers to manually download the config.yaml file, we will fetch the latest version from the repository.
-	// Thereforeore, we will do the following:
-	// 1. Delete the existing config.yaml file if it exists as it will be outdated in the future
-	// 2. Read the latest config.yaml file from the repository
-	// Bonus: it does not download the config.yaml file, it just reads it from the repository.
-
 	err := os.Remove("config.yaml")
 	if err != nil && !os.IsNotExist(err) {
 		return Config{}, fmt.Errorf("error deleting old config.yaml: %w", err)
@@ -96,13 +83,13 @@ func UnmarshalYAML() (Config, error) {
 func WriteToFile(filename string, content string) {
 	f, err := os.OpenFile(filename, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0644)
 	if err != nil {
-    	panic(err)
+		panic(err)
 	}
-	
+
 	defer f.Close()
 
 	if _, err = f.WriteString(content); err != nil {
-    		panic(err)
+		panic(err)
 	}
 }
 
@@ -110,378 +97,97 @@ func BuildURL(baseURL, username string) string {
 	return strings.Replace(baseURL, "{}", username, 1)
 }
 
-func NoRedirects(url string, WebsiteErrorCode int) {
-
-
+func MakeRequestWithErrorCode(website Website, url string, username string) {
 	transport := &http.Transport{
-    	TLSClientConfig: &tls.Config{
-        	MinVersion: tls.VersionTLS12,
-    	},
-	}
-
-	client := &http.Client{
-		Timeout: 60 * time.Second,
-		Transport: transport,
-		CheckRedirect: func(req *http.Request, via []*http.Request) error {
-			return http.ErrUseLastResponse // Prevent following redirects
+		TLSClientConfig: &tls.Config{
+			MinVersion: tls.VersionTLS12,
 		},
 	}
 
-	req, err := http.NewRequest("GET", url, nil)
-	if err != nil {
-		fmt.Printf("Error creating request: %v\n", err)
-		os.Exit(1)
-	}
-
-	req.Header.Set("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:125.0) Gecko/20100101 Firefox/125.0")
-
-	resp, err := client.Do(req)
-	if err != nil {
-		fmt.Printf("Error making request to %s: %v\n", url, err)
-		os.Exit(1)
-	}
-	
-	defer resp.Body.Close()
-
-	if resp.StatusCode != WebsiteErrorCode {
-		fmt.Println(Green + "::", url + Reset)
-		WriteToFile("results.txt", url + "\n")
-		
-		count++
-	}
-}
-
-func NoRedirectsWithCookies(url string, WebsiteErrorCode int, cookies [] Cookie) {
-
-
-	transport := &http.Transport{
-    	TLSClientConfig: &tls.Config{
-        	MinVersion: tls.VersionTLS12,
-    	},
-	}
-
 	client := &http.Client{
-		Timeout: 60 * time.Second,
+		Timeout:   60 * time.Second,
 		Transport: transport,
-		CheckRedirect: func(req *http.Request, via []*http.Request) error {
-			return http.ErrUseLastResponse // Prevent following redirects
-		},
 	}
 
-	req, err := http.NewRequest("GET", url, nil)
-	if err != nil {
-		fmt.Printf("Error creating request: %v\n", err)
-		os.Exit(1)
-	}
-
-	req.Header.Set("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:125.0) Gecko/20100101 Firefox/125.0")
-
-	for _, cookie := range cookies {
-		cookieObj := &http.Cookie{
-			Name:  cookie.Name,
-			Value: cookie.Value,
-		}
-		req.AddCookie(cookieObj)
-	}
-
-	resp, err := client.Do(req)
-	if err != nil {
-		fmt.Printf("Error making request to %s: %v\n", url, err)
-		os.Exit(1)
-	}
-	
-	defer resp.Body.Close()
-
-	if resp.StatusCode != WebsiteErrorCode {
-		fmt.Println(Green + "::", url + Reset)
-		WriteToFile("results.txt", url + "\n")
-
-		count++
-	}
-}
-
-func NoRedirectsWithErrorMsg(website Website, url string, errorMsg string, username string) {
-
-
-	transport := &http.Transport{
-    	TLSClientConfig: &tls.Config{
-        	MinVersion: tls.VersionTLS12,
-    	},
-	}
-
-	client := &http.Client{
-		Timeout: 60 * time.Second,
-		Transport: transport,
-		CheckRedirect: func(req *http.Request, via []*http.Request) error {
+	if !website.FollowRedirects {
+		client.CheckRedirect = func(req *http.Request, via []*http.Request) error {
 			return http.ErrUseLastResponse
-		},
+		}
 	}
 
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-		fmt.Printf("Error creating request: %v\n", err)
-		os.Exit(1)
-	}
-
-	req.Header.Set("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:125.0) Gecko/20100101 Firefox/125.0")
-
-	resp, err := client.Do(req)
-	if err != nil {
-		fmt.Printf("Error making request to %s: %v\n", url, err)
-		os.Exit(1)
-	}
-	
-	defer resp.Body.Close()
-
-	body, err := io.ReadAll(resp.Body)
-
-	if err != nil {
-		fmt.Printf("Error reading response body: %v\n", err)
-		os.Exit(1)
-	}
-
-	bodyString := string(body)
-
-	if !strings.Contains(bodyString, errorMsg) {
-		if website.URLProbe != "" {
-			url = BuildURL(website.BaseURL, username)
-		}
-		fmt.Println(Green + "::", url + Reset)
-		WriteToFile("results.txt", url + "\n")
-
-		count++
-	}
-}
-
-
-func NoRedirectsWithErrorMsgAndCookies(website Website, url string, errorMsg string, cookies [] Cookie, username string) {
-
-
-	transport := &http.Transport{
-    	TLSClientConfig: &tls.Config{
-        	MinVersion: tls.VersionTLS12,
-    	},
-	}
-
-	client := &http.Client{
-		Timeout: 60 * time.Second,
-		Transport: transport,
-		CheckRedirect: func(req *http.Request, via []*http.Request) error {
-			return http.ErrUseLastResponse
-		},
-	}
-
-	req, err := http.NewRequest("GET", url, nil)
-	if err != nil {
-		fmt.Printf("Error creating request: %v\n", err)
-		os.Exit(1)
-	}
-
-	req.Header.Set("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:125.0) Gecko/20100101 Firefox/125.0")
-
-	for _, cookie := range cookies {
-		cookieObj := &http.Cookie{
-			Name:  cookie.Name,
-			Value: cookie.Value,
-		}
-		req.AddCookie(cookieObj)
-	}
-
-	resp, err := client.Do(req)
-	if err != nil {
-		fmt.Printf("Error making request to %s: %v\n", url, err)
-		os.Exit(1)
-	}
-	
-	defer resp.Body.Close()
-
-	body, err := io.ReadAll(resp.Body)
-
-	if err != nil {
-		fmt.Printf("Error reading response body: %v\n", err)
-		os.Exit(1)
-	}
-
-	bodyString := string(body)
-
-	if !strings.Contains(bodyString, errorMsg) {
-		if website.URLProbe != "" {
-			url = BuildURL(website.BaseURL, username)
-		}
-		fmt.Println(Green + "::", url + Reset)
-		WriteToFile("results.txt", url + "\n")
-
-		count++
-	}
-}
-
-func MakeRequestWithCookies(url string, cookies [] Cookie, WebsiteErrorCode int) {
-
-	transport := &http.Transport{
-    	TLSClientConfig: &tls.Config{
-        	MinVersion: tls.VersionTLS12,
-    		},
-	}
-
-	client := &http.Client{
-	Timeout: 60 * time.Second,
-	Transport: transport,
-	}
-	
-	req, err := http.NewRequest("GET", url, nil)
-	
-	if err != nil {
-		fmt.Printf("Error creating request in function MakeRequestWithCookies: %v\n", err)
+		fmt.Printf("Error creating request in function MakeRequestWithErrorCode: %v\n", err)
 		return
 	}
 
 	req.Header.Set("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:125.0) Gecko/20100101 Firefox/125.0")
 
-	for _, cookie := range cookies {
-		cookieObj := &http.Cookie{
-			Name:  cookie.Name,
-			Value: cookie.Value,
+	if website.Cookies != nil {
+		for _, cookie := range website.Cookies {
+			cookieObj := &http.Cookie{
+				Name:  cookie.Name,
+				Value: cookie.Value,
+			}
+			req.AddCookie(cookieObj)
 		}
-		req.AddCookie(cookieObj)
 	}
-
-	resp, err := client.Do(req)
-	if err != nil {
-		fmt.Printf("Error making request to %s: %v\n", url, err)
-		return
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != WebsiteErrorCode {
-		fmt.Println(Green + "::", url + Reset)
-		WriteToFile("results.txt", url + "\n")
-
-		count++
-	}
-}
-
-func MakeRequestWithCookiesAndErrorMsg(website Website, url string, cookies [] Cookie, errorMsg string, username string) {
-
-	transport := &http.Transport{
-    	TLSClientConfig: &tls.Config{
-        	MinVersion: tls.VersionTLS12,
-    		},
-	}
-
-	client := &http.Client{
-	Timeout: 60 * time.Second,
-	Transport: transport,
-	}
-	
-	req, err := http.NewRequest("GET", url, nil)
-	
-	if err != nil {
-		fmt.Printf("Error creating request in function MakeRequestWithCookiesAndErrorMsg: %v\n", err)
-		return
-	}
-
-	req.Header.Set("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:125.0) Gecko/20100101 Firefox/125.0")
-
-	for _, cookie := range cookies {
-		cookieObj := &http.Cookie{
-			Name:  cookie.Name,
-			Value: cookie.Value,
-		}
-		req.AddCookie(cookieObj)
-	}
-
-	resp, err := client.Do(req)
-	if err != nil {
-		fmt.Printf("Error making request to %s: %v\n", url, err)
-		return
-	}
-	
-	defer resp.Body.Close()
-
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		fmt.Printf("Error reading response body: %v\n", err)
-		return
-	}
-
-	bodyStr := string(body)
-	if !strings.Contains(bodyStr, errorMsg) {
-		if website.URLProbe != "" {
-			url = BuildURL(website.BaseURL, username)
-		}
-		fmt.Println(Green + "::", url + Reset)
-		WriteToFile("results.txt", url + "\n")
-
-		count++
-	}
-}
-
-func MakeRequestWithoutErrorMsg(url string, WebsiteErrorCode int) {
-
-	transport := &http.Transport{
-    	TLSClientConfig: &tls.Config{
-        	MinVersion: tls.VersionTLS12,
-    		},
-	}
-
-	client := &http.Client{
-	Timeout: 60 * time.Second,
-	Transport: transport,
-	}
-	
-	req, err := http.NewRequest("GET", url, nil)
-	
-	if err != nil {
-		fmt.Printf("Error creating request in function MakeRequestWithCookies: %v\n", err)
-		return
-	}
-
-	req.Header.Set("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:125.0) Gecko/20100101 Firefox/125.0")
 
 	res, err := client.Do(req)
 	if err != nil {
 		fmt.Printf("Error making GET request to %s: %v\n", url, err)
 		return
 	}
-	
 	defer res.Body.Close()
 
-	if res.StatusCode != WebsiteErrorCode {
+	if res.StatusCode != website.ErrorCode {
 		fmt.Println(Green + "::", url + Reset)
 		WriteToFile("results.txt", url + "\n")
-
 		count++
 	}
 }
 
-func MakeRequestWithErrorMsg(website Website, url string, errorMsg string, username string) {
-
+func MakeRequestWithErrorMsg(website Website, url string, username string) {
 	transport := &http.Transport{
-    	TLSClientConfig: &tls.Config{
-        	MinVersion: tls.VersionTLS12,
-    		},
+		TLSClientConfig: &tls.Config{
+			MinVersion: tls.VersionTLS12,
+		},
 	}
 
 	client := &http.Client{
-	Timeout: 60 * time.Second,
-	Transport: transport,
+		Timeout:   60 * time.Second,
+		Transport: transport,
 	}
-	
+
+	if !website.FollowRedirects {
+		client.CheckRedirect = func(req *http.Request, via []*http.Request) error {
+			return http.ErrUseLastResponse
+		}
+	}
+
 	req, err := http.NewRequest("GET", url, nil)
-	
 	if err != nil {
-		fmt.Printf("Error creating request in function MakeRequestWithCookies: %v\n", err)
+		fmt.Printf("Error creating request in function MakeRequestWithErrorMsg: %v\n", err)
 		return
 	}
 
 	req.Header.Set("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:125.0) Gecko/20100101 Firefox/125.0")
+
+	if website.Cookies != nil {
+		for _, cookie := range website.Cookies {
+			cookieObj := &http.Cookie{
+				Name:  cookie.Name,
+				Value: cookie.Value,
+			}
+			req.AddCookie(cookieObj)
+		}
+	}
 
 	res, err := client.Do(req)
 	if err != nil {
 		fmt.Printf("Error making GET request to %s: %v\n", url, err)
 		return
 	}
-
 	defer res.Body.Close()
 
 	body, err := io.ReadAll(res.Body)
@@ -490,50 +196,41 @@ func MakeRequestWithErrorMsg(website Website, url string, errorMsg string, usern
 		return
 	}
 
+	if website.URLProbe != "" {
+		url = BuildURL(website.BaseURL, username)
+	}
+
 	bodyStr := string(body)
-	if !strings.Contains(bodyStr, errorMsg) {
-		if website.URLProbe != "" {
-			url = BuildURL(website.BaseURL, username)
-		}
+	if !strings.Contains(bodyStr, website.ErrorMsg) {
 		fmt.Println(Green + "::", url + Reset)
 		WriteToFile("results.txt", url + "\n")
-
 		count++
 	}
 }
 
 func Search(config Config, username string, wg *sync.WaitGroup) {
-    var url string
+	var url string
 
-    for _, website := range config.Websites {
-        go func(website Website) {
-            defer wg.Done()  // Ensure the goroutine signals that it's done after completion
+	for _, website := range config.Websites {
+		go func(website Website) {
+			defer wg.Done() // Ensure the goroutine signals that it's done after completion
 
-            if website.URLProbe != "" {
-                url = BuildURL(website.URLProbe, username)
-            } else {
-                url = BuildURL(website.BaseURL, username)
-            }
+			if website.URLProbe != "" {
+				url = BuildURL(website.URLProbe, username)
+			} else {
+				url = BuildURL(website.BaseURL, username)
+			}
 
-            // Your logic to handle different website types goes here, e.g.:
-            if website.ErrorType == "errorMsg" && website.Cookies != nil && !website.FollowRedirects {
-                NoRedirectsWithErrorMsgAndCookies(website, url, website.ErrorMsg, website.Cookies, username)
-            } else if website.ErrorType == "status_code" && website.Cookies != nil && !website.FollowRedirects {
-                NoRedirectsWithCookies(url, website.ErrorCode, website.Cookies)
-            } else if website.ErrorType == "status_code" && !website.FollowRedirects {
-                NoRedirects(url, website.ErrorCode)
-            } else if website.ErrorType == "errorMsg" && website.Cookies == nil {
-                MakeRequestWithCookiesAndErrorMsg(website, url, website.Cookies, website.ErrorMsg, username)
-            } else if website.ErrorType == "unknown" {
-                fmt.Println(Yellow + ":: [?]", url + Reset)
+			if website.ErrorType == "status_code" {
+				MakeRequestWithErrorCode(website, url, username)
+			} else if website.ErrorType == "errorMsg" {
+				MakeRequestWithErrorMsg(website, url, username)
+			} else {
+				fmt.Println(Yellow + ":: [?]", url + Reset)
                 WriteToFile("results.txt", "[?] " + url + "\n")
 				count++
-            } else if website.Cookies != nil {
-                MakeRequestWithCookies(url, website.Cookies, website.ErrorCode)
-            } else {
-                MakeRequestWithoutErrorMsg(url, website.ErrorCode)
-            }
-        }(website)  // Pass the website to the goroutine
+			}
+		}(website)
 	}
 }
 
