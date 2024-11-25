@@ -108,7 +108,7 @@ websites:
     base_url: "https://www.threads.net/{}"
     url_probe: ""
     follow_redirects: true
-    errrorType: "errorMsg"
+    errorType: "errorMsg"
     errorMsg: "<title>Threads</title>"
 
   - name: "Tumblr"
