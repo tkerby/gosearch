@@ -254,6 +254,9 @@ websites:
     follow_redirects: true
     errorType: "status_code"
     errorCode: 404
+    cookies:
+    - name: "ts1"
+      value: "4b134fab9439a52a1a8d1789265b0404523ccb08"
 
   - name: "Flickr"
     base_url: "https://flickr.com/photos/{}"
