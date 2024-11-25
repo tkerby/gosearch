@@ -88,12 +88,14 @@ func UnmarshalYAML() (Config, error) {
 	return config, nil
 }
 
-func WriteToFile(filename string, content string) {
+func WriteToFile(username string, content string) {
+
+	filename := fmt.Sprintf("%s.txt", username)
+
 	f, err := os.OpenFile(filename, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0644)
 	if err != nil {
 		panic(err)
 	}
-
 	defer f.Close()
 
 	if _, err = f.WriteString(content); err != nil {
@@ -150,7 +152,7 @@ func MakeRequestWithErrorCode(website Website, url string, username string) {
 
 	if res.StatusCode != website.ErrorCode {
 		fmt.Println(Green + "::", url + Reset)
-		WriteToFile("results.txt", url + "\n")
+		WriteToFile(username, url + "\n")
 		count++
 	}
 }
@@ -211,7 +213,7 @@ func MakeRequestWithErrorMsg(website Website, url string, username string) {
 	bodyStr := string(body)
 	if !strings.Contains(bodyStr, website.ErrorMsg) {
 		fmt.Println(Green + "::", url + Reset)
-		WriteToFile("results.txt", url + "\n")
+		WriteToFile(username, url + "\n")
 		count++
 	}
 }
@@ -235,7 +237,7 @@ func Search(config Config, username string, wg *sync.WaitGroup) {
 				MakeRequestWithErrorMsg(website, url, username)
 			} else {
 				fmt.Println(Yellow + ":: [?]", url + Reset)
-                WriteToFile("results.txt", "[?] " + url + "\n")
+                WriteToFile(username, "[?] " + url + "\n")
 				count++
 			}
 		}(website)
