@@ -421,3 +421,10 @@ websites:
     follow_redirects: true
     errorType: "errorMsg"
     errorMsg: "<title>Steam Community :: Error</title>"
+
+  - name: "Dev Community"
+    base_url: "https://dev.to/{}"
+    url_probe: ""
+    follow_redirects: true
+    errorType: "status_code"
+    errorCode: 404
