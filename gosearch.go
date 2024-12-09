@@ -3,16 +3,18 @@ package main
 import (
 	"fmt"
 	"io"
-	"net/http"
 	"os"
-	"strings"
-	"sync"
-	"github.com/inancgumus/screen"
-	"gopkg.in/yaml.v3"
-	"crypto/tls"
 	"time"
+	"sync"
+	"strings"
+	"net/http"
+	"crypto/tls"
+	"encoding/json"
+	"gopkg.in/yaml.v3"
+	"github.com/inancgumus/screen"
 )
 
+var Red = "\033[31m" 
 var Reset = "\033[0m"
 var Green = "\033[32m"
 var Yellow = "\033[33m"
@@ -47,6 +49,25 @@ type Config struct {
 type Cookie struct {
 	Name  string `yaml:"name"`
 	Value string `yaml:"value"`
+}
+
+type Stealer struct {
+	TotalCorporateServices int      `json:"total_corporate_services"`
+	TotalUserServices      int      `json:"total_user_services"`
+	DateCompromised        string   `json:"date_compromised"`
+	StealerFamily          string   `json:"stealer_family"`
+	ComputerName           string   `json:"computer_name"`
+	OperatingSystem        string   `json:"operating_system"`
+	MalwarePath            string   `json:"malware_path"`
+	Antiviruses            interface{} `json:"antiviruses"`
+	IP                     string   `json:"ip"`
+	TopPasswords           []string `json:"top_passwords"`
+	TopLogins              []string `json:"top_logins"`
+}
+
+type HudsonRockResponse struct {
+	Message string    `json:"message"`
+	Stealers []Stealer `json:"stealers"`
 }
 
 func UnmarshalYAML() (Config, error) {
@@ -105,6 +126,111 @@ func WriteToFile(username string, content string) {
 
 func BuildURL(baseURL, username string) string {
 	return strings.Replace(baseURL, "{}", username, 1)
+}
+
+func HudsonRock(username string, wg *sync.WaitGroup) {
+
+	defer wg.Done()
+
+	url := "https://cavalier.hudsonrock.com/api/json/v2/osint-tools/search-by-username?username=" + username
+
+	resp, err := http.Get(url)
+	if err != nil {
+		fmt.Println("Error fetching data for " + username + " in HudsonRock function:", err)
+		return
+	}
+
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println("Error reading response in HudsonRock function:", err)
+		return
+	}
+
+	var response HudsonRockResponse
+	err = json.Unmarshal(body, &response)
+	if err != nil {
+		fmt.Println("Error parsing JSON in HudsonRock function:", err)
+		return
+	}
+
+	if response.Message == "This username is not associated with a computer infected by an info-stealer. Visit https://www.hudsonrock.com/free-tools to discover additional free tools and Infostealers related data." {
+		fmt.Println(Green + ":: This username is not associated with a computer infected by an info-stealer." + Reset)
+		WriteToFile(username, ":: This username is not associated with a computer infected by an info-stealer.")
+		return
+	} else {
+		fmt.Println(Red + ":: This username is associated with a computer that was infected by an info-stealer, all the credentials saved on this computer are at risk of being accessed by cybercriminals." + Reset)
+
+		for i, stealer := range response.Stealers {
+			fmt.Println(Red + fmt.Sprintf("[-] Stealer #%d", i+1) + Reset)
+			fmt.Println(Red + fmt.Sprintf("::  Stealer Family: %s", stealer.StealerFamily) + Reset)
+			fmt.Println(Red + fmt.Sprintf("::  Date Compromised: %s", stealer.DateCompromised) + Reset)
+			fmt.Println(Red + fmt.Sprintf("::  Computer Name: %s", stealer.ComputerName) + Reset)
+			fmt.Println(Red + fmt.Sprintf(":: Operating System: %s", stealer.OperatingSystem) + Reset)
+			fmt.Println(Red + fmt.Sprintf("::  Malware Path: %s", stealer.MalwarePath) + Reset)
+			
+			switch v := stealer.Antiviruses.(type) {
+			case string:
+				fmt.Println(Red + fmt.Sprintf(":: Antiviruses: %s", v) + Reset)
+			case []interface{}:
+				antiviruses := ""
+				for _, av := range v {
+					antiviruses += fmt.Sprintf("%s, ", av)
+				}
+				fmt.Println(Red + fmt.Sprintf("::  Antiviruses: %s", antiviruses[:len(antiviruses)-2]) + Reset)
+			}
+			
+
+			fmt.Println(Red + fmt.Sprintf("::  IP: %s", stealer.IP) + Reset)
+
+			fmt.Println(Red + "[-] Top Passwords:" + Reset)
+			for _, password := range stealer.TopPasswords {
+				fmt.Println(Red + fmt.Sprintf("::    %s", password) + Reset)
+			}
+
+			fmt.Println(Red + "[-] Top Logins:" + Reset)
+			for _, login := range stealer.TopLogins {
+				fmt.Println(Red + fmt.Sprintf("::    %s", login) + Reset)
+			}
+		}
+
+		// For performance reasons, we should not print and write to the file at the same time during a single for-loop interation.
+		// Therefore, there will be 2 for-loop interations: one for printing, and one for writing to the file.
+		// This ensures that GoSearch can print as quickkly as possible since the terminal output is most important.
+
+		for i, stealer := range response.Stealers {
+			WriteToFile(username, fmt.Sprintf("[-] Stealer #%d", i+1))
+			WriteToFile(username, fmt.Sprintf("\n::  Stealer Family: %s", stealer.StealerFamily + "\n"))
+			WriteToFile(username, fmt.Sprintf("::  Date Compromised: %s", stealer.DateCompromised + "\n"))
+			WriteToFile(username, fmt.Sprintf("::  Computer Name: %s", stealer.ComputerName + "\n"))
+			WriteToFile(username, fmt.Sprintf(":: Operating System: %s", stealer.OperatingSystem + "\n"))
+			WriteToFile(username, fmt.Sprintf("::  Malware Path: %s", stealer.MalwarePath + "\n"))
+			
+			switch v := stealer.Antiviruses.(type) {
+			case string:
+				WriteToFile(username, fmt.Sprintf(":: Antiviruses: %s", v + "\n"))
+			case []interface{}:
+				antiviruses := ""
+				for _, av := range v {
+					antiviruses += fmt.Sprintf("%s, ", av)
+				}
+				WriteToFile(username, fmt.Sprintf("::  Antiviruses: %s", antiviruses[:len(antiviruses)-2] + "\n"))
+			}
+			
+			WriteToFile(username, fmt.Sprintf("::  IP: %s", stealer.IP + "\n"))
+
+			WriteToFile(username, "[-] Top Passwords:")
+			for _, password := range stealer.TopPasswords {
+				WriteToFile(username, fmt.Sprintf("::    %s", password + "\n"))
+			}
+
+			WriteToFile(username, "[-] Top Logins:")
+			for _, login := range stealer.TopLogins {
+				WriteToFile(username, fmt.Sprintf("::    %s", login + "\n"))
+			}
+		}
+	}
 }
 
 func MakeRequestWithErrorCode(website Website, url string, username string) {
@@ -271,6 +397,11 @@ func main() {
 
 	wg.Add(len(config.Websites))
 	go Search(config, username, &wg)
+	wg.Wait()
+
+	wg.Add(1)
+	fmt.Println(strings.Repeat("⎯", 60))
+	go HudsonRock(username, &wg)
 	wg.Wait()
 
 	elapsed := time.Since(start)
