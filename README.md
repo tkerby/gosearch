@@ -1,6 +1,13 @@
-![build](https://github.com/ibnaleem/gosearch/actions/workflows/go.yml/badge.svg?event=push)
-# GoSearch
-OSINT tool for searching usernames across social networks, written in Go. This project heavily relies on contributors, please see [Contributing](#contributing) for more details.
+<p align='center'>
+<img src='img/gosearch-logo.png' height=50% width=50%><br>
+<i>This project heavily relies on contributors, please see <a href="#contributing">Contributing</a> for more details.</i><br>
+<code>git clone https://github.com/ibnaleem/gosearch.git && cd gosearch && go build && ./gosearch [username]</code>
+</p>
+
+<p align="center">
+  <img src="https://github.com/ibnaleem/gosearch/actions/workflows/go.yml/badge.svg?event=push" alt="GitHub Actions Badge"> <img src="https://img.shields.io/github/last-commit/ibnaleem/gosearch"> <img src="https://img.shields.io/github/commit-activity/w/ibnaleem/gosearch"> <img src="https://img.shields.io/github/contributors/ibnaleem/gosearch"> <img alt="GitHub forks" src="https://img.shields.io/github/forks/ibnaleem/gosearch"> <img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/ibnaleem/gosearch"> <img alt="GitHub License" src="https://img.shields.io/github/license/ibnaleem/gosearch">
+</p>
+<hr>
 
 ## Installation & Usage
 ```
@@ -9,12 +16,17 @@ $ git clone https://github.com/ibnaleem/gosearch.git && cd gosearch
 ```
 $ go build
 ```
+For Unix:
 ```
 $ ./gosearch <username>
 ```
 I recommend adding the `gosearch` binary to your `/bin` for universal use:
 ```
 $ sudo mv gosearch ~/usr/bin
+```
+For Windows:
+```
+C:\Users\***\gosearch> gosearch.exe <username>
 ```
 ## Why GoSearch?
 GoSearch is based on [Sherlock](https://github.com/sherlock-project/sherlock), the well-known username search tool. However, Sherlock has several shortcomings:
