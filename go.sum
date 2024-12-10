@@ -1,3 +1,7 @@
+github.com/ibnaleem/gobreach v0.0.0-20241209224324-ea2ab918f0a5 h1:VAN5bPfI+ghTUoV7k/AF9huToTlQWl95u1MnM2e99oU=
+github.com/ibnaleem/gobreach v0.0.0-20241209224324-ea2ab918f0a5/go.mod h1:HklHQ03fEuE/IjFFbIDmscgGQIEFrvgZEey30lrNjnM=
+github.com/ibnaleem/gobreach v0.0.0-20241210003806-81e3b1678889 h1:rUs4h5hESvKNDoC1zIcWq7fqtsCvjUPaY7gzmn3Djdo=
+github.com/ibnaleem/gobreach v0.0.0-20241210003806-81e3b1678889/go.mod h1:HklHQ03fEuE/IjFFbIDmscgGQIEFrvgZEey30lrNjnM=
 github.com/inancgumus/screen v0.0.0-20190314163918-06e984b86ed3 h1:fO9A67/izFYFYky7l1pDP5Dr0BTCRkaQJUG6Jm5ehsk=
 github.com/inancgumus/screen v0.0.0-20190314163918-06e984b86ed3/go.mod h1:Ey4uAp+LvIl+s5jRbOHLcZpUDnkjLBROl15fZLwPlTM=
 golang.org/x/crypto v0.29.0 h1:L5SG1JTTXupVV3n6sUqMTeWbjAyfPwoda2DLX8J8FrQ=
