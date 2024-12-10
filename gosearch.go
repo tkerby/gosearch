@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"log"
 	"time"
 	"sync"
 	"strings"
@@ -12,6 +13,7 @@ import (
 	"encoding/json"
 	"gopkg.in/yaml.v3"
 	"github.com/inancgumus/screen"
+	"github.com/ibnaleem/gobreach"
 )
 
 var Red = "\033[31m" 
@@ -233,6 +235,67 @@ func HudsonRock(username string, wg *sync.WaitGroup) {
 	}
 }
 
+
+func BuildEmail(username string) []string {
+	emailDomains := []string{
+			"@gmail.com",
+			"@yahoo.com",
+			"@outlook.com",
+			"@hotmail.com",
+			"@icloud.com",
+			"@aol.com",
+			"@live.com",
+			"@protonmail.com",
+			"@zoho.com",
+			"@msn.com",
+			"proton.me",
+			"onionmail.org",
+			"gmx.de",
+			"mail2world.com",
+	}
+
+	var emails []string
+
+	for _, domain := range emailDomains {
+			emails = append(emails, username + domain)
+	}
+
+	return emails
+}
+
+func SearchBreachDirectory(emails []string, apikey string, wg *sync.WaitGroup) {
+
+	defer wg.Done()
+
+	// Get an API key (10 lookups for free) @ https://rapidapi.com/rohan-patra/api/breachdirectory
+	client, err := gobreach.NewBreachDirectoryClient(apikey)
+	
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for _, email := range emails {
+
+		fmt.Println(Yellow + ":: Searching " + email + " on Breach Directory for any compromised passwords..." + Reset)
+		
+		response, err := client.SearchEmail(email)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		if response.Found > 0 {
+			fmt.Printf(Green + ":: Found %d breaches for %s:\n", response.Found, email + Reset)
+			for _, entry := range response.Result {
+				fmt.Println(Green + "[+] :: Password:", entry.Password + Reset)
+				fmt.Println(Green + "[+] :: SHA1:", entry.Sha1 + Reset)
+				fmt.Println(Green + "[+] :: Source:", entry.Sources + Reset)
+			}
+		} else {
+			fmt.Printf(Red + ":: No breaches found for %s. Moving on...\n", email + Reset)
+		}
+	}
+}
+
 func MakeRequestWithErrorCode(website Website, url string, username string) {
 	transport := &http.Transport{
 		TLSClientConfig: &tls.Config{
@@ -241,7 +304,7 @@ func MakeRequestWithErrorCode(website Website, url string, username string) {
 	}
 
 	client := &http.Client{
-		Timeout:   60 * time.Second,
+		Timeout:   85 * time.Second,
 		Transport: transport,
 	}
 
@@ -291,7 +354,7 @@ func MakeRequestWithErrorMsg(website Website, url string, username string) {
 	}
 
 	client := &http.Client{
-		Timeout:   60 * time.Second,
+		Timeout:   85 * time.Second,
 		Transport: transport,
 	}
 
@@ -375,6 +438,7 @@ func main() {
 		fmt.Println("Usage: gosearch <username>\nIssues: https://github.com/ibnaleem/gosearch/issues")
 		os.Exit(1)
 	}
+
 	var username string = os.Args[1]
 	var wg sync.WaitGroup
 
@@ -387,10 +451,10 @@ func main() {
 	screen.Clear()
 	fmt.Println(ASCII)
 	fmt.Println(VERSION)
-	fmt.Println(strings.Repeat("⎯", 60))
+	fmt.Println(strings.Repeat("⎯", 85))
 	fmt.Println(":: Username                              : ", username)
 	fmt.Println(":: Websites                              : ", len(config.Websites))
-	fmt.Println(strings.Repeat("⎯", 60))
+	fmt.Println(strings.Repeat("⎯", 85))
 	fmt.Println(":: A yellow link indicates that I was unable to verify whether the username exists on the platform.")
 
 	start := time.Now()
@@ -400,13 +464,23 @@ func main() {
 	wg.Wait()
 
 	wg.Add(1)
-	fmt.Println(strings.Repeat("⎯", 60))
+	fmt.Println(strings.Repeat("⎯", 85))
 	fmt.Println(Yellow + ":: Searching HudsonRock's Cybercrime Intelligence Database..." + Reset)
 	go HudsonRock(username, &wg)
 	wg.Wait()
 
+
+	if len(os.Args) == 3 {
+		apikey := os.Args[2]
+		fmt.Println(strings.Repeat("⎯", 85))
+		emails := BuildEmail(username)
+    wg.Add(1)
+    go SearchBreachDirectory(emails, apikey, &wg)
+    wg.Wait()
+  }
+
 	elapsed := time.Since(start)
-	fmt.Println(strings.Repeat("⎯", 60))
+	fmt.Println(strings.Repeat("⎯", 85))
 	fmt.Println(":: Number of profiles found              : ", count)
 	fmt.Println(":: Total time taken                      : ", elapsed)
 	
