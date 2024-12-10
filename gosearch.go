@@ -401,6 +401,7 @@ func main() {
 
 	wg.Add(1)
 	fmt.Println(strings.Repeat("⎯", 60))
+	fmt.Println(Yellow + ":: Searching HudsonRock's Cybercrime Intelligence Database..." + Reset)
 	go HudsonRock(username, &wg)
 	wg.Wait()
 
