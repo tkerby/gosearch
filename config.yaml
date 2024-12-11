@@ -435,3 +435,10 @@ websites:
     follow_redirects: true
     errorType: "errorMsg"
     errorMsg: '<p class="text-text-tertiary typo-callout">You’re not supposed to be here.</p>'
+
+  - name: "HackerNews"
+    base_url: "https://news.ycombinator.com/user?id={}"
+    url_probe: ""
+    follow_redirects: true
+    errorType: "errorMsg"
+    errorMsg: 'No such user.'
