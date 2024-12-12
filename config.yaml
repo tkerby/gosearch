@@ -498,3 +498,10 @@ websites:
     follow_redirects: true
     errorType: "status_code"
     errorCode: 404
+
+  - name: "Apple Discussions"
+    base_url: "https://discussions.apple.com/profile/{}"
+    url_probe: ""
+    follow_redirects: true
+    errorType: "status_code"
+    errorCode: 404
