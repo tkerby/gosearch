@@ -471,7 +471,6 @@ websites:
     errorType: "errorMsg"
     errorCode: '{"available":true}'
 
-
   - name: "All My Links"
     base_url: "https://allmylinks.com/{}"
     url_probe: ""
@@ -492,3 +491,10 @@ websites:
     follow_redirects: true
     errorType: "errorMsg"
     errorCode: "<title>AniList</title>"
+
+  - name: "Apple Developers"
+    base_url: "https://developer.apple.com/forums/profile/{}"
+    url_probe: ""
+    follow_redirects: true
+    errorType: "status_code"
+    errorCode: 404
