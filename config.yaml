@@ -463,3 +463,10 @@ websites:
     follow_redirects: true
     errorType: "status_code"
     errorCode: 404
+
+  - name: "8Tracks"
+    base_url: "https://8tracks.com/{}"
+    url_probe: "https://8tracks.com/users/check_username?login={}&format=jsonh"
+    follow_redirects: true
+    errorType: "errorMsg"
+    errorCode: '{"available":true}'
