@@ -455,7 +455,7 @@ websites:
     url_probe: ""
     follow_redirects: true
     errorType: "errorMsg"
-    errorCode: "<p> Bad Username.</p>"
+    errorMsg: "<p> Bad Username.</p>"
 
   - name: "7Cups"
     base_url: "https://www.7cups.com/@{}"
@@ -469,7 +469,7 @@ websites:
     url_probe: "https://8tracks.com/users/check_username?login={}&format=jsonh"
     follow_redirects: true
     errorType: "errorMsg"
-    errorCode: '{"available":true}'
+    errorMsg: '{"available":true}'
 
   - name: "All My Links"
     base_url: "https://allmylinks.com/{}"
@@ -483,14 +483,14 @@ websites:
     url_probe: ""
     follow_redirects: true
     errorType: "errorMsg"
-    errorCode: "<title>Profil | AniWorld.to - Animes gratis legal online ansehen</title>"
+    errorMsg: "<title>Profil | AniWorld.to - Animes gratis legal online ansehen</title>"
 
   - name: "Anilist"
     base_url: "https://anilist.co/user/{}/"
     url_probe: ""
     follow_redirects: true
     errorType: "errorMsg"
-    errorCode: "<title>AniList</title>"
+    errorMsg: "<title>AniList</title>"
 
   - name: "Apple Developers"
     base_url: "https://developer.apple.com/forums/profile/{}"
