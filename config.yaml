@@ -485,3 +485,10 @@ websites:
     follow_redirects: true
     errorType: "errorMsg"
     errorCode: "<title>Profil | AniWorld.to - Animes gratis legal online ansehen</title>"
+
+  - name: "Anilist"
+    base_url: "https://anilist.co/user/{}/"
+    url_probe: ""
+    follow_redirects: true
+    errorType: "errorMsg"
+    errorCode: "<title>AniList</title>"
