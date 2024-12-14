@@ -519,3 +519,10 @@ websites:
     follow_redirects: true
     errorType: "errorMsg"
     errorMsg: 'If you have <strong>Telegram</strong>, you can contact <a class="tgme_username_link" href="tg://resolve?domain=sfsaafefes">@sfsaafefes</a> right away.'
+
+  - name: "LastFM"
+    base_url: "https://last.fm/user/{}"
+    url_probe: ""
+    follow_redirects: true
+    errorType: "status_code" 
+    errorCode: 404
