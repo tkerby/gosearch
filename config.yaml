@@ -551,8 +551,8 @@ websites:
     errorMsg: '<title>Profile Not Found | Codecademy</title>'
 
 
-  - name: "Lichess"
-    base_url: "https://lichess.org/@/{}"
+  - name: "Gitlab"
+    base_url: "https://gitlab.com/{}"
     url_probe: ""
     follow_redirects: true
     errorType: "status_code" 
