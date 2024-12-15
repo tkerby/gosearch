@@ -400,6 +400,7 @@ func MakeRequestWithErrorMsg(website Website, url string, username string) {
 	}
 
 	bodyStr := string(body)
+	// if the error message is not found in the response body, then the profile exists
 	if !strings.Contains(bodyStr, website.ErrorMsg) {
 		fmt.Println(Green + "::", url + Reset)
 		WriteToFile(username, url + "\n")
@@ -407,12 +408,79 @@ func MakeRequestWithErrorMsg(website Website, url string, username string) {
 	}
 }
 
+func MakeRequestWithProfilePresence(website Website, url string, username string) {
+
+	// Some websites have an indicator that a profile exists
+	// but do not have an indicator when a profile does not exist.
+	// If a profile indicator is not found, we can assume that the profile does not exist.
+
+	transport := &http.Transport{
+		TLSClientConfig: &tls.Config{
+			MinVersion: tls.VersionTLS12,
+		},
+	}
+
+	client := &http.Client{
+		Timeout:   85 * time.Second,
+		Transport: transport,
+	}
+
+	if !website.FollowRedirects {
+		client.CheckRedirect = func(req *http.Request, via []*http.Request) error {
+			return http.ErrUseLastResponse
+		}
+	}
+
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		fmt.Printf("Error creating request in function MakeRequestWithErrorMsg: %v\n", err)
+		return
+	}
+
+	req.Header.Set("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:125.0) Gecko/20100101 Firefox/125.0")
+
+	if website.Cookies != nil {
+		for _, cookie := range website.Cookies {
+			cookieObj := &http.Cookie{
+				Name:  cookie.Name,
+				Value: cookie.Value,
+			}
+			req.AddCookie(cookieObj)
+		}
+	}
+
+	res, err := client.Do(req)
+	if err != nil {
+		fmt.Printf("Error making GET request to %s: %v\n", url, err)
+		return
+	}
+	defer res.Body.Close()
+
+	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		fmt.Printf("Error reading response body: %v\n", err)
+		return
+	}
+
+	if website.URLProbe != "" {
+		url = BuildURL(website.BaseURL, username)
+	}
+
+	bodyStr := string(body)
+	// if the profile indicator is found in the response body, the profile exists
+	if strings.Contains(bodyStr, website.ErrorMsg) { 
+		fmt.Println(Green + "::", url + Reset)
+		WriteToFile(username, url + "\n")
+		count++
+	}
+
+}
 func Search(config Config, username string, wg *sync.WaitGroup) {
 	var url string
 
 	for _, website := range config.Websites {
 		go func(website Website) {
-			defer wg.Done() // Ensure the goroutine signals that it's done after completion
+			defer wg.Done()
 
 			if website.URLProbe != "" {
 				url = BuildURL(website.URLProbe, username)
@@ -422,8 +490,10 @@ func Search(config Config, username string, wg *sync.WaitGroup) {
 
 			if website.ErrorType == "status_code" {
 				MakeRequestWithErrorCode(website, url, username)
-			} else if website.ErrorType == "errorMsg" {
+			} else if website.ErrorType == "errorMsg" {				
 				MakeRequestWithErrorMsg(website, url, username)
+			} else if website.ErrorType == "profilePresence" {				
+				MakeRequestWithProfilePresence(website, url, username)
 			} else {
 				fmt.Println(Yellow + ":: [?]", url + Reset)
                 WriteToFile(username, "[?] " + url + "\n")
