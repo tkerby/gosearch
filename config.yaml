@@ -518,7 +518,7 @@ websites:
     url_probe: ""
     follow_redirects: true
     errorType: "errorMsg"
-    errorMsg: 'If you have <strong>Telegram</strong>, you can contact <a class="tgme_username_link" href="tg://resolve?domain=sfsaafefes">@sfsaafefes</a> right away.'
+    errorMsg: 'If you have <strong>Telegram</strong>, you can contact'
 
   - name: "LastFM"
     base_url: "https://last.fm/user/{}"
