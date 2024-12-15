@@ -4,7 +4,7 @@ websites:
     url_probe: ""
     follow_redirects: true
     errorType: "errorMsg" 
-    errorMsg: "<title>Instagram</title>"
+    errorMsg: "<title>Page not found • Instagram</title>"
 
   - name: "Twitter/X"
     base_url: "https://twitter.com/{}"
