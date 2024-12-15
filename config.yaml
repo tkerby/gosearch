@@ -534,3 +534,11 @@ websites:
     follow_redirects: true
     errorType: "status_code" 
     errorCode: 404
+
+
+  - name: "Lichess"
+    base_url: "https://lichess.org/@/{}"
+    url_probe: ""
+    follow_redirects: true
+    errorType: "status_code" 
+    errorCode: 404
