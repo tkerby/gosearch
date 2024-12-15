@@ -45,8 +45,8 @@ websites:
     base_url: "https://www.tiktok.com/@{}"
     url_probe: ""
     follow_redirects: true
-    errorType: "errorMsg"
-    errorMsg: ""
+    errorType: "profilePresence"
+    errorMsg: "shareMeta"
 
   - name: "About Me"
     base_url: "https://about.me/{}"
