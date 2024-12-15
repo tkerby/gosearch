@@ -526,3 +526,11 @@ websites:
     follow_redirects: true
     errorType: "status_code" 
     errorCode: 404
+
+
+  - name: "Chess"
+    base_url: "https://www.chess.com/member/{}"
+    url_probe: ""
+    follow_redirects: true
+    errorType: "status_code" 
+    errorCode: 404
