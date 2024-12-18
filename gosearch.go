@@ -276,7 +276,7 @@ func SearchBreachDirectory(emails []string, apikey string, wg *sync.WaitGroup) {
 
 	for _, email := range emails {
 
-		fmt.Println(Yellow + ":: Searching " + email + " on Breach Directory for any compromised passwords..." + Reset)
+		fmt.Println(Yellow + "[*] Searching " + email + " on Breach Directory for any compromised passwords..." + Reset)
 		
 		response, err := client.SearchEmail(email)
 		if err != nil {
@@ -284,14 +284,14 @@ func SearchBreachDirectory(emails []string, apikey string, wg *sync.WaitGroup) {
 		}
 
 		if response.Found > 0 {
-			fmt.Printf(Green + ":: Found %d breaches for %s:\n", response.Found, email + Reset)
+			fmt.Printf(Green + "[+] Found %d breaches for %s:\n", response.Found, email + Reset)
 			for _, entry := range response.Result {
-				fmt.Println(Green + "[+] :: Password:", entry.Password + Reset)
-				fmt.Println(Green + "[+] :: SHA1:", entry.Sha1 + Reset)
-				fmt.Println(Green + "[+] :: Source:", entry.Sources + Reset)
+				fmt.Println(Green + "[+] Password:", entry.Password + Reset)
+				fmt.Println(Green + "[+] SHA1:", entry.Sha1 + Reset)
+				fmt.Println(Green + "[+] Source:", entry.Sources + Reset)
 			}
 		} else {
-			fmt.Printf(Red + ":: No breaches found for %s. Moving on...\n", email + Reset)
+			fmt.Printf(Red + "[-] No breaches found for %s. Moving on...\n", email + Reset)
 		}
 	}
 }
@@ -340,7 +340,7 @@ func MakeRequestWithErrorCode(website Website, url string, username string) {
 	defer res.Body.Close()
 
 	if res.StatusCode != website.ErrorCode {
-		fmt.Println(Green + "::", url + Reset)
+		fmt.Println(Green + "[+]", website.Name + ":", url + Reset)
 		WriteToFile(username, url + "\n")
 		count++
 	}
@@ -402,7 +402,7 @@ func MakeRequestWithErrorMsg(website Website, url string, username string) {
 	bodyStr := string(body)
 	// if the error message is not found in the response body, then the profile exists
 	if !strings.Contains(bodyStr, website.ErrorMsg) {
-		fmt.Println(Green + "::", url + Reset)
+		fmt.Println(Green + "[+]", website.Name + ":", url + Reset)
 		WriteToFile(username, url + "\n")
 		count++
 	}
@@ -469,7 +469,7 @@ func MakeRequestWithProfilePresence(website Website, url string, username string
 	bodyStr := string(body)
 	// if the profile indicator is found in the response body, the profile exists
 	if strings.Contains(bodyStr, website.ErrorMsg) { 
-		fmt.Println(Green + "::", url + Reset)
+		fmt.Println(Green + "[+]", website.Name + ":", url + Reset)
 		WriteToFile(username, url + "\n")
 		count++
 	}
@@ -495,7 +495,7 @@ func Search(config Config, username string, wg *sync.WaitGroup) {
 			} else if website.ErrorType == "profilePresence" {				
 				MakeRequestWithProfilePresence(website, url, username)
 			} else {
-				fmt.Println(Yellow + ":: [?]", url + Reset)
+				fmt.Println(Yellow + "[?]", website.Name + ":", url + Reset)
                 WriteToFile(username, "[?] " + url + "\n")
 				count++
 			}
@@ -525,7 +525,7 @@ func main() {
 	fmt.Println(":: Username                              : ", username)
 	fmt.Println(":: Websites                              : ", len(config.Websites))
 	fmt.Println(strings.Repeat("⎯", 85))
-	fmt.Println(":: A yellow link indicates that I was unable to verify whether the username exists on the platform.")
+	fmt.Println("[!] A yellow link indicates that I was unable to verify whether the username exists on the platform.")
 
 	start := time.Now()
 
@@ -535,7 +535,7 @@ func main() {
 
 	wg.Add(1)
 	fmt.Println(strings.Repeat("⎯", 85))
-	fmt.Println(Yellow + ":: Searching HudsonRock's Cybercrime Intelligence Database..." + Reset)
+	fmt.Println(Yellow + "[*] Searching HudsonRock's Cybercrime Intelligence Database..." + Reset)
 	go HudsonRock(username, &wg)
 	wg.Wait()
 
