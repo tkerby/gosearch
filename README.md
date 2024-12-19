@@ -38,7 +38,7 @@ For Windows:
 C:\Users\***\gosearch> gosearch.exe <username>
 ```
 ## Use Cases
-GoSearch allows you to search [breachdirectory.org](https://breachdirectory.org) for compromised passwords associated with a specific username. To fully utilize GoSearch, follow these steps:
+GoSearch allows you to search [breachdirectory.org](https://breachdirectory.org) for compromised passwords associated with a specific username. To fully utilise GoSearch, follow these steps:
 
 1. Obtain a **free** API key from `https://rapidapi.com/rohan-patra/api/breachdirectory`.
 2. Include the API key in the command arguments like this:
@@ -48,7 +48,7 @@ $ gosearch [username] [api-key]
 GoSearch will automatically generate popular email addresses for a given username.
 
 ## Why `GoSearch`?
-`GoSearch` inspired by [Sherlock](https://github.com/sherlock-project/sherlock), a popular username search tool. However, `GoSearch` improves upon Sherlock by addressing several of its key limitations:
+`GoSearch` is inspired by [Sherlock](https://github.com/sherlock-project/sherlock), a popular username search tool. However, `GoSearch` improves upon Sherlock by addressing several of its key limitations:
 
 1. Sherlock is Python-based, which makes it slower compared to Go.
 2. Sherlock is outdated and lacks updates.
