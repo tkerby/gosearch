@@ -9,6 +9,15 @@
 </p>
 <hr>
 
+## What is `GoSearch`?
+<p align='center'>
+<img src='img/1.png' height=80% width=80%><br>
+<img src='img/2.png' height=80% width=80%><br>
+<img src='img/3.png' height=80% width=80%><br>
+</p>
+
+`GoSearch` is an efficient and reliable OSINT tool designed for uncovering digital footprints associated with a given username. It's fast, straightforward, and dependable, enabling users to track an individual's online presence across multiple platforms. GoSearch also integrates data from HudsonRock's Cybercrime Intelligence Database to provide insights into cybercrime-related information. It also taps into [`BreachDirectory.org`](https://breachdirectory.org)'s database offering access to a comprehensive list of data breaches, plain-text and hashed passwords linked to the username. This tool is ideal for those needing accurate, no-frills results when investigating online identities.
+
 ## Installation & Usage
 ```
 $ git clone https://github.com/ibnaleem/gosearch.git && cd gosearch
@@ -28,51 +37,59 @@ For Windows:
 ```
 C:\Users\***\gosearch> gosearch.exe <username>
 ```
-## Best Use-Case
-GoSearch has the functionality to search [breachdirectory.org](https://breachdirectory.org) for compromised passwords, given a username. To make the most out of GoSearch, do the following:
-- Get a **free** API key @ `https://rapidapi.com/rohan-patra/api/breachdirectory`
-- Specify the API key in the command args:
+## Use Cases
+GoSearch allows you to search [breachdirectory.org](https://breachdirectory.org) for compromised passwords associated with a specific username. To fully utilize GoSearch, follow these steps:
+
+1. Obtain a **free** API key from `https://rapidapi.com/rohan-patra/api/breachdirectory`.
+2. Include the API key in the command arguments like this:
 ```
 $ gosearch [username] [api-key]
 ```
 GoSearch will automatically generate popular email addresses for a given username.
-## Why GoSearch?
-GoSearch is based on [Sherlock](https://github.com/sherlock-project/sherlock), the well-known username search tool. However, Sherlock has several shortcomings:
 
-1. Python-based, slower than Go.
-2. Outdated.
-3. Reports false positives as true.
-4. Fails to report false negatives.
+## Why `GoSearch`?
+`GoSearch` inspired by [Sherlock](https://github.com/sherlock-project/sherlock), a popular username search tool. However, `GoSearch` improves upon Sherlock by addressing several of its key limitations:
 
-The primary issue with Sherlock is false negatives: it may fail to detect a username on a platform when it does exist. The secondary issue is false positives: it may incorrectly identify a username as available. GoSearch addresses this by colour-coding potential false results (yellow), indicating uncertainty. This helps users quickly filter out irrelevant URLs. If there is enough demand in the future, we could add the functionality to only report full-positives or only report false negatives.
+1. Sherlock is Python-based, which makes it slower compared to Go.
+2. Sherlock is outdated and lacks updates.
+3. Sherlock sometimes reports false positives as valid results.
+4. Sherlock frequently misses actual usernames, leading to false negatives.
+
+The primary issue with Sherlock is false negatives—when a username exists on a platform but is not detected. The secondary issue is false positives, where a username is incorrectly flagged as available. `GoSearch` tackles these problems by colour-coding uncertain results as yellow which indicates potential false positives. This allows users to easily filter out irrelevant links. If there's enough demand, we might implement an option to report only confirmed results or focus solely on detecting false negatives.
 
 ## Contributing
-GoSearch relies on the [config.yaml](https://raw.githubusercontent.com/ibnaleem/gosearch/refs/heads/main/config.yaml) file, which lists all the websites to search. Users can add new sites to expand the search scope. This is where most of the contribution is needed. The general format is as follows:
+`GoSearch` relies on the [config.yaml](https://raw.githubusercontent.com/ibnaleem/gosearch/refs/heads/main/config.yaml) file which contains a list of websites to search. Users can contribute by adding new sites to expand the tool’s search capabilities. This is where most contributions are needed. The format for adding new sites is as follows:
 
 ```yaml
 - name: "Website name"
-  base_url: "https://www.website.com/profiles/{username}"
+  base_url: "https://www.website.com/profiles/{}"
   url_probe: "optional, see below"
-  errorType: "errorMsg/status_code/unknown"
+  errorType: "errorMsg/status_code/profilePresence/unknown"
   errorMsg/errorCode: "errorMsg" or 404/406/302, etc.
   cookies:
   - name: cookie name
     value: cookie value
 ```
-Each entry should have a concise website name for easy manual searching. This avoids any duplicate submissions.
+
+Each entry should include a clear and concise website name to facilitate manual searches, helping avoid duplicate submissions.
+
 ### `base_url`
-The `base_url` is the URL GoSearch uses to query for usernames, unless a `url_probe` is provided (see [`url_probe`](#url_probe)). Your first task is to determine *where* user profiles are located on a website. For example, Twitter profiles are found at the root path `/`, so you would set `base_url: "https://twitter.com/{}`. The `{}` at the end of the path is a *placeholder* that GoSearch will replace with the username. 
+The `base_url` is the URL `GoSearch` uses to search for usernames, unless a `url_probe` is specified (see [`url_probe`](#url_probe)). Your first task is to identify the location of user profiles on a website. For example, on Twitter, user profiles are located at the root path `/`, so you would set `base_url: "https://twitter.com/{}"`. The `{}` is a *placeholder* that `GoSearch` will automatically replace with the username when performing the search.
 
-For instance, if you query `./gosearch ibnaleem`, GoSearch will replace `{}` with "ibnaleem", resulting in the URL `https://twitter.com/privacy/ibnaleem`, assuming the query was made with `https://twitter.com/privacy/{}`.
+For example, if you run the query `./gosearch ibnaleem`, `GoSearch` will replace the `{}` placeholder with "ibnaleem", resulting in the URL `https://shaffan.dev/user/ibnaleem`, assuming the `base_url` is set to `https://shaffan.dev/user/{}`. This allows `GoSearch` to automatically generate the correct URL to check for the user's profile.
+
 ### `url_probe`
-Sometimes, websites block certain requests for security reasons but offer an API or service that can be used to retrieve the same information. The `url_probe` field is used for this purpose. It allows you to specify an API or service URL that can check the availability of a username. It's not the same as the `base_url` because GoSearch will print the API URL to the terminal, even though you’re typically looking for the profile URL.
+In some cases, websites may block direct requests for security reasons but offer an API or alternate service to retrieve the same information. The `url_probe` field is used to specify such an API or service URL that checks username availability. Unlike the `base_url`, which is used to directly search for profile URLs, the `url_probe` generates a different API request, and GoSearch will display the API URL in the terminal instead of the profile URL.
 
-For example, Duolingo profiles are accessible at `https://duolingo.com/profile/{}`. However, to check username availability, Duolingo provides a `url_probe` URL: `https://www.duolingo.com/2017-06-30/users?username={}`. If we used the `url_probe` as the `base_url`, the terminal would show something like `https://www.duolingo.com/2017-06-30/users?username=ibnaleem` rather than `https://duolingo.com/profile/ibnaleem`, which would be confusing for the user. GoSearch is designed with less experienced programmers in mind, so this distinction helps keep things clear and intuitive.
+For example, Duolingo profiles are available at `https://duolingo.com/profile/{}`, but to check if a username is available, Duolingo provides an API URL: `https://www.duolingo.com/2017-06-30/users?username={}`. If we used the `url_probe` as the `base_url`, the terminal would show something like `https://www.duolingo.com/2017-06-30/users?username=ibnaleem` instead of the user profile URL `https://duolingo.com/profile/ibnaleem`, which could confuse users. This distinction helps keep the process clearer and more intuitive, especially for those who may be less familiar with programming.
+
 ### `errorType`
-There are 3 error types
+There are 4 error types
 1. `status_code` - a specific status code that is returned if a username does not exist (typically `404`)
 2. `errorMsg` - a custom error message the website displays that is unique to usernames that do not exist
-3. `unknown` - when there is no way of ascertaining the difference between a username that exists and does not exist on the website
+3. `profilePresence` a custom message the website displays that is unique to usernames that exist.
+4. `unknown` - when there is no way of ascertaining the difference between a username that exists and does not exist on the website
+
 #### `status_code`
 The easiest to contribute, simply find an existing profile and make a request with the following code:
 ```go
@@ -168,8 +185,11 @@ You’ll need to analyse the response body of `username_not_found.txt` and compa
   errorCode: 404
   errorMsg: "<title>Hello World"</title>
 ```
+#### `errorMsg`
+The exact opposite of `errorMsg`; instead of analysing the `username_not_found.txt`'s response body, analyse the `username_found.txt`'s response body to find any word, phrase, HTML tag or other unique element that only appears in `username_found.txt`. Set `errorType: profilePresence` and set the `errorMsg` to what you've found.
+#### `"unknown"`
+Occasionally, the response body may be empty or lack any unique content in both the `username_not_found.txt` and `username_found.txt` files. After trying cookies, using the `www.` subdomain, you are left with no answers. In these cases, set the `errorType` to `"unknown"` (as a string) and include a `404` `errorCode` field underneath it.
 #### `cookies`
-
 Some websites may require cookies to retrieve specific data, such as error codes or session information. For example, the website `dzen.ru` requires the cookie `zen_sso_checked=1`, which is included in the request headers when making a browser request. To test for cookies and analyze the response, you can use the following Go code:
 
 ```go
@@ -236,10 +256,8 @@ HTTP/2 200
 ```
 
 Additionally, make sure to use the above code to analyse the response body when including the `www.` subdomain and relevant cookies.
-#### `"unknown"`
-Occasionally, the response body may be empty or lack any unique content in both the `username_not_found.txt` and `username_found.txt` files. After trying cookies, using the `www.` subdomain, you are left with no answers. In these cases, set the `errorType` to `"unknown"` (as a string) and include a `404` `errorCode` field underneath it.
 
-To contribute, follow the template above, open a PR, and I'll merge it if GoSearch can successfully detect the accounts.
+To contribute, follow the template above, open a PR, and I'll merge it if `GoSearch` can successfully detect the accounts.
 
 ## LICENSE
 This project is licensed under the GNU General Public License - see the [LICENSE](https://github.com/ibnaleem/gosearch/blob/main/LICENSE) file for details.
