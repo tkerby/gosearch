@@ -621,3 +621,10 @@ websites:
     follow_redirects: true
     errorType: "status_code" 
     errorCode: 404
+
+  - name: "Hubski"
+    base_url: "https://hubski.com/user/kleinbl00"
+    url_probe: ""
+    follow_redirects: true
+    errorType: "errorMsg"
+    errorMsg: "<a href="/">No such user.</a>"
