@@ -600,3 +600,10 @@ websites:
     follow_redirects: true
     errorType: "status_code" 
     errorCode: 404
+
+  - name: "TripAdvisor Forums"
+    base_url: "https://www.tripadvisor.com/Profile/{}"
+    url_probe: ""
+    follow_redirects: true
+    errorType: "status_code" 
+    errorCode: 404
