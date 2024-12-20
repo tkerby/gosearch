@@ -614,3 +614,10 @@ websites:
     follow_redirects: true
     errorType: "status_code" 
     errorCode: 404
+
+  - name: "PHUCKS"
+    base_url: "https://phuks.co/u/{}"
+    url_probe: ""
+    follow_redirects: true
+    errorType: "status_code" 
+    errorCode: 404
