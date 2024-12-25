@@ -31,6 +31,7 @@ var ASCII string = `
 `
 var VERSION string = "v1.0.0"
 var count uint16 = 0 // Maximum value for count is 65,535
+var domaincount uint8 = 0 // Maximum value for domaincount is 255
 
 type Website struct {
 	Name             string   `json:"name"`
@@ -301,6 +302,42 @@ func BuildDomains(username string) []string {
 
 	return domains
 }
+
+func SearchDomains(username string, domains []string, wg *sync.WaitGroup) {
+	defer wg.Done()
+
+	client := &http.Client{}
+
+
+	fmt.Println(Yellow + "[*] Searching", len(domains), "with the username", username + Reset)
+
+	for _, domain := range domains {
+
+		req, err := http.NewRequest("GET", domain, nil)
+		if err != nil {
+			fmt.Printf("Error creating request in function SearchDomains: %v\n", err)
+			return
+		}
+		req.Header.Set("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:125.0) Gecko/20100101 Firefox/125.0")
+
+		resp, err := client.Do(req)
+		if err != nil {
+			fmt.Printf("Error sending request in function SearchDomains: %v\n", err)
+			return
+		}
+
+		if resp.StatusCode == 200 {
+			fmt.Println(Green + "[+] 200 OK:", domain + Reset)
+			domaincount++
+		}
+
+		if domaincount > 0 {
+			fmt.Println(Green + "[+] Found", domaincount, "domains with the username", username + Reset)
+		} else {
+			fmt.Println(Red + "[-] No domains found with the username", username + Reset)
+		}
+}}
+
 func SearchBreachDirectory(emails []string, apikey string, wg *sync.WaitGroup) {
 
 	defer wg.Done()
