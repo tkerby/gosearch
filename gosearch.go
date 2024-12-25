@@ -11,7 +11,6 @@ import (
 	"net/http"
 	"crypto/tls"
 	"encoding/json"
-	"gopkg.in/yaml.v3"
 	"github.com/inancgumus/screen"
 	"github.com/ibnaleem/gobreach"
 )
@@ -34,23 +33,23 @@ var VERSION string = "v1.0.0"
 var count uint16 = 0 // Maximum value for count is 65,535
 
 type Website struct {
-	Name             string   `yaml:"name"`
-	BaseURL          string   `yaml:"base_url"`
-	URLProbe         string   `yaml:"url_probe,omitempty"`
-	FollowRedirects  bool     `yaml:"follow_redirects,omitempty"`
-	ErrorType        string   `yaml:"errorType"`
-	ErrorMsg         string   `yaml:"errorMsg,omitempty"`
-	ErrorCode        int      `yaml:"errorCode,omitempty"`
-	Cookies          []Cookie `yaml:"cookies,omitempty"`
+	Name             string   `json:"name"`
+	BaseURL          string   `json:"base_url"`
+	URLProbe         string   `json:"url_probe,omitempty"`
+	FollowRedirects  bool     `json:"follow_redirects,omitempty"`
+	ErrorType        string   `json:"errorType"`
+	ErrorMsg         string   `json:"errorMsg,omitempty"`
+	ErrorCode        int      `json:"errorCode,omitempty"`
+	Cookies          []Cookie `json:"cookies,omitempty"`
 }
 
-type Config struct {
-	Websites []Website `yaml:"websites"`
+type Data struct {
+	Websites []Website `json:"websites"`
 }
 
 type Cookie struct {
-	Name  string `yaml:"name"`
-	Value string `yaml:"value"`
+	Name  string `json:"name"`
+	Value string `json:"value"`
 }
 
 type Stealer struct {
@@ -72,43 +71,43 @@ type HudsonRockResponse struct {
 	Stealers []Stealer `json:"stealers"`
 }
 
-func UnmarshalYAML() (Config, error) {
+func UnmarshalJSON() (Data, error) {
 
-	// GoSearch relies on config.yaml to determine the websites to search for.
-	// Instead of forcing uers to manually download the config.yaml file, we will fetch the latest version from the repository.
+	// GoSearch relies on data.json to determine the websites to search for.
+	// Instead of forcing uers to manually download the data.json file, we will fetch the latest version from the repository.
 	// Thereforeore, we will do the following:
-	// 1. Delete the existing config.yaml file if it exists as it will be outdated in the future
-	// 2. Read the latest config.yaml file from the repository
-	// Bonus: it does not download the config.yaml file, it just reads it from the repository.
+	// 1. Delete the existing data.json file if it exists as it will be outdated in the future
+	// 2. Read the latest data.json file from the repository
+	// Bonus: it does not download the data.json file, it just reads it from the repository.
 
-	err := os.Remove("config.yaml")
-	if err != nil && !os.IsNotExist(err) {
-		return Config{}, fmt.Errorf("error deleting old config.yaml: %w", err)
-	}
+	// err := os.Remove("data.json")
+	// if err != nil && !os.IsNotExist(err) {
+	//	return Data{}, fmt.Errorf("error deleting old data.json: %w", err)
+	// }
 
-	url := "https://raw.githubusercontent.com/ibnaleem/gosearch/refs/heads/yaml-error/config.yaml"
+	url := "https://raw.githubusercontent.com/ibnaleem/gosearch/refs/heads/yaml-error/data.json"
 	resp, err := http.Get(url)
 	if err != nil {
-		return Config{}, fmt.Errorf("error downloading config.yaml: %w", err)
+		return Data{}, fmt.Errorf("error downloading data.json: %w", err)
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return Config{}, fmt.Errorf("failed to download config.yaml, status code: %d", resp.StatusCode)
+		return Data{}, fmt.Errorf("failed to download data.json, status code: %d", resp.StatusCode)
 	}
 
-	yamlData, err := io.ReadAll(resp.Body)
+	jsonData, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return Config{}, fmt.Errorf("error reading downloaded content: %w", err)
+		return Data{}, fmt.Errorf("error reading downloaded content: %w", err)
 	}
 
-	var config Config
-	err = yaml.Unmarshal(yamlData, &config)
+	var data Data
+	err = json.Unmarshal(jsonData, &data)
 	if err != nil {
-		return Config{}, fmt.Errorf("error unmarshaling YAML: %w", err)
+		return Data{}, fmt.Errorf("error unmarshaling JSON: %w", err)
 	}
 
-	return config, nil
+	return data, nil
 }
 
 func WriteToFile(username string, content string) {
@@ -475,10 +474,10 @@ func MakeRequestWithProfilePresence(website Website, url string, username string
 	}
 
 }
-func Search(config Config, username string, wg *sync.WaitGroup) {
+func Search(data Data, username string, wg *sync.WaitGroup) {
 	var url string
 
-	for _, website := range config.Websites {
+	for _, website := range data.Websites {
 		go func(website Website) {
 			defer wg.Done()
 
@@ -512,9 +511,9 @@ func main() {
 	var username string = os.Args[1]
 	var wg sync.WaitGroup
 
-	config, err := UnmarshalYAML()
+	data, err := UnmarshalJSON()
 	if err != nil {
-		fmt.Printf("Error unmarshaling YAML: %v\n", err)
+		fmt.Printf("Error unmarshaling json: %v\n", err)
 		os.Exit(1)
 	}
 
@@ -523,14 +522,14 @@ func main() {
 	fmt.Println(VERSION)
 	fmt.Println(strings.Repeat("⎯", 85))
 	fmt.Println(":: Username                              : ", username)
-	fmt.Println(":: Websites                              : ", len(config.Websites))
+	fmt.Println(":: Websites                              : ", len(data.Websites))
 	fmt.Println(strings.Repeat("⎯", 85))
 	fmt.Println("[!] A yellow link indicates that I was unable to verify whether the username exists on the platform.")
 
 	start := time.Now()
 
-	wg.Add(len(config.Websites))
-	go Search(config, username, &wg)
+	wg.Add(len(data.Websites))
+	go Search(data, username, &wg)
 	wg.Wait()
 
 	wg.Add(1)
