@@ -58,23 +58,28 @@ GoSearch will automatically generate popular email addresses for a given usernam
 The primary issue with Sherlock is false negatives—when a username exists on a platform but is not detected. The secondary issue is false positives, where a username is incorrectly flagged as available. `GoSearch` tackles these problems by colour-coding uncertain results as yellow which indicates potential false positives. This allows users to easily filter out irrelevant links. If there's enough demand, we might implement an option to report only confirmed results or focus solely on detecting false negatives.
 
 ## Contributing
-`GoSearch` relies on the [config.yaml](https://raw.githubusercontent.com/ibnaleem/gosearch/refs/heads/main/config.yaml) file which contains a list of websites to search. Users can contribute by adding new sites to expand the tool’s search capabilities. This is where most contributions are needed. The format for adding new sites is as follows:
+`GoSearch` relies on the [data.json](https://raw.githubusercontent.com/ibnaleem/gosearch/refs/heads/main/data.json) file which contains a list of websites to search. Users can contribute by adding new sites to expand the tool’s search capabilities. This is where most contributions are needed. The format for adding new sites is as follows:
 
-```yaml
-- name: "Website name"
-  base_url: "https://www.website.com/profiles/{}"
-  url_probe: "optional, see below"
-  errorType: "errorMsg/status_code/profilePresence/unknown"
-  errorMsg/errorCode: "errorMsg" or 404/406/302, etc.
-  cookies:
-  - name: cookie name
-    value: cookie value
+```json
+{
+  "name": "Website name",
+  "base_url": "https://www.website.com/profiles/{}",
+  "url_probe": "optional, see below",
+  "errorType": "errorMsg/status_code/profilePresence/unknown",
+  "errorMsg/errorCode": "errorMsg",
+  "cookies": [
+    {
+      "name": "cookie name",
+      "value": "cookie value"
+    }
+  ]
+}
 ```
 
 Each entry should include a clear and concise website name to facilitate manual searches, helping avoid duplicate submissions.
 
 ### `base_url`
-The `base_url` is the URL `GoSearch` uses to search for usernames, unless a `url_probe` is specified (see [`url_probe`](#url_probe)). Your first task is to identify the location of user profiles on a website. For example, on Twitter, user profiles are located at the root path `/`, so you would set `base_url: "https://twitter.com/{}"`. The `{}` is a *placeholder* that `GoSearch` will automatically replace with the username when performing the search.
+The `base_url` is the URL `GoSearch` uses to search for usernames, unless a `url_probe` is specified (see [`url_probe`](#url_probe)). Your first task is to identify the location of user profiles on a website. For example, on Twitter, user profiles are located at the root path `/`, so you would set `"base_url": "https://twitter.com/{}"`. The `{}` is a *placeholder* that `GoSearch` will automatically replace with the username when performing the search.
 
 For example, if you run the query `./gosearch ibnaleem`, `GoSearch` will replace the `{}` placeholder with "ibnaleem", resulting in the URL `https://shaffan.dev/user/ibnaleem`, assuming the `base_url` is set to `https://shaffan.dev/user/{}`. This allows `GoSearch` to automatically generate the correct URL to check for the user's profile.
 
@@ -180,10 +185,12 @@ $ ./test https://website.com/username_does_not_exist
 $ mv response.txt username_not_found.txt
 ```
 You’ll need to analyse the response body of `username_not_found.txt` and compare it with `username_found.txt`. Look for any word, phrase, HTML tag, or other unique element that appears only in `username_not_found.txt`. Once you've identified something distinct, add it to the `errorMsg` field under the `errorType` field. Keep in mind that `errorType` can only have one field below it: either `errorCode` or `errorMsg`, **but not both**. Below is *incorrect*:
-```yaml
-  errorType: "status_code"
-  errorCode: 404
-  errorMsg: "<title>Hello World"</title>
+```json
+{
+    "errorType": "status_code",
+    "errorCode": 404,
+    "errorMsg": "<title>Hello World</title>"
+}
 ```
 #### `errorMsg`
 The exact opposite of `errorMsg`; instead of analysing the `username_not_found.txt`'s response body, analyse the `username_found.txt`'s response body to find any word, phrase, HTML tag or other unique element that only appears in `username_found.txt`. Set `errorType: profilePresence` and set the `errorMsg` to what you've found.
