@@ -313,7 +313,7 @@ func SearchDomains(username string, domains []string, wg *sync.WaitGroup) {
 
 	for _, domain := range domains {
 
-		req, err := http.NewRequest("GET", "http" + domain, nil)
+		req, err := http.NewRequest("GET", "http://" + domain, nil)
 		if err != nil {
 			fmt.Printf("Error creating request in function SearchDomains: %v\n", err)
 			return
