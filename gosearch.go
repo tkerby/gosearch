@@ -8,6 +8,7 @@ import (
 	"time"
 	"sync"
 	"strings"
+	"net"
 	"net/http"
 	"crypto/tls"
 	"encoding/json"
@@ -31,6 +32,7 @@ var ASCII string = `
 `
 var VERSION string = "v1.0.0"
 var count uint16 = 0 // Maximum value for count is 65,535
+var domaincount uint8 = 0 // Maximum value for domaincount is 255
 
 type Website struct {
 	Name             string   `json:"name"`
@@ -260,6 +262,90 @@ func BuildEmail(username string) []string {
 	}
 
 	return emails
+}
+
+
+func BuildDomains(username string) []string {
+	tlds := []string{
+		".com",
+		".net",
+		".org",
+		".biz",
+		".info",
+		".name",
+		".pro",
+		".cat",
+		".co",
+		".me",
+		".io",
+		".tech",
+		".dev",
+		".app",
+		".shop",
+		".fail",
+		".xyz",
+		".blog",
+		".portfolio",
+		".store",
+		".online",
+		".about",
+		".space",
+		".lol",
+		".fun",
+		".social",
+	}
+
+	var domains []string
+
+	for _, tld := range tlds {
+			domains = append(domains, username + tld)
+	}
+
+	return domains
+}
+
+func SearchDomains(username string, domains []string, wg *sync.WaitGroup) {
+	defer wg.Done()
+
+	client := &http.Client{}
+	fmt.Println(Yellow + "[*] Searching", len(domains), "domains with the username", username, "..." + Reset)
+
+	domaincount := 0
+
+	for _, domain := range domains {
+		url := "http://" + domain
+
+		req, err := http.NewRequest("GET", url, nil)
+		if err != nil {
+			fmt.Printf("Error creating request for %s: %v\n", domain, err)
+			continue
+		}
+		req.Header.Set("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:125.0) Gecko/20100101 Firefox/125.0")
+
+		resp, err := client.Do(req)
+		if err != nil {
+			if strings.Contains(err.Error(), "no such host") {
+				continue // this means the domain doesn't exist
+			} else if netErr, ok := err.(net.Error); ok && netErr.Timeout() {
+				continue // this also means the domain doesn't exist
+			} else {
+				fmt.Printf("Error sending request for %s: %v\n", domain, err)
+			}
+			continue
+		}
+		defer resp.Body.Close()
+
+		if resp.StatusCode == 200 {
+			fmt.Println(Green + "[+] 200 OK:", domain + Reset)
+			domaincount++
+		}
+	}
+
+	if domaincount > 0 {
+		fmt.Println(Green + "[+] Found", domaincount, "domains with the username", username + Reset)
+	} else {
+		fmt.Println(Red + "[-] No domains found with the username", username + Reset)
+	}
 }
 
 func SearchBreachDirectory(emails []string, apikey string, wg *sync.WaitGroup) {
@@ -547,6 +633,12 @@ func main() {
     go SearchBreachDirectory(emails, apikey, &wg)
     wg.Wait()
   }
+
+    domains := BuildDomains(username)
+	fmt.Println(strings.Repeat("⎯", 85))
+	wg.Add(1)
+	go SearchDomains(username, domains, &wg)
+	wg.Wait()
 
 	elapsed := time.Since(start)
 	fmt.Println(strings.Repeat("⎯", 85))
