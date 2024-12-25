@@ -86,7 +86,7 @@ func UnmarshalYAML() (Config, error) {
 		return Config{}, fmt.Errorf("error deleting old config.yaml: %w", err)
 	}
 
-	url := "https://raw.githubusercontent.com/ibnaleem/gosearch/refs/heads/main/config.yaml"
+	url := "https://raw.githubusercontent.com/ibnaleem/gosearch/refs/heads/yaml-error/config.yaml"
 	resp, err := http.Get(url)
 	if err != nil {
 		return Config{}, fmt.Errorf("error downloading config.yaml: %w", err)
