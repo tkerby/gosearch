@@ -8,6 +8,7 @@ import (
 	"time"
 	"sync"
 	"strings"
+	"net"
 	"net/http"
 	"crypto/tls"
 	"encoding/json"
@@ -307,36 +308,45 @@ func SearchDomains(username string, domains []string, wg *sync.WaitGroup) {
 	defer wg.Done()
 
 	client := &http.Client{}
+	fmt.Println(Yellow + "[*] Searching", len(domains), "domains with the username", username, "..." + Reset)
 
-
-	fmt.Println(Yellow + "[*] Searching", len(domains), "domains with the username", username + Reset)
+	domaincount := 0
 
 	for _, domain := range domains {
+		url := "http://" + domain
 
-		req, err := http.NewRequest("GET", "http://" + domain, nil)
+		req, err := http.NewRequest("GET", url, nil)
 		if err != nil {
-			fmt.Printf("Error creating request in function SearchDomains: %v\n", err)
-			return
+			fmt.Printf("Error creating request for %s: %v\n", domain, err)
+			continue
 		}
 		req.Header.Set("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:125.0) Gecko/20100101 Firefox/125.0")
 
 		resp, err := client.Do(req)
 		if err != nil {
-			fmt.Printf("Error sending request in function SearchDomains: %v\n", err)
-			return
+			if strings.Contains(err.Error(), "no such host") {
+				continue // this means the domain doesn't exist
+			} else if netErr, ok := err.(net.Error); ok && netErr.Timeout() {
+				continue // this also means the domain doesn't exist
+			} else {
+				fmt.Printf("Error sending request for %s: %v\n", domain, err)
+			}
+			continue
 		}
+		defer resp.Body.Close()
 
 		if resp.StatusCode == 200 {
 			fmt.Println(Green + "[+] 200 OK:", domain + Reset)
 			domaincount++
 		}
+	}
 
-		if domaincount > 0 {
-			fmt.Println(Green + "[+] Found", domaincount, "domains with the username", username + Reset)
-		} else {
-			fmt.Println(Red + "[-] No domains found with the username", username + Reset)
-		}
-}}
+	if domaincount > 0 {
+		fmt.Println(Green + "[+] Found", domaincount, "domains with the username", username + Reset)
+	} else {
+		fmt.Println(Red + "[-] No domains found with the username", username + Reset)
+	}
+}
 
 func SearchBreachDirectory(emails []string, apikey string, wg *sync.WaitGroup) {
 
