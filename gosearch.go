@@ -80,12 +80,12 @@ func UnmarshalJSON() (Data, error) {
 	// 2. Read the latest data.json file from the repository
 	// Bonus: it does not download the data.json file, it just reads it from the repository.
 
-	// err := os.Remove("data.json")
-	// if err != nil && !os.IsNotExist(err) {
-	//	return Data{}, fmt.Errorf("error deleting old data.json: %w", err)
-	// }
+	err := os.Remove("data.json")
+	if err != nil && !os.IsNotExist(err) {
+		return Data{}, fmt.Errorf("error deleting old data.json: %w", err)
+	}
 
-	url := "https://raw.githubusercontent.com/ibnaleem/gosearch/refs/heads/yaml-error/data.json"
+	url := "https://raw.githubusercontent.com/ibnaleem/gosearch/refs/heads/main/data.json"
 	resp, err := http.Get(url)
 	if err != nil {
 		return Data{}, fmt.Errorf("error downloading data.json: %w", err)
