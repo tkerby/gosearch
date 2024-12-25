@@ -309,7 +309,7 @@ func SearchDomains(username string, domains []string, wg *sync.WaitGroup) {
 	client := &http.Client{}
 
 
-	fmt.Println(Yellow + "[*] Searching", len(domains), "with the username", username + Reset)
+	fmt.Println(Yellow + "[*] Searching", len(domains), "domains with the username", username + Reset)
 
 	for _, domain := range domains {
 
