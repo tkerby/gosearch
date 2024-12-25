@@ -262,6 +262,45 @@ func BuildEmail(username string) []string {
 	return emails
 }
 
+
+func BuildDomains(username string) []string {
+	tlds := []string{
+		".com",
+		".net",
+		".org",
+		".biz",
+		".info",
+		".name",
+		".pro",
+		".cat",
+		".co",
+		".me",
+		".io",
+		".tech",
+		".dev",
+		".app",
+		".shop",
+		".fail",
+		".xyz",
+		".blog",
+		".portfolio",
+		".store",
+		".online",
+		".about",
+		".space",
+		".lol",
+		".fun",
+		".social",
+	}
+
+	var domains []string
+
+	for _, tld := range tlds {
+			domains = append(domains, username + tld)
+	}
+
+	return domains
+}
 func SearchBreachDirectory(emails []string, apikey string, wg *sync.WaitGroup) {
 
 	defer wg.Done()
