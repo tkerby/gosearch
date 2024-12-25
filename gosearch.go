@@ -624,6 +624,12 @@ func main() {
     wg.Wait()
   }
 
+    domains := BuildDomains(username)
+	fmt.Println(strings.Repeat("⎯", 85))
+	wg.Add(1)
+	go SearchDomains(username, domains, &wg)
+	wg.Wait()
+
 	elapsed := time.Since(start)
 	fmt.Println(strings.Repeat("⎯", 85))
 	fmt.Println(":: Number of profiles found              : ", count)
