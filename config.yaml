@@ -623,7 +623,7 @@ websites:
     errorCode: 404
 
   - name: "Hubski"
-    base_url: "https://hubski.com/user/kleinbl00"
+    base_url: "https://hubski.com/user/{}"
     url_probe: ""
     follow_redirects: true
     errorType: "errorMsg"
