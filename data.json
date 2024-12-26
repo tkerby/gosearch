@@ -856,6 +856,14 @@
       "follow_redirects": false,
       "errorType": "status_code",
       "errorCode": 302
+    },
+    {
+      "name": "Bandcamp",
+      "base_url": "https://www.bandcamp.com/{}",
+      "url_probe": "",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
     }
     ]
 }
