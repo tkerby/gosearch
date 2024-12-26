@@ -765,6 +765,7 @@
       "errorCode": 404
     },
     {
+<<<<<<< HEAD
       "name": "Bitwarden Forums",
       "base_url": "https://community.bitwarden.com/u/{}",
       "url_probe": "",
@@ -775,6 +776,10 @@
     {
       "name": "Blipfoto",
       "base_url": "https://www.blipfoto.com/{}",
+=======
+      "name": "Airline Pilot",
+      "base_url": "https://airlinepilot.life/u/{}",
+>>>>>>> d324ca4 (add airline pilot)
       "url_probe": "",
       "follow_redirects": true,
       "errorType": "status_code",
