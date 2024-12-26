@@ -840,6 +840,14 @@
       "follow_redirects": true,
       "errorType": "status_code",
       "errorCode": 404
+    },
+    {
+      "name": "Avizo",
+      "base_url": "https://www.avizo.cz/{}",
+      "url_probe": "",
+      "follow_redirects": false,
+      "errorType": "status_code",
+      "errorCode": 301
     }
     ]
 }
