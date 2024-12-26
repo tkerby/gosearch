@@ -848,6 +848,14 @@
       "follow_redirects": false,
       "errorType": "status_code",
       "errorCode": 301
+    },
+    {
+      "name": "BOOTH",
+      "base_url": "https://{}.booth.pm/",
+      "url_probe": "",
+      "follow_redirects": false,
+      "errorType": "status_code",
+      "errorCode": 302
     }
     ]
 }
