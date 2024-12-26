@@ -792,6 +792,14 @@
       "follow_redirects": true,
       "errorType": "unknown",
       "errorCode": 200
+    },
+    {
+      "name": "ArtStation",
+      "base_url": "https://www.artstation.com/{}",
+      "url_probe": "",
+      "follow_redirects": true,
+      "errorType": "unknown",
+      "errorCode": 403
     }
     ]
 }
