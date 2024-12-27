@@ -876,9 +876,17 @@
       "errorType": "errorMsg",
       "errorMsg": "User not found"
     },
-        {
+    {
       "name": "Bookcrossing",
       "base_url": "https://www.bookcrossing.com/mybookshelf/{}",
+      "url_probe": "",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Brave Community",
+      "base_url": "https://community.brave.com/u/{}",
       "url_probe": "",
       "follow_redirects": true,
       "errorType": "status_code",
