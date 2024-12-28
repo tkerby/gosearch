@@ -947,6 +947,14 @@
       "follow_redirects": true,
       "errorType": "status_code",
       "errorCode": 404
+    },
+    {
+      "name": "Caddy Community",
+      "base_url":"https://caddy.community/u/{}",
+      "url_probe": "",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
     }
     ]
 }
