@@ -779,6 +779,14 @@
       "follow_redirects": true,
       "errorType": "status_code",
       "errorCode": 404
+    },
+    {
+      "name": "Guns.lol",
+      "base_url": "https://guns.lol/{}",
+      "url_probe": "",
+      "follow_redirects": true,
+      "errorType": "unknown",
+      "errorCode": 307
     }
     ]
 }
