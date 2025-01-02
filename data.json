@@ -645,7 +645,7 @@
       "errorCode": 404
     },
     {
-      "name": "Codeacadmey",
+      "name": "Codecademy",
       "base_url": "https://www.codecademy.com/profiles/{}",
       "url_probe": "",
       "follow_redirects": true,
@@ -963,6 +963,190 @@
       "follow_redirects": true,
       "errorType": "status_code",
       "errorCode": 404 
+    },
+    {
+      "name": "Career.habr",
+      "base_url": "https://career.habr.com/{}",
+      "url_probe": "",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Championat",
+      "base_url": "https://www.championat.com/user/{}",
+      "url_probe": "",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Chaos",
+      "base_url": "https://chaos.social/@{}",
+      "url_probe": "",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Chatujme.cz",
+      "base_url": "https://profil.chatujme.cz/{}",
+      "url_probe": "",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Choice Community",
+      "base_url": "https://choice.community/u/{}",
+      "url_probe": "",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Clapper",
+      "base_url": "https://clapperapp.com/{}",
+      "url_probe": "",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 400
+    },
+    {
+      "name": "Cloudflare Community",
+      "base_url": "https://community.cloudflare.com/u/{}",
+      "url_probe": "",
+      "follow_redirects": true,
+      "errorType": "unknown",
+      "errorCode": 403
+    },
+    {
+      "name": "Clubhouse",
+      "base_url": "https://www.clubhouse.com/@{}",
+      "url_probe": "",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Code Snippet Wiki",
+      "base_url": "https://codesnippets.fandom.com/wiki/User:{}",
+      "url_probe": "",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Codeberg",
+      "base_url": "https://codeberg.org/{}",
+      "url_probe": "",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Codecademy",
+      "base_url": "https://www.codecademy.com/profiles/{}",
+      "url_probe": "",
+      "follow_redirects": true,
+      "errorType": "message",
+      "errorCode": "This profile could not be found"
+    },
+    {
+      "name": "Codechef",
+      "base_url": "https://www.codechef.com/users/{}",
+      "url_probe": "",
+      "follow_redirects": true,
+      "errorType": "response_url",
+      "errorCode": "https://www.codechef.com/"
+    },
+    {
+      "name": "Codeforces",
+      "base_url": "https://codeforces.com/profile/{}",
+      "url_probe": "https://codeforces.com/api/user.info?handles={}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Codepen",
+      "base_url": "https://codepen.io/{}",
+      "url_probe": "",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Coders Rank",
+      "base_url": "https://profile.codersrank.io/user/{}/",
+      "url_probe": "",
+      "follow_redirects": true,
+      "errorType": "message",
+      "errorCode": "not a registered member"
+    },
+    {
+      "name": "Coderwall",
+      "base_url": "https://coderwall.com/{}",
+      "url_probe": "",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Codewars",
+      "base_url": "https://www.codewars.com/users/{}",
+      "url_probe": "",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Coinvote",
+      "base_url": "https://coinvote.cc/profile/{}",
+      "url_probe": "",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "ColourLovers",
+      "base_url": "https://www.colourlovers.com/lover/{}",
+      "url_probe": "",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Contently",
+      "base_url": "https://{}.contently.com/",
+      "url_probe": "",
+      "follow_redirects": true,
+      "errorType": "response_url",
+      "errorCode": "https://contently.com"
+    },
+    {
+      "name": "Coroflot",
+      "base_url": "https://www.coroflot.com/{}",
+      "url_probe": "",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Cracked",
+      "base_url": "https://www.cracked.com/members/{}/",
+      "url_probe": "",
+      "follow_redirects": true,
+      "errorType": "response_url",
+      "errorCode": "https://www.cracked.com/"
+    },
+    {
+      "name": "Crevado",
+      "base_url": "https://{}.crevado.com",
+      "url_probe": "",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
     }
     ]
 }
