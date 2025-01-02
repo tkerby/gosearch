@@ -1056,9 +1056,9 @@
       "name": "Codechef",
       "base_url": "https://www.codechef.com/users/{}",
       "url_probe": "",
-      "follow_redirects": true,
-      "errorType": "response_url",
-      "errorCode": "https://www.codechef.com/"
+      "follow_redirects": false,
+      "errorType": "status_code",
+      "errorCode": 404
     },
     {
       "name": "Codeforces",
