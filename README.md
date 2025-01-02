@@ -84,7 +84,7 @@ The `base_url` is the URL `GoSearch` uses to search for usernames, unless a `url
 For example, if you run the query `./gosearch ibnaleem`, `GoSearch` will replace the `{}` placeholder with "ibnaleem", resulting in the URL `https://shaffan.dev/user/ibnaleem`, assuming the `base_url` is set to `https://shaffan.dev/user/{}`. This allows `GoSearch` to automatically generate the correct URL to check for the user's profile.
 
 ### `url_probe`
-In some cases, websites may block direct requests for security reasons but offer an API or alternate service to retrieve the same information. The `url_probe` field is used to specify such an API or service URL that checks username availability. Unlike the `base_url`, which is used to directly search for profile URLs, the `url_probe` generates a different API request, and GoSearch will display the API URL in the terminal instead of the profile URL.
+In some cases, websites may block direct requests for security reasons but offer an API or alternate service to retrieve the same information. The `url_probe` field is used to specify such an API or service URL that checks username availability. Unlike the `base_url`, which is used to directly search for profile URLs, the `url_probe` generates a different API request, but GoSearch will still display the `base_url` in the terminal instead of the API URL since that is not where the profile lives.
 
 For example, Duolingo profiles are available at `https://duolingo.com/profile/{}`, but to check if a username is available, Duolingo provides an API URL: `https://www.duolingo.com/2017-06-30/users?username={}`. If we used the `url_probe` as the `base_url`, the terminal would show something like `https://www.duolingo.com/2017-06-30/users?username=ibnaleem` instead of the user profile URL `https://duolingo.com/profile/ibnaleem`, which could confuse users. This distinction helps keep the process clearer and more intuitive, especially for those who may be less familiar with programming.
 
@@ -96,104 +96,84 @@ There are 4 error types
 4. `unknown` - when there is no way of ascertaining the difference between a username that exists and does not exist on the website
 
 #### `status_code`
-The easiest to contribute, simply find an existing profile and make a request with the following code:
-```go
-package main
-
-import (
-    "fmt"
-    "log"
-    "net/http"
-    "os"
-)
-
-func MakeRequest(url string) {
-    resp, err := http.Get(url)
-    if err != nil {
-        log.Fatal(err)
-    }
-
-    defer resp.Body.Close()
-
-    fmt.Println("Response:", resp.Status)
-}
-
-func main() {
-    var url string = os.Args[1]
-    MakeRequest(url)
-}
+The easiest to contribute, simply find an existing profile and build the test binary:
 ```
-```
+$ git clone https://github.com/ibnaleem/gosearch.git
+$ cd gosearch
+$ cd tests
 $ go build
 ```
+This will create a `./tests` or `tests.exe` binary, depending on your OS. For `status_code` testing, use the `0` option:
 ```
-$ ./request https://yourwebsite.com/username
-Response: 200 OK
+$ ./tests https://yourwebsite.com/username-exists 0
+[*] Testing URL: https://yourwebsite.com/username-exists
+[*] Mode: 0 (Status Code)
+[+] Response: 200 OK
 ```
 Where username is the existing username on the website. Then, make the same request with a username that does not exist on the website:
 ```
-$ ./request https://yourwebsite.com/usernamedoesnotexist
-Response: 404 Not Found
+$ ./tests https://yourwebsite.com/username-does-not-exist 0
+[*] Testing URL: https://yourwebsite.com/username-does-not-exist
+[*] Mode: 0 (Status Code)
+[+] Response: 404 Not Found
 ```
-Copy and set `errorCode`, the field under `errorType`, as the code that's printed to the terminal (in this case it's `404`).
+Usually, websites send a `200 OK` for profiles that exist, and a `404 Not Found` for ones that do not exist. In some cases, they may throw a `403 Forbidden`, but it does not matter as long as the status code for an existing profile is always different from non-existing profiles. Copy and set `errorCode`, the field under `errorType`, as the code that's printed to the terminal (in this case it's `404`).
+```json
+{
+  "name": "Your Website",
+  "base_url": "https://www.yourwebsite.com/{}",
+  "url_probe": "",
+  "errorType": "status_code",
+  "errorCode": 404,
+}
+```
+> [!WARNING]  
+> [`"errorCode"` expects a value of type `int`](https://github.com/ibnaleem/gosearch/blob/main/gosearch.go#L44). Therefore, `"errorCode":"404"` **is invalid.**
+
 #### `errorMsg`
-This is more tricky, so what you must do is download the response body to a file. Luckily I've already written the code for you:
-```go
-package main
-
-import (
-	"fmt"
-	"io"
-	"log"
-	"net/http"
-	"os"
-)
-
-func MakeRequest(url string) {
-	resp, err := http.Get(url)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer resp.Body.Close()
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println(string(body))
-	os.WriteFile("response.txt", []byte(body), 0644)
-}
-
-func main() {
-	url := os.Args[1] // Take URL as argument from command line
-	MakeRequest(url)
-}
+This is more tricky, so what you must do is download the response body to a file. Luckily I've already written the code for you in the `tests` binary. Simply pass the URL followed by mode `1`:
 ```
+$ ./tests https://yourwebsite.com/username-exists 1
+[*] Testing URL: https://yourwebsite.com/username-exists
+[*] Mode: 1 (Response Body)
+[+] Response: 200 OK
+[+] Saved response to response.txt
 ```
-$ go build
-```
-```
-./test https://website.com/username
-```
-Once again, the first username corresponds to an existing account, while the second username is for an account that does not exist. Be sure to rename `response.txt` to avoid having my code overwrite it.
+Once again, the first username corresponds to an existing profile, while the second username is for an account that does not exist. Be sure to rename `response.txt` to avoid having my code overwrite it.
 ```
 $ mv response.txt username_found.txt
 ```
 ```
-$ ./test https://website.com/username_does_not_exist
+$ ./tests https://yourwebsite.com/username-does-not-exists 1
+[*] Testing URL: https://yourwebsite.com/username-does-not-exists
+[*] Mode: 1 (Response Body)
+[+] Response: 200 OK
+[+] Saved response to response.txt
 ```
 ```
 $ mv response.txt username_not_found.txt
 ```
-You’ll need to analyse the response body of `username_not_found.txt` and compare it with `username_found.txt`. Look for any word, phrase, HTML tag, or other unique element that appears only in `username_not_found.txt`. Once you've identified something distinct, add it to the `errorMsg` field under the `errorType` field. Keep in mind that `errorType` can only have one field below it: either `errorCode` or `errorMsg`, **but not both**. Below is *incorrect*:
+You’ll need to analyse the response body of `username_not_found.txt` and compare it with `username_found.txt`. Look for any word, phrase, HTML tag, or other unique element that appears only in `username_not_found.txt`. Once you've identified something distinct, add it to the `errorMsg` field under the `errorType` field. Keep in mind that `errorType` can only have one field below it: either `errorCode` or `errorMsg`, **but not both**.
+```
+$ cat username_found.txt | grep "<title>"
+<title>Username | Your Website</title>
+```
+```
+cat username_not_found.txt | grep "<title>"
+<title>Your Website</title>
+```
+In this case, the website's `<title>` tag contains the username of an existing profile, and for non-existing profiles it merely states the website name. Therefore, the `errorMsg` would be `<title>Your Website</title>`:
 ```json
 {
-    "errorType": "status_code",
-    "errorCode": 404,
-    "errorMsg": "<title>Hello World</title>"
+  "name": "Your Website",
+  "base_url": "https://www.yourwebsite.com/{}",
+  "url_probe": "",
+  "errorType": "errorMsg",
+  "errorMsg": "<title>Your Website</title>",
 }
 ```
-#### `errorMsg`
-The exact opposite of `errorMsg`; instead of analysing the `username_not_found.txt`'s response body, analyse the `username_found.txt`'s response body to find any word, phrase, HTML tag or other unique element that only appears in `username_found.txt`. Set `errorType: profilePresence` and set the `errorMsg` to what you've found.
+#### `profilePresence`
+The exact opposite of `errorMsg`; instead of analysing the `username_not_found.txt`'s response body, analyse the `username_found.txt`'s response body to find any word, phrase, HTML tag or other unique element that only appears in `username_found.txt`. Set `"errorType": "profilePresence"` and set the `errorMsg` to what you've found.
 #### `"unknown"`
 Occasionally, the response body may be empty or lack any unique content in both the `username_not_found.txt` and `username_found.txt` files. After trying cookies, using the `www.` subdomain, you are left with no answers. In these cases, set the `errorType` to `"unknown"` (as a string) and include a `404` `errorCode` field underneath it.
 #### `cookies`
@@ -256,7 +236,6 @@ HTTP/2 308
 ...
 location: https://www.pinterest.com/username
 ```
-
 ```
 $ curl -I https://www.pinterest.com/username
 HTTP/2 200
