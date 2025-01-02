@@ -1101,14 +1101,6 @@
       "errorCode": 404
     },
     {
-      "name": "Coinvote",
-      "base_url": "https://coinvote.cc/profile/{}",
-      "url_probe": "",
-      "follow_redirects": true,
-      "errorType": "status_code",
-      "errorCode": 404
-    },
-    {
       "name": "ColourLovers",
       "base_url": "https://www.colourlovers.com/lover/{}",
       "url_probe": "",
