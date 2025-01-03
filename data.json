@@ -1160,7 +1160,7 @@
       "name": "CyberDefenders",
       "base_url": "https://cyberdefenders.org/p/{}",
       "url_probe": "",
-      "follow_redirects": true,
+      "follow_redirects": false,
       "errorType": "status_code",
       "errorCode": 301
     },
@@ -1201,6 +1201,106 @@
       "base_url": "https://www.discogs.com/user/{}",
       "url_probe": "",
       "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Eintracht Frankfurt Forum",
+      "base_url": "https://community.eintracht.de/fans/{}",
+      "url_probe": "",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 500
+    },
+    {
+      "name": "Envato Forum",
+      "base_url": "https://forums.envato.com/u/{}",
+      "url_probe": "",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": "enabled"
+    },
+    {
+      "name": "Exposure",
+      "base_url": "https://{}.exposure.co/",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Exophase",
+      "base_url": "https://www.exophase.com/user/{}/",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "EyeEm",
+      "url": "https://www.eyeem.com/u/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Fameswap",
+      "base_url": "https://fameswap.com/user/{}",
+      "follow_redirects": true,
+      "errorType": "unknown",
+      "errorCode": 403
+    },
+    {
+      "name": "Fanpop",
+      "base_url": "https://www.fanpop.com/fans/{}",
+      "follow_redirects": false,
+      "errorType": "status_code",
+      "errorCode": 302
+    },
+    {
+      "name": "Finanzfrage",
+      "base_url": "https://www.finanzfrage.net/nutzer/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Flightradar24",
+      "base_url": "https://my.flightradar24.com/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Flipboard",
+      "base_url": "https://flipboard.com/@{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Rusfootball",
+      "base_url": "https://www.rusfootball.info/user/{}/",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "FortniteTracker",
+      "base_url": "https://fortnitetracker.com/profile/all/{}",
+      "follow_redirects": true,
+      "errorType": "unknown",
+      "errorCode": 403
+    },
+    {
+      "name": "Freelance.habr",
+      "base_url": "https://freelance.habr.com/freelancers/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Freelancer",
+      "base_url": "https://www.freelancer.com/u/{}",
+      "follow_redirects":true,
       "errorType": "status_code",
       "errorCode": 404
     }
