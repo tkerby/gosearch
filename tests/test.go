@@ -46,6 +46,7 @@ func Mode0(url string) {
 	defer res.Body.Close()
 
 	fmt.Println(Green + "[+] Response:", res.Status + Reset)
+	fmt.Println(Green + "[+] Response URL:", res.Request.URL)
 
 	os.Exit(0)
 }
@@ -87,6 +88,7 @@ func Mode1(url string) {
 
 	os.WriteFile("response.txt", body, os.FileMode(os.O_WRONLY))
 	fmt.Println(Green + "[+] Response:", res.Status + Reset)
+	fmt.Println(Green + "[+] Response URL:", res.Request.URL)
 	fmt.Println(Green + "[+] Saved response to response.txt" + Reset)
 
   os.Exit(0)
@@ -126,6 +128,7 @@ func Mode2(url string) {
 	defer res.Body.Close()
 
 	fmt.Println(Green + "[+] Response:", res.Status + Reset)
+	fmt.Println(Green + "[+] Response URL:", res.Request.URL)
 	os.Exit(0)
 }
 
@@ -170,6 +173,7 @@ func Mode3(url string) {
 
 	os.WriteFile("response.txt", body, os.FileMode(os.O_WRONLY))
 	fmt.Println(Green + "[+] Response:", res.Status + Reset)
+	fmt.Println(Green + "[+] Response URL:", res.Request.URL)
 	fmt.Println(Green + "[+] Saved response to response.txt" + Reset)
 
 	os.Exit(0)
@@ -177,8 +181,8 @@ func Mode3(url string) {
 }
 
 func main() {
-	url := os.Args[1] // the URL to test the usernames against
-	mode := os.Args[2] // the mode to use for testing purposes
+	url := os.Args[1]
+	mode := os.Args[2]
 
 	if len(os.Args) != 3 {
 		fmt.Println(Red + "Usage: gosearch <url> <mode>\nIssues: https://github.com/ibnaleem/gosearch/issues" + Reset)
