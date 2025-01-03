@@ -1120,9 +1120,9 @@
       "name": "Cracked",
       "base_url": "https://www.cracked.com/members/{}/",
       "url_probe": "",
-      "follow_redirects": true,
-      "errorType": "response_url",
-      "errorCode": "https://www.cracked.com/"
+      "follow_redirects": false,
+      "errorType": "status_code",
+      "errorCode": 302
     },
     {
       "name": "Crevado",
