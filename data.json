@@ -1324,6 +1324,62 @@
       "follow_redirects": true,
       "errorType": "unknown",
       "errorCode": 200
+    },
+    {
+      "name": "Harvard Scholar",
+      "base_url": "https://scholar.harvard.edu/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Hashnode",
+      "base_url": "https://hashnode.com/@{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Houzz",
+      "base_url": "https://houzz.com/user/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "HubPages",
+      "base_url": "https://hubpages.com/@{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "username_claimed": "blue"
+    },
+    {
+      "name": "Hubski",
+      "base_url": "https://hubski.com/user/{}",
+      "follow_redirects": true,
+      "errorType": "errorMsg",
+      "errorMsg": "No such user."
+    },
+    {
+      "name": "IFTTT",
+      "base_url": "https://www.ifttt.com/p/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "IRC-Galleria",
+      "base_url": "https://irc-galleria.net/user/{}",
+      "follow_redirects": false,
+      "errorType": "status_code",
+      "errorCode": 302
+    },
+    {
+      "name": "Icons8 Community",
+      "base_url": "https://community.icons8.com/u/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
     }
     ]
 }
