@@ -1156,6 +1156,174 @@
       "follow_redirects":true,
       "errorType": "status_code",
       "errorCode": 404
+    },
+    {
+      "name": "Freesound",
+      "base_url": "https://freesound.org/people/{}/",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "GaiaOnline",
+      "base_url": "https://www.gaiaonline.com/profiles/{}",
+      "follow_redirects": true,
+      "errorType": "errorMsg",
+      "errorMsg": "No user ID specified or user does not exist!"
+    },
+    {
+      "name": "Gamespot",
+      "base_url": "https://www.gamespot.com/profile/{}/",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "GeeksforGeeks",
+      "base_url": "https://auth.geeksforgeeks.org/user/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Genius (Artists)",
+      "base_url": "https://genius.com/artists/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Genius (Users)",
+      "base_url": "https://genius.com/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Gesundheitsfrage",
+      "base_url": "https://www.gesundheitsfrage.net/nutzer/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "GetMyUni",
+      "base_url": "https://www.getmyuni.com/author/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Giant Bomb",
+      "base_url": "https://www.giantbomb.com/profile/{}/",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "GitBook",
+      "base_url": "https://{}.gitbook.io/",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "GitHub Pages",
+      "base_url": "https://{}.github.io/",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Gitea",
+      "base_url": "https://gitea.com/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Gitee",
+      "base_url": "https://gitee.com/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "GoodReads",
+      "base_url": "https://www.goodreads.com/{}",
+      "follow_redirects":true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Gradle",
+      "base_url": "https://plugins.gradle.org/u/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Grailed",
+      "base_url": "https://www.grailed.com/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Gravatar",
+      "base_url": "http://en.gravatar.com/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Gumroad",
+      "base_url": "https://{}.gumroad.com/",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Gutefrage",
+      "base_url": "https://www.gutefrage.net/nutzer/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Hackaday",
+      "base_url": "https://hackaday.io/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "HackenProof",
+      "base_url": "https://hackenproof.com/hackers/{}",
+      "follow_redirects": true,
+      "errorType": "unknown",
+      "errorCode": 403
+    },
+    {
+      "name": "HackerEarth",
+      "base_url": "https://hackerearth.com/@{}",
+      "follow_redirects": true,
+      "errorType": "errorMsg",
+      "errorMsg": "<title> 404 | HackerEarth</title>"
+    },
+    {
+      "name": "HackerOne",
+      "base_url": "https://hackerone.com/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "HackerRank",
+      "base_url": "https://hackerrank.com/{}",
+      "follow_redirects": true,
+      "errorType": "unknown",
+      "errorCode": 200
     }
     ]
 }
