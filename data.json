@@ -922,8 +922,8 @@
       "name": "Codecademy",
       "base_url": "https://www.codecademy.com/profiles/{}",
       "follow_redirects": true,
-      "errorType": "message",
-      "errorCode": "This profile could not be found"
+      "errorType": "errorMsg",
+      "errorMsg": "This profile could not be found"
     },
     {
       "name": "Codechef",
@@ -951,8 +951,8 @@
       "name": "Coders Rank",
       "base_url": "https://profile.codersrank.io/user/{}/",
       "follow_redirects": true,
-      "errorType": "message",
-      "errorCode": "not a registered member"
+      "errorType": "errorMsg",
+      "errorMsg": "not a registered member"
     },
     {
       "name": "Coderwall",
