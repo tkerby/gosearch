@@ -1351,7 +1351,7 @@
       "base_url": "https://hubpages.com/@{}",
       "follow_redirects": true,
       "errorType": "status_code",
-      "username_claimed": "blue"
+      "errorCode": 404
     },
     {
       "name": "Hubski",
