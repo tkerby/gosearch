@@ -1109,14 +1109,6 @@
       "errorCode": 404
     },
     {
-      "name": "Contently",
-      "base_url": "https://{}.contently.com/",
-      "url_probe": "",
-      "follow_redirects": true,
-      "errorType": "response_url",
-      "errorCode": "https://contently.com"
-    },
-    {
       "name": "Coroflot",
       "base_url": "https://www.coroflot.com/{}",
       "url_probe": "",
