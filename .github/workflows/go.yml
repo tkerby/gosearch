@@ -24,5 +24,8 @@ jobs:
     - name: Build
       run: go build
 
+    - name: Build Test File
+      run: go build ./tests/test.go
+
     - name: Test
       run: go test
