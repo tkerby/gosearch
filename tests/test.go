@@ -176,13 +176,7 @@ func Mode3(url string) {
 }
 
 func main() {
-	if len(os.Args) != 3 {
-		fmt.Println(Red + "Usage: gosearch <url> <mode>\nIssues: https://github.com/ibnaleem/gosearch/issues" + Reset)
-		os.Exit(1)
-	} else if len(os.Args) == 2 {
-		fmt.Println(Red + "Mode not provided. Please provide either 0, 1, 2, or 3. Exiting..." + Reset)
-		os.Exit(1)
-	} else if len(os.Args) == 1 {
+	if len(os.Args) == 1 {
 		fmt.Println(Yellow + "Welcome to GoSearch's testing binary." + Reset)
 		fmt.Println(Yellow + "First, find a url containing a username." + Red + "Eg. https://instagram.com/zuck" + Reset)
 		fmt.Println(Yellow + "Then, provide the mode number you want to test against." + Red + "Eg. ./test https://instagram.com/zuck 0" + Reset)
@@ -190,6 +184,12 @@ func main() {
 		fmt.Println(Yellow + "1: Response Body - Check if the response body contains any errors for invalid usernames (e.g 'username not found')")
 		fmt.Println(Yellow + "2: Status Code (No Redirects) - Check if a website throws any status code errors for invalid usernames without following redirects")
 		fmt.Println(Yellow + "3: Response Body (No Redirects) - Check if the response body contains any errors for invalid usernames (e.g 'username not found') without following redirects")
+		os.Exit(1)
+	} else if len(os.Args) == 2 {
+		fmt.Println(Red + "Mode not provided. Please provide either 0, 1, 2, or 3. Exiting..." + Reset)
+		os.Exit(1)
+	} else if len(os.Args) > 3 {
+		fmt.Println(Red + "Usage: gosearch <url> <mode>\nIssues: https://github.com/ibnaleem/gosearch/issues" + Reset)
 		os.Exit(1)
 	}
 
