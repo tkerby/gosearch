@@ -52,8 +52,6 @@ func Mode0(url string) {
 
 	fmt.Println(Green+"[+] Response:", res.Status+Reset)
 	fmt.Println(Green+"[+] Response URL:", res.Request.URL)
-
-	os.Exit(0)
 }
 
 func Mode1(url string) {
@@ -94,8 +92,6 @@ func Mode1(url string) {
 	fmt.Println(Green+"[+] Response:", res.Status+Reset)
 	fmt.Println(Green+"[+] Response URL:", res.Request.URL)
 	fmt.Println(Green + "[+] Saved response to response.txt" + Reset)
-
-	os.Exit(0)
 }
 
 func Mode2(url string) {
@@ -133,7 +129,6 @@ func Mode2(url string) {
 
 	fmt.Println(Green+"[+] Response:", res.Status+Reset)
 	fmt.Println(Green+"[+] Response URL:", res.Request.URL)
-	os.Exit(0)
 }
 
 func Mode3(url string) {
@@ -178,9 +173,6 @@ func Mode3(url string) {
 	fmt.Println(Green+"[+] Response:", res.Status+Reset)
 	fmt.Println(Green+"[+] Response URL:", res.Request.URL)
 	fmt.Println(Green + "[+] Saved response to response.txt" + Reset)
-
-	os.Exit(0)
-
 }
 
 func main() {
