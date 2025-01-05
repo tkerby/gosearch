@@ -88,7 +88,7 @@ func Mode1(url string) {
 		log.Fatal(err)
 	}
 
-	os.WriteFile("response.txt", body, os.FileMode(os.O_WRONLY))
+	os.WriteFile("response.txt", body, os.ModePerm)
 	fmt.Println(Green+"[+] Response:", res.Status+Reset)
 	fmt.Println(Green+"[+] Response URL:", res.Request.URL)
 	fmt.Println(Green + "[+] Saved response to response.txt" + Reset)
@@ -169,7 +169,7 @@ func Mode3(url string) {
 		log.Fatal(err)
 	}
 
-	os.WriteFile("response.txt", body, os.FileMode(os.O_WRONLY))
+	os.WriteFile("response.txt", body, os.ModePerm)
 	fmt.Println(Green+"[+] Response:", res.Status+Reset)
 	fmt.Println(Green+"[+] Response URL:", res.Request.URL)
 	fmt.Println(Green + "[+] Saved response to response.txt" + Reset)
