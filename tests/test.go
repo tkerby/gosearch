@@ -176,9 +176,6 @@ func Mode3(url string) {
 }
 
 func main() {
-	url := os.Args[1]
-	mode := os.Args[2]
-
 	if len(os.Args) != 3 {
 		fmt.Println(Red + "Usage: gosearch <url> <mode>\nIssues: https://github.com/ibnaleem/gosearch/issues" + Reset)
 		os.Exit(1)
@@ -195,6 +192,9 @@ func main() {
 		fmt.Println(Yellow + "3: Response Body (No Redirects) - Check if the response body contains any errors for invalid usernames (e.g 'username not found') without following redirects")
 		os.Exit(1)
 	}
+
+	url := os.Args[1]
+	mode := os.Args[2]
 
 	if mode == "0" {
 		Mode0(url)
