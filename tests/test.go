@@ -10,10 +10,16 @@ import (
 	"time"
 )
 
-var Red = "\033[31m"
-var Reset = "\033[0m"
-var Green = "\033[32m"
-var Yellow = "\033[33m"
+// Color output constants.
+const (
+	Red    = "\033[31m"
+	Reset  = "\033[0m"
+	Green  = "\033[32m"
+	Yellow = "\033[33m"
+)
+
+// User-Agent header used in requests.
+const UserAgent = "Mozilla/5.0 (X11; Linux x86_64; rv:125.0) Gecko/20100101 Firefox/125.0"
 
 func Mode0(url string) {
 	fmt.Println(Yellow+"[*] Testing URL:", url+Reset)
@@ -30,12 +36,12 @@ func Mode0(url string) {
 		Transport: transport,
 	}
 
-	req, err := http.NewRequest("GET", url, nil)
+	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	req.Header.Set("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:125.0) Gecko/20100101 Firefox/125.0")
+	req.Header.Set("User-Agent", UserAgent)
 
 	res, err := client.Do(req)
 	if err != nil {
@@ -65,12 +71,12 @@ func Mode1(url string) {
 		Transport: transport,
 	}
 
-	req, err := http.NewRequest("GET", url, nil)
+	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	req.Header.Set("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:125.0) Gecko/20100101 Firefox/125.0")
+	req.Header.Set("User-Agent", UserAgent)
 
 	res, err := client.Do(req)
 	if err != nil {
@@ -111,12 +117,12 @@ func Mode2(url string) {
 		return http.ErrUseLastResponse
 	}
 
-	req, err := http.NewRequest("GET", url, nil)
+	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	req.Header.Set("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:125.0) Gecko/20100101 Firefox/125.0")
+	req.Header.Set("User-Agent", UserAgent)
 
 	res, err := client.Do(req)
 	if err != nil {
@@ -149,12 +155,12 @@ func Mode3(url string) {
 		return http.ErrUseLastResponse
 	}
 
-	req, err := http.NewRequest("GET", url, nil)
+	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	req.Header.Set("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:125.0) Gecko/20100101 Firefox/125.0")
+	req.Header.Set("User-Agent", UserAgent)
 
 	res, err := client.Do(req)
 	if err != nil {
