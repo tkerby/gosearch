@@ -17,11 +17,16 @@ import (
 	"github.com/inancgumus/screen"
 )
 
-var Red = "\033[31m"
-var Reset = "\033[0m"
-var Green = "\033[32m"
-var Yellow = "\033[33m"
-var ASCII string = `
+// Color output constants.
+const (
+	Red    = "\033[31m"
+	Reset  = "\033[0m"
+	Green  = "\033[32m"
+	Yellow = "\033[33m"
+)
+
+// GoSearch ASCII logo.
+const ASCII string = `
  ________  ________  ________  _______   ________  ________  ________  ___  ___     
 |\   ____\|\   __  \|\   ____\|\  ___ \ |\   __  \|\   __  \|\   ____\|\  \|\  \    
 \ \  \___|\ \  \|\  \ \  \___|\ \   __/|\ \  \|\  \ \  \|\  \ \  \___|\ \  \\\  \   
@@ -31,9 +36,14 @@ var ASCII string = `
     \|_______|\|_______|\_________\|_______|\|__|\|__|\|__|\|__|\|_______|\|__|\|__|
                        \|_________|
 `
-var VERSION string = "v1.0.0"
-var count uint16 = 0      // Maximum value for count is 65,535
-var domaincount uint8 = 0 // Maximum value for domaincount is 255
+
+// User-Agent header used in requests.
+const UserAgent = "Mozilla/5.0 (X11; Linux x86_64; rv:125.0) Gecko/20100101 Firefox/125.0"
+
+// GoSearch version.
+const VERSION string = "v1.0.0"
+
+var count uint16 = 0 // Maximum value for count is 65,535
 
 type Website struct {
 	Name            string   `json:"name"`
@@ -310,12 +320,12 @@ func SearchDomains(username string, domains []string, wg *sync.WaitGroup) {
 	for _, domain := range domains {
 		url := "http://" + domain
 
-		req, err := http.NewRequest("GET", url, nil)
+		req, err := http.NewRequest(http.MethodGet, url, nil)
 		if err != nil {
 			fmt.Printf("Error creating request for %s: %v\n", domain, err)
 			continue
 		}
-		req.Header.Set("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:125.0) Gecko/20100101 Firefox/125.0")
+		req.Header.Set("User-Agent", UserAgent)
 
 		resp, err := client.Do(req)
 		if err != nil {
@@ -330,7 +340,7 @@ func SearchDomains(username string, domains []string, wg *sync.WaitGroup) {
 		}
 		defer resp.Body.Close()
 
-		if resp.StatusCode == 200 {
+		if resp.StatusCode == http.StatusOK {
 			fmt.Println(Green+"[+] 200 OK:", domain+Reset)
 			domaincount++
 		}
@@ -392,13 +402,13 @@ func MakeRequestWithErrorCode(website Website, url string, username string) {
 		}
 	}
 
-	req, err := http.NewRequest("GET", url, nil)
+	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		fmt.Printf("Error creating request in function MakeRequestWithErrorCode: %v\n", err)
 		return
 	}
 
-	req.Header.Set("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:125.0) Gecko/20100101 Firefox/125.0")
+	req.Header.Set("User-Agent", UserAgent)
 
 	if website.Cookies != nil {
 		for _, cookie := range website.Cookies {
@@ -442,13 +452,13 @@ func MakeRequestWithErrorMsg(website Website, url string, username string) {
 		}
 	}
 
-	req, err := http.NewRequest("GET", url, nil)
+	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		fmt.Printf("Error creating request in function MakeRequestWithErrorMsg: %v\n", err)
 		return
 	}
 
-	req.Header.Set("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:125.0) Gecko/20100101 Firefox/125.0")
+	req.Header.Set("User-Agent", UserAgent)
 
 	if website.Cookies != nil {
 		for _, cookie := range website.Cookies {
@@ -508,13 +518,13 @@ func MakeRequestWithProfilePresence(website Website, url string, username string
 		}
 	}
 
-	req, err := http.NewRequest("GET", url, nil)
+	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		fmt.Printf("Error creating request in function MakeRequestWithErrorMsg: %v\n", err)
 		return
 	}
 
-	req.Header.Set("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:125.0) Gecko/20100101 Firefox/125.0")
+	req.Header.Set("User-Agent", UserAgent)
 
 	if website.Cookies != nil {
 		for _, cookie := range website.Cookies {
