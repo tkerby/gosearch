@@ -360,15 +360,16 @@ func SearchBreachDirectory(emails []string, apikey string, wg *sync.WaitGroup) {
 			log.Fatal(err)
 		}
 
-		if response.Found > 0 {
-			fmt.Printf(Green+"[+] Found %d breaches for %s:\n", response.Found, email+Reset)
-			for _, entry := range response.Result {
-				fmt.Println(Green+"[+] Password:", entry.Password+Reset)
-				fmt.Println(Green+"[+] SHA1:", entry.Sha1+Reset)
-				fmt.Println(Green+"[+] Source:", entry.Sources+Reset)
-			}
-		} else {
+		if response.Found == 0 {
 			fmt.Printf(Red+"[-] No breaches found for %s. Moving on...\n", email+Reset)
+			continue
+		}
+
+		fmt.Printf(Green+"[+] Found %d breaches for %s:\n", response.Found, email+Reset)
+		for _, entry := range response.Result {
+			fmt.Println(Green+"[+] Password:", entry.Password+Reset)
+			fmt.Println(Green+"[+] SHA1:", entry.Sha1+Reset)
+			fmt.Println(Green+"[+] Source:", entry.Sources+Reset)
 		}
 	}
 }
