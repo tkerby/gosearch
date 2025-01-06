@@ -170,75 +170,75 @@ func HudsonRock(username string, wg *sync.WaitGroup) {
 		fmt.Println(Green + ":: This username is not associated with a computer infected by an info-stealer." + Reset)
 		WriteToFile(username, ":: This username is not associated with a computer infected by an info-stealer.")
 		return
-	} else {
-		fmt.Println(Red + ":: This username is associated with a computer that was infected by an info-stealer, all the credentials saved on this computer are at risk of being accessed by cybercriminals." + Reset)
+	}
 
-		for i, stealer := range response.Stealers {
-			fmt.Println(Red + fmt.Sprintf("[-] Stealer #%d", i+1) + Reset)
-			fmt.Println(Red + fmt.Sprintf("::  Stealer Family: %s", stealer.StealerFamily) + Reset)
-			fmt.Println(Red + fmt.Sprintf("::  Date Compromised: %s", stealer.DateCompromised) + Reset)
-			fmt.Println(Red + fmt.Sprintf("::  Computer Name: %s", stealer.ComputerName) + Reset)
-			fmt.Println(Red + fmt.Sprintf(":: Operating System: %s", stealer.OperatingSystem) + Reset)
-			fmt.Println(Red + fmt.Sprintf("::  Malware Path: %s", stealer.MalwarePath) + Reset)
+	fmt.Println(Red + ":: This username is associated with a computer that was infected by an info-stealer, all the credentials saved on this computer are at risk of being accessed by cybercriminals." + Reset)
 
-			switch v := stealer.Antiviruses.(type) {
-			case string:
-				fmt.Println(Red + fmt.Sprintf(":: Antiviruses: %s", v) + Reset)
-			case []interface{}:
-				antiviruses := ""
-				for _, av := range v {
-					antiviruses += fmt.Sprintf("%s, ", av)
-				}
-				fmt.Println(Red + fmt.Sprintf("::  Antiviruses: %s", antiviruses[:len(antiviruses)-2]) + Reset)
+	for i, stealer := range response.Stealers {
+		fmt.Println(Red + fmt.Sprintf("[-] Stealer #%d", i+1) + Reset)
+		fmt.Println(Red + fmt.Sprintf("::  Stealer Family: %s", stealer.StealerFamily) + Reset)
+		fmt.Println(Red + fmt.Sprintf("::  Date Compromised: %s", stealer.DateCompromised) + Reset)
+		fmt.Println(Red + fmt.Sprintf("::  Computer Name: %s", stealer.ComputerName) + Reset)
+		fmt.Println(Red + fmt.Sprintf(":: Operating System: %s", stealer.OperatingSystem) + Reset)
+		fmt.Println(Red + fmt.Sprintf("::  Malware Path: %s", stealer.MalwarePath) + Reset)
+
+		switch v := stealer.Antiviruses.(type) {
+		case string:
+			fmt.Println(Red + fmt.Sprintf(":: Antiviruses: %s", v) + Reset)
+		case []interface{}:
+			antiviruses := ""
+			for _, av := range v {
+				antiviruses += fmt.Sprintf("%s, ", av)
 			}
-
-			fmt.Println(Red + fmt.Sprintf("::  IP: %s", stealer.IP) + Reset)
-
-			fmt.Println(Red + "[-] Top Passwords:" + Reset)
-			for _, password := range stealer.TopPasswords {
-				fmt.Println(Red + fmt.Sprintf("::    %s", password) + Reset)
-			}
-
-			fmt.Println(Red + "[-] Top Logins:" + Reset)
-			for _, login := range stealer.TopLogins {
-				fmt.Println(Red + fmt.Sprintf("::    %s", login) + Reset)
-			}
+			fmt.Println(Red + fmt.Sprintf("::  Antiviruses: %s", antiviruses[:len(antiviruses)-2]) + Reset)
 		}
 
-		// For performance reasons, we should not print and write to the file at the same time during a single for-loop interation.
-		// Therefore, there will be 2 for-loop interations: one for printing, and one for writing to the file.
-		// This ensures that GoSearch can print as quickkly as possible since the terminal output is most important.
+		fmt.Println(Red + fmt.Sprintf("::  IP: %s", stealer.IP) + Reset)
 
-		for i, stealer := range response.Stealers {
-			WriteToFile(username, fmt.Sprintf("[-] Stealer #%d", i+1))
-			WriteToFile(username, fmt.Sprintf("\n::  Stealer Family: %s", stealer.StealerFamily+"\n"))
-			WriteToFile(username, fmt.Sprintf("::  Date Compromised: %s", stealer.DateCompromised+"\n"))
-			WriteToFile(username, fmt.Sprintf("::  Computer Name: %s", stealer.ComputerName+"\n"))
-			WriteToFile(username, fmt.Sprintf(":: Operating System: %s", stealer.OperatingSystem+"\n"))
-			WriteToFile(username, fmt.Sprintf("::  Malware Path: %s", stealer.MalwarePath+"\n"))
+		fmt.Println(Red + "[-] Top Passwords:" + Reset)
+		for _, password := range stealer.TopPasswords {
+			fmt.Println(Red + fmt.Sprintf("::    %s", password) + Reset)
+		}
 
-			switch v := stealer.Antiviruses.(type) {
-			case string:
-				WriteToFile(username, fmt.Sprintf(":: Antiviruses: %s", v+"\n"))
-			case []interface{}:
-				antiviruses := ""
-				for _, av := range v {
-					antiviruses += fmt.Sprintf("%s, ", av)
-				}
-				WriteToFile(username, fmt.Sprintf("::  Antiviruses: %s", antiviruses[:len(antiviruses)-2]+"\n"))
+		fmt.Println(Red + "[-] Top Logins:" + Reset)
+		for _, login := range stealer.TopLogins {
+			fmt.Println(Red + fmt.Sprintf("::    %s", login) + Reset)
+		}
+	}
+
+	// For performance reasons, we should not print and write to the file at the same time during a single for-loop interation.
+	// Therefore, there will be 2 for-loop interations: one for printing, and one for writing to the file.
+	// This ensures that GoSearch can print as quickkly as possible since the terminal output is most important.
+
+	for i, stealer := range response.Stealers {
+		WriteToFile(username, fmt.Sprintf("[-] Stealer #%d", i+1))
+		WriteToFile(username, fmt.Sprintf("\n::  Stealer Family: %s", stealer.StealerFamily+"\n"))
+		WriteToFile(username, fmt.Sprintf("::  Date Compromised: %s", stealer.DateCompromised+"\n"))
+		WriteToFile(username, fmt.Sprintf("::  Computer Name: %s", stealer.ComputerName+"\n"))
+		WriteToFile(username, fmt.Sprintf(":: Operating System: %s", stealer.OperatingSystem+"\n"))
+		WriteToFile(username, fmt.Sprintf("::  Malware Path: %s", stealer.MalwarePath+"\n"))
+
+		switch v := stealer.Antiviruses.(type) {
+		case string:
+			WriteToFile(username, fmt.Sprintf(":: Antiviruses: %s", v+"\n"))
+		case []interface{}:
+			antiviruses := ""
+			for _, av := range v {
+				antiviruses += fmt.Sprintf("%s, ", av)
 			}
+			WriteToFile(username, fmt.Sprintf("::  Antiviruses: %s", antiviruses[:len(antiviruses)-2]+"\n"))
+		}
 
-			WriteToFile(username, fmt.Sprintf("::  IP: %s", stealer.IP+"\n"))
+		WriteToFile(username, fmt.Sprintf("::  IP: %s", stealer.IP+"\n"))
 
-			WriteToFile(username, "[-] Top Passwords:")
-			for _, password := range stealer.TopPasswords {
-				WriteToFile(username, fmt.Sprintf("::    %s", password+"\n"))
-			}
+		WriteToFile(username, "[-] Top Passwords:")
+		for _, password := range stealer.TopPasswords {
+			WriteToFile(username, fmt.Sprintf("::    %s", password+"\n"))
+		}
 
-			WriteToFile(username, "[-] Top Logins:")
-			for _, login := range stealer.TopLogins {
-				WriteToFile(username, fmt.Sprintf("::    %s", login+"\n"))
-			}
+		WriteToFile(username, "[-] Top Logins:")
+		for _, login := range stealer.TopLogins {
+			WriteToFile(username, fmt.Sprintf("::    %s", login+"\n"))
 		}
 	}
 }
@@ -329,13 +329,16 @@ func SearchDomains(username string, domains []string, wg *sync.WaitGroup) {
 
 		resp, err := client.Do(req)
 		if err != nil {
-			if strings.Contains(err.Error(), "no such host") {
-				continue // this means the domain doesn't exist
-			} else if netErr, ok := err.(net.Error); ok && netErr.Timeout() {
-				continue // this also means the domain doesn't exist
-			} else {
+			netErr, ok := err.(net.Error)
+
+			// The following errors mean that the domain does not exist.
+			noSuchHostError := strings.Contains(err.Error(), "no such host")
+			networkTimeoutError := ok && netErr.Timeout()
+
+			if !noSuchHostError && !networkTimeoutError {
 				fmt.Printf("Error sending request for %s: %v\n", domain, err)
 			}
+
 			continue
 		}
 		defer resp.Body.Close()
@@ -575,13 +578,14 @@ func Search(data Data, username string, wg *sync.WaitGroup) {
 				url = BuildURL(website.BaseURL, username)
 			}
 
-			if website.ErrorType == "status_code" {
+			switch website.ErrorType {
+			case "status_code":
 				MakeRequestWithErrorCode(website, url, username)
-			} else if website.ErrorType == "errorMsg" {
+			case "errorMsg":
 				MakeRequestWithErrorMsg(website, url, username)
-			} else if website.ErrorType == "profilePresence" {
+			case "profilePresence":
 				MakeRequestWithProfilePresence(website, url, username)
-			} else {
+			default:
 				fmt.Println(Yellow+"[?]", website.Name+":", url+Reset)
 				WriteToFile(username, "[?] "+url+"\n")
 				count++
