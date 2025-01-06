@@ -115,14 +115,14 @@ func UnmarshalJSON() (Data, error) {
 func WriteToFile(username string, content string) {
 	filename := fmt.Sprintf("%s.txt", username)
 
-	f, err := os.OpenFile(filename, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0644)
+	f, err := os.OpenFile(filename, os.O_APPEND|os.O_WRONLY|os.O_CREATE, os.ModePerm)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 	defer f.Close()
 
 	if _, err = f.WriteString(content); err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 }
 
