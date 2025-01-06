@@ -1,22 +1,23 @@
 package main
 
 import (
-	"fmt"
-	"io"
-	"os"
-	"log"
-	"time"
-	"sync"
-	"strings"
-	"net"
-	"net/http"
 	"crypto/tls"
 	"encoding/json"
-	"github.com/inancgumus/screen"
+	"fmt"
+	"io"
+	"log"
+	"net"
+	"net/http"
+	"os"
+	"strings"
+	"sync"
+	"time"
+
 	"github.com/ibnaleem/gobreach"
+	"github.com/inancgumus/screen"
 )
 
-var Red = "\033[31m" 
+var Red = "\033[31m"
 var Reset = "\033[0m"
 var Green = "\033[32m"
 var Yellow = "\033[33m"
@@ -31,18 +32,18 @@ var ASCII string = `
                        \|_________|
 `
 var VERSION string = "v1.0.0"
-var count uint16 = 0 // Maximum value for count is 65,535
+var count uint16 = 0      // Maximum value for count is 65,535
 var domaincount uint8 = 0 // Maximum value for domaincount is 255
 
 type Website struct {
-	Name             string   `json:"name"`
-	BaseURL          string   `json:"base_url"`
-	URLProbe         string   `json:"url_probe,omitempty"`
-	FollowRedirects  bool     `json:"follow_redirects,omitempty"`
-	ErrorType        string   `json:"errorType"`
-	ErrorMsg         string   `json:"errorMsg,omitempty"`
-	ErrorCode        int      `json:"errorCode,omitempty"`
-	Cookies          []Cookie `json:"cookies,omitempty"`
+	Name            string   `json:"name"`
+	BaseURL         string   `json:"base_url"`
+	URLProbe        string   `json:"url_probe,omitempty"`
+	FollowRedirects bool     `json:"follow_redirects,omitempty"`
+	ErrorType       string   `json:"errorType"`
+	ErrorMsg        string   `json:"errorMsg,omitempty"`
+	ErrorCode       int      `json:"errorCode,omitempty"`
+	Cookies         []Cookie `json:"cookies,omitempty"`
 }
 
 type Data struct {
@@ -55,26 +56,25 @@ type Cookie struct {
 }
 
 type Stealer struct {
-	TotalCorporateServices int      `json:"total_corporate_services"`
-	TotalUserServices      int      `json:"total_user_services"`
-	DateCompromised        string   `json:"date_compromised"`
-	StealerFamily          string   `json:"stealer_family"`
-	ComputerName           string   `json:"computer_name"`
-	OperatingSystem        string   `json:"operating_system"`
-	MalwarePath            string   `json:"malware_path"`
+	TotalCorporateServices int         `json:"total_corporate_services"`
+	TotalUserServices      int         `json:"total_user_services"`
+	DateCompromised        string      `json:"date_compromised"`
+	StealerFamily          string      `json:"stealer_family"`
+	ComputerName           string      `json:"computer_name"`
+	OperatingSystem        string      `json:"operating_system"`
+	MalwarePath            string      `json:"malware_path"`
 	Antiviruses            interface{} `json:"antiviruses"`
-	IP                     string   `json:"ip"`
-	TopPasswords           []string `json:"top_passwords"`
-	TopLogins              []string `json:"top_logins"`
+	IP                     string      `json:"ip"`
+	TopPasswords           []string    `json:"top_passwords"`
+	TopLogins              []string    `json:"top_logins"`
 }
 
 type HudsonRockResponse struct {
-	Message string    `json:"message"`
+	Message  string    `json:"message"`
 	Stealers []Stealer `json:"stealers"`
 }
 
 func UnmarshalJSON() (Data, error) {
-
 	// GoSearch relies on data.json to determine the websites to search for.
 	// Instead of forcing uers to manually download the data.json file, we will fetch the latest version from the repository.
 	// Thereforeore, we will do the following:
@@ -113,7 +113,6 @@ func UnmarshalJSON() (Data, error) {
 }
 
 func WriteToFile(username string, content string) {
-
 	filename := fmt.Sprintf("%s.txt", username)
 
 	f, err := os.OpenFile(filename, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0644)
@@ -132,14 +131,13 @@ func BuildURL(baseURL, username string) string {
 }
 
 func HudsonRock(username string, wg *sync.WaitGroup) {
-
 	defer wg.Done()
 
 	url := "https://cavalier.hudsonrock.com/api/json/v2/osint-tools/search-by-username?username=" + username
 
 	resp, err := http.Get(url)
 	if err != nil {
-		fmt.Println("Error fetching data for " + username + " in HudsonRock function:", err)
+		fmt.Println("Error fetching data for "+username+" in HudsonRock function:", err)
 		return
 	}
 
@@ -172,7 +170,7 @@ func HudsonRock(username string, wg *sync.WaitGroup) {
 			fmt.Println(Red + fmt.Sprintf("::  Computer Name: %s", stealer.ComputerName) + Reset)
 			fmt.Println(Red + fmt.Sprintf(":: Operating System: %s", stealer.OperatingSystem) + Reset)
 			fmt.Println(Red + fmt.Sprintf("::  Malware Path: %s", stealer.MalwarePath) + Reset)
-			
+
 			switch v := stealer.Antiviruses.(type) {
 			case string:
 				fmt.Println(Red + fmt.Sprintf(":: Antiviruses: %s", v) + Reset)
@@ -183,7 +181,6 @@ func HudsonRock(username string, wg *sync.WaitGroup) {
 				}
 				fmt.Println(Red + fmt.Sprintf("::  Antiviruses: %s", antiviruses[:len(antiviruses)-2]) + Reset)
 			}
-			
 
 			fmt.Println(Red + fmt.Sprintf("::  IP: %s", stealer.IP) + Reset)
 
@@ -204,66 +201,64 @@ func HudsonRock(username string, wg *sync.WaitGroup) {
 
 		for i, stealer := range response.Stealers {
 			WriteToFile(username, fmt.Sprintf("[-] Stealer #%d", i+1))
-			WriteToFile(username, fmt.Sprintf("\n::  Stealer Family: %s", stealer.StealerFamily + "\n"))
-			WriteToFile(username, fmt.Sprintf("::  Date Compromised: %s", stealer.DateCompromised + "\n"))
-			WriteToFile(username, fmt.Sprintf("::  Computer Name: %s", stealer.ComputerName + "\n"))
-			WriteToFile(username, fmt.Sprintf(":: Operating System: %s", stealer.OperatingSystem + "\n"))
-			WriteToFile(username, fmt.Sprintf("::  Malware Path: %s", stealer.MalwarePath + "\n"))
-			
+			WriteToFile(username, fmt.Sprintf("\n::  Stealer Family: %s", stealer.StealerFamily+"\n"))
+			WriteToFile(username, fmt.Sprintf("::  Date Compromised: %s", stealer.DateCompromised+"\n"))
+			WriteToFile(username, fmt.Sprintf("::  Computer Name: %s", stealer.ComputerName+"\n"))
+			WriteToFile(username, fmt.Sprintf(":: Operating System: %s", stealer.OperatingSystem+"\n"))
+			WriteToFile(username, fmt.Sprintf("::  Malware Path: %s", stealer.MalwarePath+"\n"))
+
 			switch v := stealer.Antiviruses.(type) {
 			case string:
-				WriteToFile(username, fmt.Sprintf(":: Antiviruses: %s", v + "\n"))
+				WriteToFile(username, fmt.Sprintf(":: Antiviruses: %s", v+"\n"))
 			case []interface{}:
 				antiviruses := ""
 				for _, av := range v {
 					antiviruses += fmt.Sprintf("%s, ", av)
 				}
-				WriteToFile(username, fmt.Sprintf("::  Antiviruses: %s", antiviruses[:len(antiviruses)-2] + "\n"))
+				WriteToFile(username, fmt.Sprintf("::  Antiviruses: %s", antiviruses[:len(antiviruses)-2]+"\n"))
 			}
-			
-			WriteToFile(username, fmt.Sprintf("::  IP: %s", stealer.IP + "\n"))
+
+			WriteToFile(username, fmt.Sprintf("::  IP: %s", stealer.IP+"\n"))
 
 			WriteToFile(username, "[-] Top Passwords:")
 			for _, password := range stealer.TopPasswords {
-				WriteToFile(username, fmt.Sprintf("::    %s", password + "\n"))
+				WriteToFile(username, fmt.Sprintf("::    %s", password+"\n"))
 			}
 
 			WriteToFile(username, "[-] Top Logins:")
 			for _, login := range stealer.TopLogins {
-				WriteToFile(username, fmt.Sprintf("::    %s", login + "\n"))
+				WriteToFile(username, fmt.Sprintf("::    %s", login+"\n"))
 			}
 		}
 	}
 }
 
-
 func BuildEmail(username string) []string {
 	emailDomains := []string{
-			"@gmail.com",
-			"@yahoo.com",
-			"@outlook.com",
-			"@hotmail.com",
-			"@icloud.com",
-			"@aol.com",
-			"@live.com",
-			"@protonmail.com",
-			"@zoho.com",
-			"@msn.com",
-			"proton.me",
-			"onionmail.org",
-			"gmx.de",
-			"mail2world.com",
+		"@gmail.com",
+		"@yahoo.com",
+		"@outlook.com",
+		"@hotmail.com",
+		"@icloud.com",
+		"@aol.com",
+		"@live.com",
+		"@protonmail.com",
+		"@zoho.com",
+		"@msn.com",
+		"proton.me",
+		"onionmail.org",
+		"gmx.de",
+		"mail2world.com",
 	}
 
 	var emails []string
 
 	for _, domain := range emailDomains {
-			emails = append(emails, username + domain)
+		emails = append(emails, username+domain)
 	}
 
 	return emails
 }
-
 
 func BuildDomains(username string) []string {
 	tlds := []string{
@@ -298,7 +293,7 @@ func BuildDomains(username string) []string {
 	var domains []string
 
 	for _, tld := range tlds {
-			domains = append(domains, username + tld)
+		domains = append(domains, username+tld)
 	}
 
 	return domains
@@ -308,7 +303,7 @@ func SearchDomains(username string, domains []string, wg *sync.WaitGroup) {
 	defer wg.Done()
 
 	client := &http.Client{}
-	fmt.Println(Yellow + "[*] Searching", len(domains), "domains with the username", username, "..." + Reset)
+	fmt.Println(Yellow+"[*] Searching", len(domains), "domains with the username", username, "..."+Reset)
 
 	domaincount := 0
 
@@ -336,47 +331,44 @@ func SearchDomains(username string, domains []string, wg *sync.WaitGroup) {
 		defer resp.Body.Close()
 
 		if resp.StatusCode == 200 {
-			fmt.Println(Green + "[+] 200 OK:", domain + Reset)
+			fmt.Println(Green+"[+] 200 OK:", domain+Reset)
 			domaincount++
 		}
 	}
 
 	if domaincount > 0 {
-		fmt.Println(Green + "[+] Found", domaincount, "domains with the username", username + Reset)
+		fmt.Println(Green+"[+] Found", domaincount, "domains with the username", username+Reset)
 	} else {
-		fmt.Println(Red + "[-] No domains found with the username", username + Reset)
+		fmt.Println(Red+"[-] No domains found with the username", username+Reset)
 	}
 }
 
 func SearchBreachDirectory(emails []string, apikey string, wg *sync.WaitGroup) {
-
 	defer wg.Done()
 
 	// Get an API key (10 lookups for free) @ https://rapidapi.com/rohan-patra/api/breachdirectory
 	client, err := gobreach.NewBreachDirectoryClient(apikey)
-	
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	for _, email := range emails {
-
 		fmt.Println(Yellow + "[*] Searching " + email + " on Breach Directory for any compromised passwords..." + Reset)
-		
+
 		response, err := client.SearchEmail(email)
 		if err != nil {
 			log.Fatal(err)
 		}
 
 		if response.Found > 0 {
-			fmt.Printf(Green + "[+] Found %d breaches for %s:\n", response.Found, email + Reset)
+			fmt.Printf(Green+"[+] Found %d breaches for %s:\n", response.Found, email+Reset)
 			for _, entry := range response.Result {
-				fmt.Println(Green + "[+] Password:", entry.Password + Reset)
-				fmt.Println(Green + "[+] SHA1:", entry.Sha1 + Reset)
-				fmt.Println(Green + "[+] Source:", entry.Sources + Reset)
+				fmt.Println(Green+"[+] Password:", entry.Password+Reset)
+				fmt.Println(Green+"[+] SHA1:", entry.Sha1+Reset)
+				fmt.Println(Green+"[+] Source:", entry.Sources+Reset)
 			}
 		} else {
-			fmt.Printf(Red + "[-] No breaches found for %s. Moving on...\n", email + Reset)
+			fmt.Printf(Red+"[-] No breaches found for %s. Moving on...\n", email+Reset)
 		}
 	}
 }
@@ -425,8 +417,8 @@ func MakeRequestWithErrorCode(website Website, url string, username string) {
 	defer res.Body.Close()
 
 	if res.StatusCode != website.ErrorCode {
-		fmt.Println(Green + "[+]", website.Name + ":", url + Reset)
-		WriteToFile(username, url + "\n")
+		fmt.Println(Green+"[+]", website.Name+":", url+Reset)
+		WriteToFile(username, url+"\n")
 		count++
 	}
 }
@@ -487,14 +479,13 @@ func MakeRequestWithErrorMsg(website Website, url string, username string) {
 	bodyStr := string(body)
 	// if the error message is not found in the response body, then the profile exists
 	if !strings.Contains(bodyStr, website.ErrorMsg) {
-		fmt.Println(Green + "[+]", website.Name + ":", url + Reset)
-		WriteToFile(username, url + "\n")
+		fmt.Println(Green+"[+]", website.Name+":", url+Reset)
+		WriteToFile(username, url+"\n")
 		count++
 	}
 }
 
 func MakeRequestWithProfilePresence(website Website, url string, username string) {
-
 	// Some websites have an indicator that a profile exists
 	// but do not have an indicator when a profile does not exist.
 	// If a profile indicator is not found, we can assume that the profile does not exist.
@@ -553,13 +544,13 @@ func MakeRequestWithProfilePresence(website Website, url string, username string
 
 	bodyStr := string(body)
 	// if the profile indicator is found in the response body, the profile exists
-	if strings.Contains(bodyStr, website.ErrorMsg) { 
-		fmt.Println(Green + "[+]", website.Name + ":", url + Reset)
-		WriteToFile(username, url + "\n")
+	if strings.Contains(bodyStr, website.ErrorMsg) {
+		fmt.Println(Green+"[+]", website.Name+":", url+Reset)
+		WriteToFile(username, url+"\n")
 		count++
 	}
-
 }
+
 func Search(data Data, username string, wg *sync.WaitGroup) {
 	var url string
 
@@ -575,13 +566,13 @@ func Search(data Data, username string, wg *sync.WaitGroup) {
 
 			if website.ErrorType == "status_code" {
 				MakeRequestWithErrorCode(website, url, username)
-			} else if website.ErrorType == "errorMsg" {				
+			} else if website.ErrorType == "errorMsg" {
 				MakeRequestWithErrorMsg(website, url, username)
-			} else if website.ErrorType == "profilePresence" {				
+			} else if website.ErrorType == "profilePresence" {
 				MakeRequestWithProfilePresence(website, url, username)
 			} else {
-				fmt.Println(Yellow + "[?]", website.Name + ":", url + Reset)
-                WriteToFile(username, "[?] " + url + "\n")
+				fmt.Println(Yellow+"[?]", website.Name+":", url+Reset)
+				WriteToFile(username, "[?] "+url+"\n")
 				count++
 			}
 		}(website)
@@ -624,17 +615,16 @@ func main() {
 	go HudsonRock(username, &wg)
 	wg.Wait()
 
-
 	if len(os.Args) == 3 {
 		apikey := os.Args[2]
 		fmt.Println(strings.Repeat("⎯", 85))
 		emails := BuildEmail(username)
-    wg.Add(1)
-    go SearchBreachDirectory(emails, apikey, &wg)
-    wg.Wait()
-  }
+		wg.Add(1)
+		go SearchBreachDirectory(emails, apikey, &wg)
+		wg.Wait()
+	}
 
-    domains := BuildDomains(username)
+	domains := BuildDomains(username)
 	fmt.Println(strings.Repeat("⎯", 85))
 	wg.Add(1)
 	go SearchDomains(username, domains, &wg)
@@ -644,6 +634,6 @@ func main() {
 	fmt.Println(strings.Repeat("⎯", 85))
 	fmt.Println(":: Number of profiles found              : ", count)
 	fmt.Println(":: Total time taken                      : ", elapsed)
-	
+
 	os.Exit(0)
 }
