@@ -255,10 +255,10 @@ func BuildEmail(username string) []string {
 		"@protonmail.com",
 		"@zoho.com",
 		"@msn.com",
-		"proton.me",
-		"onionmail.org",
-		"gmx.de",
-		"mail2world.com",
+		"@proton.me",
+		"@onionmail.org",
+		"@gmx.de",
+		"@mail2world.com",
 	}
 
 	var emails []string
