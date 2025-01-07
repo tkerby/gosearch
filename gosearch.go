@@ -86,8 +86,8 @@ type HudsonRockResponse struct {
 
 func UnmarshalJSON() (Data, error) {
 	// GoSearch relies on data.json to determine the websites to search for.
-	// Instead of forcing uers to manually download the data.json file, we will fetch the latest version from the repository.
-	// Thereforeore, we will do the following:
+	// Instead of forcing users to manually download the data.json file, we will fetch the latest version from the repository.
+	// Therefore, we will do the following:
 	// 1. Delete the existing data.json file if it exists as it will be outdated in the future
 	// 2. Read the latest data.json file from the repository
 	// Bonus: it does not download the data.json file, it just reads it from the repository.
@@ -116,7 +116,7 @@ func UnmarshalJSON() (Data, error) {
 	var data Data
 	err = json.Unmarshal(jsonData, &data)
 	if err != nil {
-		return Data{}, fmt.Errorf("error unmarshaling JSON: %w", err)
+		return Data{}, fmt.Errorf("error unmarshalling JSON: %w", err)
 	}
 
 	return data, nil
@@ -209,9 +209,9 @@ func HudsonRock(username string, wg *sync.WaitGroup) {
 		}
 	}
 
-	// For performance reasons, we should not print and write to the file at the same time during a single for-loop interation.
-	// Therefore, there will be 2 for-loop interations: one for printing, and one for writing to the file.
-	// This ensures that GoSearch can print as quickkly as possible since the terminal output is most important.
+	// For performance reasons, we should not print and write to the file at the same time during a single for-loop iteration.
+	// Therefore, there will be 2 for-loop iterations: one for printing, and one for writing to the file.
+	// This ensures that GoSearch can print as quickly as possible since the terminal output is most important.
 
 	for i, stealer := range response.Stealers {
 		WriteToFile(username, fmt.Sprintf("[-] Stealer #%d\n", i+1))
@@ -611,7 +611,7 @@ func main() {
 
 	data, err := UnmarshalJSON()
 	if err != nil {
-		fmt.Printf("Error unmarshaling json: %v\n", err)
+		fmt.Printf("Error unmarshalling json: %v\n", err)
 		os.Exit(1)
 	}
 
