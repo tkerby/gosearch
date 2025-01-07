@@ -176,24 +176,27 @@ func HudsonRock(username string, wg *sync.WaitGroup) {
 
 	for i, stealer := range response.Stealers {
 		fmt.Println(Red + fmt.Sprintf("[-] Stealer #%d", i+1) + Reset)
-		fmt.Println(Red + fmt.Sprintf("::  Stealer Family: %s", stealer.StealerFamily) + Reset)
-		fmt.Println(Red + fmt.Sprintf("::  Date Compromised: %s", stealer.DateCompromised) + Reset)
-		fmt.Println(Red + fmt.Sprintf("::  Computer Name: %s", stealer.ComputerName) + Reset)
-		fmt.Println(Red + fmt.Sprintf(":: Operating System: %s", stealer.OperatingSystem) + Reset)
-		fmt.Println(Red + fmt.Sprintf("::  Malware Path: %s", stealer.MalwarePath) + Reset)
+		fmt.Println(Red + fmt.Sprintf("::    Stealer Family: %s", stealer.StealerFamily) + Reset)
+		fmt.Println(Red + fmt.Sprintf("::    Date Compromised: %s", stealer.DateCompromised) + Reset)
+		fmt.Println(Red + fmt.Sprintf("::    Computer Name: %s", stealer.ComputerName) + Reset)
+		fmt.Println(Red + fmt.Sprintf("::    Operating System: %s", stealer.OperatingSystem) + Reset)
+		fmt.Println(Red + fmt.Sprintf("::    Malware Path: %s", stealer.MalwarePath) + Reset)
 
 		switch v := stealer.Antiviruses.(type) {
 		case string:
-			fmt.Println(Red + fmt.Sprintf(":: Antiviruses: %s", v) + Reset)
+			WriteToFile(username, fmt.Sprintf("::    Antiviruses: %s\n", v))
 		case []interface{}:
-			antiviruses := ""
-			for _, av := range v {
-				antiviruses += fmt.Sprintf("%s, ", av)
+			antiviruses := make([]string, len(v))
+
+			for i, av := range v {
+				antiviruses[i] = fmt.Sprint(av)
 			}
-			fmt.Println(Red + fmt.Sprintf("::  Antiviruses: %s", antiviruses[:len(antiviruses)-2]) + Reset)
+
+			avs := strings.Join(antiviruses, ", ")
+			WriteToFile(username, fmt.Sprintf("::    Antiviruses: %s\n", avs))
 		}
 
-		fmt.Println(Red + fmt.Sprintf("::  IP: %s", stealer.IP) + Reset)
+		fmt.Println(Red + fmt.Sprintf("::    IP: %s", stealer.IP) + Reset)
 
 		fmt.Println(Red + "[-] Top Passwords:" + Reset)
 		for _, password := range stealer.TopPasswords {
@@ -211,34 +214,37 @@ func HudsonRock(username string, wg *sync.WaitGroup) {
 	// This ensures that GoSearch can print as quickkly as possible since the terminal output is most important.
 
 	for i, stealer := range response.Stealers {
-		WriteToFile(username, fmt.Sprintf("[-] Stealer #%d", i+1))
-		WriteToFile(username, fmt.Sprintf("\n::  Stealer Family: %s", stealer.StealerFamily+"\n"))
-		WriteToFile(username, fmt.Sprintf("::  Date Compromised: %s", stealer.DateCompromised+"\n"))
-		WriteToFile(username, fmt.Sprintf("::  Computer Name: %s", stealer.ComputerName+"\n"))
-		WriteToFile(username, fmt.Sprintf(":: Operating System: %s", stealer.OperatingSystem+"\n"))
-		WriteToFile(username, fmt.Sprintf("::  Malware Path: %s", stealer.MalwarePath+"\n"))
+		WriteToFile(username, fmt.Sprintf("[-] Stealer #%d\n", i+1))
+		WriteToFile(username, fmt.Sprintf("::    Stealer Family: %s\n", stealer.StealerFamily))
+		WriteToFile(username, fmt.Sprintf("::    Date Compromised: %s\n", stealer.DateCompromised))
+		WriteToFile(username, fmt.Sprintf("::    Computer Name: %s\n", stealer.ComputerName))
+		WriteToFile(username, fmt.Sprintf("::    Operating System: %s\n", stealer.OperatingSystem))
+		WriteToFile(username, fmt.Sprintf("::    Malware Path: %s\n", stealer.MalwarePath))
 
 		switch v := stealer.Antiviruses.(type) {
 		case string:
-			WriteToFile(username, fmt.Sprintf(":: Antiviruses: %s", v+"\n"))
+			WriteToFile(username, fmt.Sprintf("::    Antiviruses: %s\n", v))
 		case []interface{}:
-			antiviruses := ""
-			for _, av := range v {
-				antiviruses += fmt.Sprintf("%s, ", av)
+			antiviruses := make([]string, len(v))
+
+			for i, av := range v {
+				antiviruses[i] = fmt.Sprint(av)
 			}
-			WriteToFile(username, fmt.Sprintf("::  Antiviruses: %s", antiviruses[:len(antiviruses)-2]+"\n"))
+
+			avs := strings.Join(antiviruses, ", ")
+			WriteToFile(username, fmt.Sprintf("::    Antiviruses: %s\n", avs))
 		}
 
-		WriteToFile(username, fmt.Sprintf("::  IP: %s", stealer.IP+"\n"))
+		WriteToFile(username, fmt.Sprintf("::    IP: %s\n", stealer.IP))
 
-		WriteToFile(username, "[-] Top Passwords:")
+		WriteToFile(username, "[-] Top Passwords:\n")
 		for _, password := range stealer.TopPasswords {
-			WriteToFile(username, fmt.Sprintf("::    %s", password+"\n"))
+			WriteToFile(username, fmt.Sprintf("::    %s\n", password))
 		}
 
-		WriteToFile(username, "[-] Top Logins:")
+		WriteToFile(username, "[-] Top Logins:\n")
 		for _, login := range stealer.TopLogins {
-			WriteToFile(username, fmt.Sprintf("::    %s", login+"\n"))
+			WriteToFile(username, fmt.Sprintf("::    %s\n", login))
 		}
 	}
 }
