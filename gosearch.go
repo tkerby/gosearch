@@ -26,7 +26,7 @@ const (
 )
 
 // GoSearch ASCII logo.
-const ASCII string = `
+const ASCII = `
  ________  ________  ________  _______   ________  ________  ________  ___  ___     
 |\   ____\|\   __  \|\   ____\|\  ___ \ |\   __  \|\   __  \|\   ____\|\  \|\  \    
 \ \  \___|\ \  \|\  \ \  \___|\ \   __/|\ \  \|\  \ \  \|\  \ \  \___|\ \  \\\  \   
@@ -41,7 +41,7 @@ const ASCII string = `
 const UserAgent = "Mozilla/5.0 (X11; Linux x86_64; rv:125.0) Gecko/20100101 Firefox/125.0"
 
 // GoSearch version.
-const VERSION string = "v1.0.0"
+const VERSION = "v1.0.0"
 
 var count uint16 = 0 // Maximum value for count is 65,535
 
@@ -606,7 +606,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	var username string = os.Args[1]
+	var username = os.Args[1]
 	var wg sync.WaitGroup
 
 	data, err := UnmarshalJSON()
