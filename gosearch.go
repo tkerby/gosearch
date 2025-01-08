@@ -35,6 +35,7 @@ const ASCII = `
    \ \_______\ \_______\____\_\  \ \_______\ \__\ \__\ \__\\ _\\ \_______\ \__\ \__\
     \|_______|\|_______|\_________\|_______|\|__|\|__|\|__|\|__|\|_______|\|__|\|__|
                        \|_________|
+
 `
 
 // User-Agent header used in requests.
@@ -616,7 +617,7 @@ func main() {
 	}
 
 	screen.Clear()
-	fmt.Println(ASCII)
+	fmt.Print(ASCII)
 	fmt.Println(VERSION)
 	fmt.Println(strings.Repeat("⎯", 85))
 	fmt.Println(":: Username                              : ", username)
