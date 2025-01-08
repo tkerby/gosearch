@@ -655,6 +655,4 @@ func main() {
 	fmt.Println(strings.Repeat("⎯", 85))
 	fmt.Println(":: Number of profiles found              : ", count)
 	fmt.Println(":: Total time taken                      : ", elapsed)
-
-	os.Exit(0)
 }
