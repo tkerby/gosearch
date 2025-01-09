@@ -31,7 +31,7 @@ $ ./gosearch <username>
 ```
 I recommend adding the `gosearch` binary to your `/usr/local/bin` for universal use:
 ```
-# mv gosearch /usr/local/bin
+$ mv gosearch /usr/local/bin
 ```
 For Windows:
 ```
