@@ -29,9 +29,9 @@ For Unix:
 ```
 $ ./gosearch <username>
 ```
-I recommend adding the `gosearch` binary to your `/bin` for universal use:
+I recommend adding the `gosearch` binary to your `/usr/local/bin` for universal use:
 ```
-$ sudo mv gosearch ~/usr/bin
+# mv gosearch /usr/local/bin
 ```
 For Windows:
 ```
