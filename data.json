@@ -480,7 +480,7 @@
       "base_url": "https://www.1337x.to/user/{}/",
       "follow_redirects": true,
       "errorType": "errorMsg",
-      "errorMsg": "<p> Bad Username.</p>"
+      "errorMsg": "<title>Error something went wrong.</title>"
     },
     {
       "name": "7Cups",
