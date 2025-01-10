@@ -23,15 +23,15 @@
 $ git clone https://github.com/ibnaleem/gosearch.git && cd gosearch
 ```
 ```
-$ go build
+(/gosearch) $ go build
 ```
 For Unix:
 ```
-$ ./gosearch <username>
+(/gosearch) $ ./gosearch <username>
 ```
 I recommend adding the `gosearch` binary to your `/usr/local/bin` for universal use:
 ```
-$ sudo mv gosearch /usr/local/bin
+(/gosearch) $ sudo mv gosearch /usr/local/bin
 ```
 For Windows:
 ```
