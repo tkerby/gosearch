@@ -4,7 +4,6 @@
       "name": "Instagram",
       "base_url": "https://instagram.com/{}",
       "follow_redirects": true,
-      "errorType": "errorMsg",
       "errorMsg": "<title>Page not found • Instagram</title>"
     },
     {
