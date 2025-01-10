@@ -266,7 +266,7 @@ func BuildEmail(username string) []string {
 		"@onionmail.org",
 		"@gmx.de",
 		"@mail2world.com",
-		"@mail.ru".
+		"@mail.ru",
 		"@i.ua",
 		"@ya.ru",
 		"@yandex.com",
