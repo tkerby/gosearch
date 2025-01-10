@@ -459,7 +459,7 @@
       "base_url": "https://app.daily.dev/{}",
       "follow_redirects": true,
       "errorType": "errorMsg",
-      "errorMsg": "<p class=\"text-text-tertiary typo-callout\">You're not supposed to be here.</p>"
+      "errorMsg": "Page not found"
     },
     {
       "name": "HackerNews",
