@@ -927,9 +927,9 @@
     {
       "name": "Codechef",
       "base_url": "https://www.codechef.com/users/{}",
-      "follow_redirects": false,
-      "errorType": "status_code",
-      "errorCode": 404
+      "follow_redirects": true,
+      "errorType": "errorMsg",
+      "errorMsg": "<meta property=\"og:title\" content=\"CodeChef | CodeChef: Practical coding for everyone\" />"
     },
     {
       "name": "Codeforces",
