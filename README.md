@@ -1,7 +1,7 @@
 <p align='center'>
 <img src='img/gosearch-logo.png' height=50% width=50%><br>
 <i>This project heavily relies on contributors, please see <a href="#contributing">Contributing</a> for more details.</i><br>
-<code>git clone https://github.com/ibnaleem/gosearch.git && cd gosearch && go build && ./gosearch [username]</code>
+<code>go install github.com/ibnaleem/gosearch@latest</code>
 </p>
 
 <p align="center">
@@ -19,25 +19,6 @@
 `GoSearch` is an efficient and reliable OSINT tool designed for uncovering digital footprints associated with a given username. It's fast, straightforward, and dependable, enabling users to track an individual's online presence across multiple platforms. `GoSearch` also integrates data from HudsonRock's Cybercrime Intelligence Database to provide insights into cybercrime-related information. It also taps into [`BreachDirectory.org`](https://breachdirectory.org)'s database offering access to a comprehensive list of data breaches, plain-text and hashed passwords linked to the username. This tool is ideal for those needing accurate, no-frills results when investigating online identities.
 
 ## Installation & Usage
-```
-$ git clone https://github.com/ibnaleem/gosearch.git && cd gosearch
-```
-```
-$ (/gosearch) go build
-```
-For Unix:
-```
-$ (/gosearch) ./gosearch <username>
-```
-I recommend adding the `gosearch` binary to your `/usr/local/bin` for universal use:
-```
-$ (/gosearch) sudo mv gosearch /usr/local/bin
-```
-For Windows:
-```
-C:\Users\***\gosearch> gosearch.exe <username>
-```
-Install using go:
 ```
 $ go install github.com/ibnaleem/gosearch@latest
 ```
