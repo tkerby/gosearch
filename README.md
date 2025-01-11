@@ -37,6 +37,10 @@ For Windows:
 ```
 C:\Users\***\gosearch> gosearch.exe <username>
 ```
+Install using go:
+```
+$ go install github.com/ibnaleem/gosearch@latest
+```
 ## Use Cases
 GoSearch allows you to search [breachdirectory.org](https://breachdirectory.org) for compromised passwords associated with a specific username. To fully utilise GoSearch, follow these steps:
 
