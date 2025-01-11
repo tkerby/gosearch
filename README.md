@@ -23,15 +23,15 @@
 $ git clone https://github.com/ibnaleem/gosearch.git && cd gosearch
 ```
 ```
-(/gosearch) $ go build
+$ (/gosearch) go build
 ```
 For Unix:
 ```
-(/gosearch) $ ./gosearch <username>
+$ (/gosearch) ./gosearch <username>
 ```
 I recommend adding the `gosearch` binary to your `/usr/local/bin` for universal use:
 ```
-(/gosearch) $ sudo mv gosearch /usr/local/bin
+$ (/gosearch) sudo mv gosearch /usr/local/bin
 ```
 For Windows:
 ```
@@ -47,6 +47,13 @@ $ gosearch [username] [api-key]
 ```
 GoSearch will automatically generate popular email addresses for a given username.
 
+## I Don't Have a Username
+If you're uncertain about a person's username, you could try generating some by using [urbanadventurer/username-anarchy](https://github.com/urbanadventurer/username-anarchy). Note that `username-anarchy` can only be run in Unix terminals (Mac/Linux)
+```
+$ git clone https://github.com/urbanadventurer/username-anarchy
+$ cd username-anarchy
+$ (username-anarchy) ./username-anarchy firstname lastname
+```
 ## Why `GoSearch`?
 `GoSearch` is inspired by [Sherlock](https://github.com/sherlock-project/sherlock), a popular username search tool. However, `GoSearch` improves upon Sherlock by addressing several of its key limitations:
 
