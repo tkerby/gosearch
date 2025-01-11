@@ -389,7 +389,7 @@
       "base_url": "https://www.figma.com/@{}",
       "follow_redirects": true,
       "errorType": "status_code",
-      "errorCode": 202
+      "errorCode": 404
     },
     {
       "name": "Linktree",
