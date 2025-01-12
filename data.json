@@ -1088,7 +1088,7 @@
     },
     {
       "name": "EyeEm",
-      "url": "https://www.eyeem.com/u/{}",
+      "base_url": "https://www.eyeem.com/u/{}",
       "follow_redirects": true,
       "errorType": "status_code",
       "errorCode": 404
