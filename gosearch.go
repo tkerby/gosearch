@@ -638,10 +638,10 @@ func MakeRequestWithProfilePresence(website Website, url string, username string
 }
 
 func Search(data Data, username string, wg *sync.WaitGroup) {
-	var url string
-
 	for _, website := range data.Websites {
 		go func(website Website) {
+			var url string
+
 			defer wg.Done()
 
 			if website.URLProbe != "" {
