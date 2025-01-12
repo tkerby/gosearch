@@ -11,6 +11,7 @@ import (
 	"os"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"time"
 
 	"github.com/ibnaleem/gobreach"
@@ -44,7 +45,7 @@ const UserAgent = "Mozilla/5.0 (X11; Linux x86_64; rv:125.0) Gecko/20100101 Fire
 // GoSearch version.
 const VERSION = "v1.0.0"
 
-var count uint16 = 0 // Maximum value for count is 65,535
+var count atomic.Uint32
 
 type Website struct {
 	Name            string   `json:"name"`
@@ -505,7 +506,7 @@ func MakeRequestWithErrorCode(website Website, url string, username string) {
 	if res.StatusCode != website.ErrorCode {
 		fmt.Println(Green+"[+]", website.Name+":", url+Reset)
 		WriteToFile(username, url+"\n")
-		count++
+		count.Add(1)
 	}
 }
 
@@ -567,7 +568,7 @@ func MakeRequestWithErrorMsg(website Website, url string, username string) {
 	if !strings.Contains(bodyStr, website.ErrorMsg) {
 		fmt.Println(Green+"[+]", website.Name+":", url+Reset)
 		WriteToFile(username, url+"\n")
-		count++
+		count.Add(1)
 	}
 }
 
@@ -633,7 +634,7 @@ func MakeRequestWithProfilePresence(website Website, url string, username string
 	if strings.Contains(bodyStr, website.ErrorMsg) {
 		fmt.Println(Green+"[+]", website.Name+":", url+Reset)
 		WriteToFile(username, url+"\n")
-		count++
+		count.Add(1)
 	}
 }
 
@@ -660,7 +661,7 @@ func Search(data Data, username string, wg *sync.WaitGroup) {
 			default:
 				fmt.Println(Yellow+"[?]", website.Name+":", url+Reset)
 				WriteToFile(username, "[?] "+url+"\n")
-				count++
+				count.Add(1)
 			}
 		}(website)
 	}
@@ -719,6 +720,6 @@ func main() {
 
 	elapsed := time.Since(start)
 	fmt.Println(strings.Repeat("⎯", 85))
-	fmt.Println(":: Number of profiles found              : ", count)
+	fmt.Println(":: Number of profiles found              : ", count.Load())
 	fmt.Println(":: Total time taken                      : ", elapsed)
 }
