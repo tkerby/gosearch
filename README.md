@@ -241,7 +241,7 @@ To contribute, follow the template above, open a PR, and I'll merge it if `GoSea
 This project is licensed under the GNU General Public License - see the [LICENSE](https://github.com/ibnaleem/gosearch/blob/main/LICENSE) file for details.
 
 ## Support
-[![BuyMeACoffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/ibnaleem)
+[![BuyMeACoffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/gosearch)
 ### Bitcoin
 ```
 bc1qjrtyq8m7urapu7cvmvrrs6m7qkh2jpn5wqezfl
