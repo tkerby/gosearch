@@ -983,7 +983,7 @@
     },
     {
       "name": "Cracked",
-      "base_url": "https://www.cracked.com/members/{}/",
+      "base_url": "https://www.cracked.com/members/{}",
       "follow_redirects": false,
       "errorType": "status_code",
       "errorCode": 302
