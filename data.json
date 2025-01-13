@@ -201,7 +201,7 @@
       "base_url": "https://twitch.tv/{}",
       "follow_redirects": true,
       "errorType": "errorMsg",
-      "errorMsg": "<meta property='og:description' content='Twitch is the world's leading video platform and community for gamers.'>"
+      "errorMsg": "<meta property='og:description' content='Twitch is the world&#39;s leading video platform and community for gamers.'>"
     },
     {
       "name": "Rumble",
