@@ -249,8 +249,8 @@
       "base_url": "https://bsky.app/profile/{}.bsky.social",
       "url_probe": "https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile?actor={}.bsky.social",
       "follow_redirects": true,
-      "errorType": "errorMsg",
-      "errorMsg": "{\"error\":\"InvalidRequest\",\"message\":\"Profile not found\"}"
+      "errorType": "status_code",
+      "errorCode": 400
     },
     {
       "name": "9GAG",
