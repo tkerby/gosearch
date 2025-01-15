@@ -504,6 +504,7 @@ func MakeRequestWithErrorCode(website Website, url string, username string) {
 	defer res.Body.Close()
 
 	if res.StatusCode != website.ErrorCode {
+		url = BuildURL(website.BaseURL, username)
 		fmt.Println(Green+"[+]", website.Name+":", url+Reset)
 		WriteToFile(username, url+"\n")
 		count.Add(1)
