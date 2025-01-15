@@ -563,6 +563,7 @@ func MakeRequestWithErrorMsg(website Website, url string, username string) {
 	bodyStr := string(body)
 	// if the error message is not found in the response body, then the profile exists
 	if !strings.Contains(bodyStr, website.ErrorMsg) {
+		url = BuildURL(website.BaseURL, username)
 		fmt.Println(Green+"[+]", website.Name+":", url+Reset)
 		WriteToFile(username, url+"\n")
 		count.Add(1)
