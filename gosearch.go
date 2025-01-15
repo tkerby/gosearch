@@ -560,10 +560,6 @@ func MakeRequestWithErrorMsg(website Website, url string, username string) {
 		return
 	}
 
-	if website.URLProbe != "" {
-		url = BuildURL(website.BaseURL, username)
-	}
-
 	bodyStr := string(body)
 	// if the error message is not found in the response body, then the profile exists
 	if !strings.Contains(bodyStr, website.ErrorMsg) {
