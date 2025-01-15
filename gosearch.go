@@ -504,6 +504,7 @@ func MakeRequestWithErrorCode(website Website, url string, username string) {
 	defer res.Body.Close()
 
 	if res.StatusCode != website.ErrorCode {
+		url = BuildURL(website.BaseURL, username)
 		fmt.Println(Green+"[+]", website.Name+":", url+Reset)
 		WriteToFile(username, url+"\n")
 		count.Add(1)
@@ -559,13 +560,10 @@ func MakeRequestWithErrorMsg(website Website, url string, username string) {
 		return
 	}
 
-	if website.URLProbe != "" {
-		url = BuildURL(website.BaseURL, username)
-	}
-
 	bodyStr := string(body)
 	// if the error message is not found in the response body, then the profile exists
 	if !strings.Contains(bodyStr, website.ErrorMsg) {
+		url = BuildURL(website.BaseURL, username)
 		fmt.Println(Green+"[+]", website.Name+":", url+Reset)
 		WriteToFile(username, url+"\n")
 		count.Add(1)
@@ -623,10 +621,6 @@ func MakeRequestWithProfilePresence(website Website, url string, username string
 	if err != nil {
 		fmt.Printf("Error reading response body: %v\n", err)
 		return
-	}
-
-	if website.URLProbe != "" {
-		url = BuildURL(website.BaseURL, username)
 	}
 
 	bodyStr := string(body)
