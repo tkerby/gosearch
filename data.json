@@ -612,9 +612,10 @@
     {
       "name": "Imgur",
       "base_url": "https://imgur.com/user/{}",
+      "url_probe":"https://api.imgur.com/account/v1/accounts/{}?client_id=546c25a59c58ad7",
       "follow_redirects": true,
-      "errorType": "unknown",
-      "errorCode": 200
+      "errorType": "status_code",
+      "errorCode": 404
     },
     {
       "name": "GameFAQs Community",
