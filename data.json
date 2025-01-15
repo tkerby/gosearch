@@ -110,8 +110,8 @@
       "name": "Threads",
       "base_url": "https://www.threads.net/{}",
       "follow_redirects": true,
-      "errorType": "errorMsg",
-      "errorMsg": "<title>Threads</title>"
+      "errorType": "unknown",
+      "errorCode": 200
     },
     {
       "name": "Tumblr",
