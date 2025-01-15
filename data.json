@@ -582,6 +582,13 @@
       "errorCode": 403
     },
     {
+        "name": "sourcehut",
+        "base_url": "https://sr.ht/~{}/",
+        "follow_redirects": true,
+        "errorType": "status_code",
+        "errorCode": 404
+    },
+    {
       "name": "Disqus",
       "base_url": "https://disqus.com/by/{}",
       "follow_redirects": true,
