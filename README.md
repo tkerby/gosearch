@@ -31,14 +31,14 @@ $ ./gosearch [username]
 C:\Users\Bob> gosearch.exe [username]
 ```
 ## Use Cases
-GoSearch allows you to search [breachdirectory.org](https://breachdirectory.org) for compromised passwords associated with a specific username. To fully utilise GoSearch, follow these steps:
+GoSearch allows you to search [BreachDirectory](https://breachdirectory.org) for compromised passwords associated with a specific username. To fully utilise GoSearch, follow these steps:
 
 1. Obtain a **free** API key from `https://rapidapi.com/rohan-patra/api/breachdirectory`.
 2. Include the API key in the command arguments like this:
 ```
 $ gosearch [username] [api-key]
 ```
-GoSearch will automatically generate popular email addresses for a given username.
+If GoSearch finds password hashes, it will attempt to crack them using [Weakpass](https://weakpass.com). The success rate is nearly 100%, as Weakpass uses a large wordlist of common data-wells, which align with the breaches reported by [BreachDirectory](https://breachdirectory.org). Every single password hash that's been found in [BreachDirectory](https://breachdirectory.org) has been cracked by [Weakpass](https://weakpass.com).
 
 ## I Don't Have a Username
 If you're uncertain about a person's username, you could try generating some by using [urbanadventurer/username-anarchy](https://github.com/urbanadventurer/username-anarchy). Note that `username-anarchy` can only be run in Unix terminals (Mac/Linux)
