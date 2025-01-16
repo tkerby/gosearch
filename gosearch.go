@@ -601,7 +601,7 @@ func Search(data Data, username string, wg *sync.WaitGroup) {
 	}
 }
 
-func deleteOldFile(username string) {
+func DeleteOldFile(username string) {
     filename := fmt.Sprintf("%s.txt", username)
     _ = os.Remove(filename)
 }
