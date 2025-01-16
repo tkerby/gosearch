@@ -86,6 +86,12 @@ type HudsonRockResponse struct {
 	Stealers []Stealer `json:"stealers"`
 }
 
+type WeakpassResponse struct {
+	Type  string `json:"type"`
+	Hash  string `json:"hash"`
+	Pass  string `json:"pass"`
+}
+
 func UnmarshalJSON() (Data, error) {
 	// GoSearch relies on data.json to determine the websites to search for.
 	// Instead of forcing users to manually download the data.json file, we will fetch the latest version from the repository.
@@ -251,98 +257,6 @@ func HudsonRock(username string, wg *sync.WaitGroup) {
 	}
 }
 
-func BuildEmail(username string) []string {
-	emailDomains := []string{
-		"@gmail.com",
-		"@yahoo.com",
-		"@outlook.com",
-		"@hotmail.com",
-		"@icloud.com",
-		"@aol.com",
-		"@live.com",
-		"@protonmail.com",
-		"@zoho.com",
-		"@msn.com",
-		"@proton.me",
-		"@onionmail.org",
-		"@gmx.de",
-		"@mail2world.com",
-		"@mail.ru",
-		"@i.ua",
-		"@ya.ru",
-		"@yandex.com",
-		"@tutanota.com",
-		"@fastmail.com",
-		"@hushmail.com",
-		"@mail.com",
-		"@gmx.com",
-		"@inbox.com",
-		"@rediffmail.com",
-		"@runbox.com",
-		"@mailfence.com",
-		"@web.de",
-		"@laposte.net",
-		"@orange.fr",
-		"@freenet.de",
-		"@virgilio.it",
-		"@libero.it",
-		"@alice.it",
-		"@t-online.de",
-		"@bluewin.ch",
-		"@bk.ru",
-		"@list.ru",
-		"@mail.kz",
-		"@rambler.ru",
-		"@meta.ua",
-		"@ukr.net",
-		"@online.ua",
-		"@163.com",
-		"@126.com",
-		"@qq.com",
-		"@sina.com",
-		"@naver.com",
-		"@daum.net",
-		"@hanmail.net",
-		"@yeah.net",
-		"@bol.com.br",
-		"@terra.com.br",
-		"@uol.com.br",
-		"@ig.com.br",
-		"@bellsouth.net",
-		"@verizon.net",
-		"@shaw.ca",
-		"@rogers.com",
-		"@bigpond.com",
-		"@optusnet.com.au",
-		"@me.com",
-		"@posteo.net",
-		"@disroot.org",
-		"@prodigy.net",
-		"@att.net",
-		"@cox.net",
-		"@earthlink.net",
-		"@netzero.net",
-		"@charter.net",
-		"@sbcglobal.net",
-		"@comcast.net",
-		"@zoho.eu",
-		"@europe.com",
-		"@usa.net",
-		"@ukmail.org",
-		"@europemail.com",
-		"@safe-mail.net",
-		"@iname.com",
-	}
-
-	var emails []string
-
-	for _, domain := range emailDomains {
-		emails = append(emails, username+domain)
-	}
-
-	return emails
-}
-
 func BuildDomains(username string) []string {
 	tlds := []string{
 		".com",
@@ -429,7 +343,7 @@ func SearchDomains(username string, domains []string, wg *sync.WaitGroup) {
 	}
 }
 
-func SearchBreachDirectory(emails []string, apikey string, wg *sync.WaitGroup) {
+func SearchBreachDirectory(username string, apikey string, wg *sync.WaitGroup) {
 	defer wg.Done()
 
 	// Get an API key (10 lookups for free) @ https://rapidapi.com/rohan-patra/api/breachdirectory
@@ -437,27 +351,71 @@ func SearchBreachDirectory(emails []string, apikey string, wg *sync.WaitGroup) {
 	if err != nil {
 		log.Fatal(err)
 	}
+	
+	fmt.Println(Yellow + "[*] Searching " + username + " on Breach Directory for any compromised passwords..." + Reset)
 
-	for _, email := range emails {
-		fmt.Println(Yellow + "[*] Searching " + email + " on Breach Directory for any compromised passwords..." + Reset)
-
-		response, err := client.SearchEmail(email)
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		if response.Found == 0 {
-			fmt.Printf(Red+"[-] No breaches found for %s. Moving on...\n", email+Reset)
-			continue
-		}
-
-		fmt.Printf(Green+"[+] Found %d breaches for %s:\n", response.Found, email+Reset)
-		for _, entry := range response.Result {
-			fmt.Println(Green+"[+] Password:", entry.Password+Reset)
-			fmt.Println(Green+"[+] SHA1:", entry.Sha1+Reset)
-			fmt.Println(Green+"[+] Source:", entry.Sources+Reset)
-		}
+	// For some reason, gobreach is not updating so we will settle for SearchEmail which does the same thing; it searches a term that doesn't have to be an email or username.
+	response, err := client.SearchEmail(username)
+	if err != nil {
+		log.Fatal(err)
 	}
+
+	if response.Found == 0 {
+		fmt.Printf(Red+"[-] No breaches found for %s.", username+Reset)
+	}
+
+	fmt.Printf(Green+"[+] Found %d breaches for %s:\n", response.Found, username+Reset)
+	for _, entry := range response.Result {
+		
+		pass := CrackHash(entry.Hash)
+		if pass != "" {
+			fmt.Println(Green+"[+] Password:",pass+Reset)
+		} else {
+			fmt.Println(Green+"[+] Password:", entry.Password+Reset)
+		}
+		
+		fmt.Println(Green+"[+] SHA1:", entry.Sha1+Reset)
+		fmt.Println(Green+"[+] Source:", entry.Sources+Reset)
+	}
+}
+
+func CrackHash(hash string) string {
+	// We will crack the hash from BreachDirectory using Weakpass
+
+	client := &http.Client{}
+	url := fmt.Sprintf("https://weakpass.com/api/v1/search/%s.json", hash)
+
+	req, err := http.NewRequest(http.MethodGet, url, nil)
+
+	if err != nil {
+		fmt.Printf("Error creating request in function CrackHash: %v\n", err)
+		return ""
+	}
+
+	req.Header.Set("User-Agent", UserAgent)
+	req.Header.Set("accept:", "application/json")
+
+	res, err := client.Do(req)
+	if err != nil {
+		fmt.Printf("Error fetching response in function CrackHash: %v\n", err)
+		return ""
+	}
+
+	defer res.Body.Close()
+
+	jsonData, err := io.ReadAll(res.Body)
+	if err != nil {
+		fmt.Errorf("Error reading jsonData on line 400")
+		return ""
+	}
+
+	var weakpass WeakpassResponse
+	err = json.Unmarshal(jsonData, &weakpass)
+	if err != nil {
+		fmt.Errorf("error unmarshalling JSON: %w", err)
+		return ""
+	}
+	return weakpass.Pass
 }
 
 func MakeRequestWithErrorCode(website Website, url string, username string) {
@@ -706,9 +664,8 @@ func main() {
 	if len(os.Args) == 3 {
 		apikey := os.Args[2]
 		fmt.Println(strings.Repeat("⎯", 85))
-		emails := BuildEmail(username)
 		wg.Add(1)
-		go SearchBreachDirectory(emails, apikey, &wg)
+		go SearchBreachDirectory(username, apikey, &wg)
 		wg.Wait()
 	}
 

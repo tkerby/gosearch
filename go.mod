@@ -1,6 +1,6 @@
 module github.com/ibnaleem/gosearch
 
-go 1.23.3
+go 1.23.4
 
 require (
 	github.com/ibnaleem/gobreach v0.0.0-20241210003806-81e3b1678889
