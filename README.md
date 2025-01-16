@@ -24,7 +24,7 @@ $ go install github.com/ibnaleem/gosearch@latest
 ```
 ### Unix:
 ```
-$ ./gosearch [username]
+$ gosearch [username]
 ```
 ### Windows
 ```
