@@ -337,7 +337,7 @@ func SearchDomains(username string, domains []string, wg *sync.WaitGroup) {
 	}
 }
 
-func SearchBreachDirectory(emails []string, apikey string, wg *sync.WaitGroup) {
+func SearchBreachDirectory(username string, apikey string, wg *sync.WaitGroup) {
 	defer wg.Done()
 
 	// Get an API key (10 lookups for free) @ https://rapidapi.com/rohan-patra/api/breachdirectory
@@ -345,26 +345,24 @@ func SearchBreachDirectory(emails []string, apikey string, wg *sync.WaitGroup) {
 	if err != nil {
 		log.Fatal(err)
 	}
+	
+	fmt.Println(Yellow + "[*] Searching " + username + " on Breach Directory for any compromised passwords..." + Reset)
 
-	for _, email := range emails {
-		fmt.Println(Yellow + "[*] Searching " + email + " on Breach Directory for any compromised passwords..." + Reset)
+	// For some reason, gobreach is not updating so we will settle for SearchEmail which does the same thing; it searches a term that doesn't have to be an email or username.
+	response, err := client.SearchEmail(username)
+	if err != nil {
+		log.Fatal(err)
+	}
 
-		response, err := client.SearchEmail(email)
-		if err != nil {
-			log.Fatal(err)
-		}
+	if response.Found == 0 {
+		fmt.Printf(Red+"[-] No breaches found for %s.", username+Reset)
+	}
 
-		if response.Found == 0 {
-			fmt.Printf(Red+"[-] No breaches found for %s. Moving on...\n", email+Reset)
-			continue
-		}
-
-		fmt.Printf(Green+"[+] Found %d breaches for %s:\n", response.Found, email+Reset)
-		for _, entry := range response.Result {
-			fmt.Println(Green+"[+] Password:", entry.Password+Reset)
-			fmt.Println(Green+"[+] SHA1:", entry.Sha1+Reset)
-			fmt.Println(Green+"[+] Source:", entry.Sources+Reset)
-		}
+	fmt.Printf(Green+"[+] Found %d breaches for %s:\n", response.Found, username+Reset)
+	for _, entry := range response.Result {
+		fmt.Println(Green+"[+] Password:", entry.Password+Reset)
+		fmt.Println(Green+"[+] SHA1:", entry.Sha1+Reset)
+		fmt.Println(Green+"[+] Source:", entry.Sources+Reset)
 	}
 }
 
@@ -614,9 +612,8 @@ func main() {
 	if len(os.Args) == 3 {
 		apikey := os.Args[2]
 		fmt.Println(strings.Repeat("⎯", 85))
-		emails := BuildEmail(username)
 		wg.Add(1)
-		go SearchBreachDirectory(emails, apikey, &wg)
+		go SearchBreachDirectory(username, apikey, &wg)
 		wg.Wait()
 	}
 
