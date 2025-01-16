@@ -601,6 +601,11 @@ func Search(data Data, username string, wg *sync.WaitGroup) {
 	}
 }
 
+func deleteOldFile(username string) {
+    filename := fmt.Sprintf("%s.txt", username)
+    _ = os.Remove(filename)
+}
+
 func main() {
 	if len(os.Args) < 2 {
 		fmt.Println("Usage: gosearch <username>\nIssues: https://github.com/ibnaleem/gosearch/issues")
@@ -608,6 +613,7 @@ func main() {
 	}
 
 	var username = os.Args[1]
+	deleteOldFile(username)
 	var wg sync.WaitGroup
 
 	data, err := UnmarshalJSON()
