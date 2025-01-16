@@ -86,6 +86,12 @@ type HudsonRockResponse struct {
 	Stealers []Stealer `json:"stealers"`
 }
 
+type WeakpassResponse struct {
+	Type  string `json:"type"`
+	Hash  string `json:"hash"`
+	Pass  string `json:"pass"`
+}
+
 func UnmarshalJSON() (Data, error) {
 	// GoSearch relies on data.json to determine the websites to search for.
 	// Instead of forcing users to manually download the data.json file, we will fetch the latest version from the repository.
@@ -360,10 +366,56 @@ func SearchBreachDirectory(username string, apikey string, wg *sync.WaitGroup) {
 
 	fmt.Printf(Green+"[+] Found %d breaches for %s:\n", response.Found, username+Reset)
 	for _, entry := range response.Result {
-		fmt.Println(Green+"[+] Password:", entry.Password+Reset)
+		
+		pass := CrackHash(entry.Hash)
+		if pass != "" {
+			fmt.Println(Green+"[+] Password:",pass+Reset)
+		} else {
+			fmt.Println(Green+"[+] Password:", entry.Password+Reset)
+		}
+		
 		fmt.Println(Green+"[+] SHA1:", entry.Sha1+Reset)
 		fmt.Println(Green+"[+] Source:", entry.Sources+Reset)
 	}
+}
+
+func CrackHash(hash string) string {
+	// We will crack the hash from BreachDirectory using Weakpass
+
+	client := &http.Client{}
+	url := fmt.Sprintf("https://weakpass.com/api/v1/search/%s.json", hash)
+
+	req, err := http.NewRequest(http.MethodGet, url, nil)
+
+	if err != nil {
+		fmt.Printf("Error creating request in function CrackHash: %v\n", err)
+		return ""
+	}
+
+	req.Header.Set("User-Agent", UserAgent)
+	req.Header.Set("accept:", "application/json")
+
+	res, err := client.Do(req)
+	if err != nil {
+		fmt.Printf("Error fetching response in function CrackHash: %v\n", err)
+		return ""
+	}
+
+	defer res.Body.Close()
+
+	jsonData, err := io.ReadAll(res.Body)
+	if err != nil {
+		fmt.Errorf("Error reading jsonData on line 400")
+		return ""
+	}
+
+	var weakpass WeakpassResponse
+	err = json.Unmarshal(jsonData, &weakpass)
+	if err != nil {
+		fmt.Errorf("error unmarshalling JSON: %w", err)
+		return ""
+	}
+	return weakpass.Pass
 }
 
 func MakeRequestWithErrorCode(website Website, url string, username string) {
