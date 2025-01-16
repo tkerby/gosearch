@@ -51,7 +51,7 @@ func Mode0(url string) {
 	defer res.Body.Close()
 
 	fmt.Println(Green+"[+] Response:", res.Status+Reset)
-	fmt.Println(Green+"[+] Response URL:", res.Request.URL+Reset)
+	fmt.Println(Green+"[+] Response URL:", res.Request.URL.String()+Reset)
 }
 
 func Mode1(url string) {
