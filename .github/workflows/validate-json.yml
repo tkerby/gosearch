@@ -2,8 +2,12 @@ name: Validate JSON File
 
 on:
   push:
-    paths:
-      - 'data.json'
+    branches: 
+      - "main" 
+  pull_request:
+    branches:
+      - "main"
+
 jobs:
   validate-json:
     runs-on: ubuntu-latest
