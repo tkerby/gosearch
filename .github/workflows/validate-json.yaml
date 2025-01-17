@@ -1,0 +1,34 @@
+name: Validate JSON File
+
+on:
+  push:
+    paths:
+      - 'data.json'
+jobs:
+  validate-json:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Validate JSON structure
+        run: |
+          # Validate the JSON file in the root directory
+          echo "Validating data.json"
+          jq -e 'map(
+            .name | type == "string" and
+            .base_url | type == "string" and
+            (.url_probe | type == "string" or .url_probe == null) and
+            .follow_redirects | type == "boolean" and
+            .errorType | (test("status_code|errorMsg|profilePresence|unknown")) and
+            (
+              (.errorType == "errorMsg" and .errorCode == null and .errorMsg | type == "string") or
+              (.errorType != "errorMsg" and .errorCode | type == "integer" and .errorMsg == null)
+            )
+          )' data.json
+          if [[ $? -ne 0 ]]; then
+            echo "Validation failed for data.json"
+            exit 1
+          fi
+        shell: bash
