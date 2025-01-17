@@ -6,7 +6,7 @@ on:
       - "main" 
   pull_request:
     branches:
-      - "main"
+      - "main" 
 
 jobs:
   validate-json:
@@ -20,7 +20,8 @@ jobs:
         run: |
           # Validate the JSON file in the root directory
           echo "Validating data.json"
-          jq -e 'map(
+          
+          jq -e '.websites | map(
             .name | type == "string" and
             .base_url | type == "string" and
             (.url_probe | type == "string" or .url_probe == null) and
@@ -31,6 +32,7 @@ jobs:
               (.errorType != "errorMsg" and .errorCode | type == "integer" and .errorMsg == null)
             )
           )' data.json
+          
           if [[ $? -ne 0 ]]; then
             echo "Validation failed for data.json"
             exit 1
