@@ -354,8 +354,7 @@ func SearchBreachDirectory(username string, apikey string, wg *sync.WaitGroup) {
 
 	fmt.Println(Yellow + "[*] Searching " + username + " on Breach Directory for any compromised passwords..." + Reset)
 
-	// For some reason, gobreach is not updating so we will settle for SearchEmail which does the same thing; it searches a term that doesn't have to be an email or username.
-	response, err := client.SearchEmail(username)
+	response, err := client.Search(username)
 	if err != nil {
 		log.Fatal(err)
 	}
