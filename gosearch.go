@@ -405,14 +405,14 @@ func CrackHash(hash string) string {
 
 	jsonData, err := io.ReadAll(res.Body)
 	if err != nil {
-		fmt.Errorf("Error reading jsonData on line 400")
+		fmt.Printf("Error reading response JSON: %v\n", err)
 		return ""
 	}
 
 	var weakpass WeakpassResponse
 	err = json.Unmarshal(jsonData, &weakpass)
 	if err != nil {
-		fmt.Errorf("error unmarshalling JSON: %w", err)
+		fmt.Printf("Error unmarshalling JSON: %v\n", err)
 		return ""
 	}
 	return weakpass.Pass
