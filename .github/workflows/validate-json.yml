@@ -23,6 +23,7 @@ jobs:
           
           jq -e '
             .websites | map(
+              select(type == "object") | 
               .name | type == "string" and
               .base_url | type == "string" and
               (.url_probe | type == "string" or .url_probe == null) and
