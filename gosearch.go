@@ -87,9 +87,9 @@ type HudsonRockResponse struct {
 }
 
 type WeakpassResponse struct {
-	Type  string `json:"type"`
-	Hash  string `json:"hash"`
-	Pass  string `json:"pass"`
+	Type string `json:"type"`
+	Hash string `json:"hash"`
+	Pass string `json:"pass"`
 }
 
 func UnmarshalJSON() (Data, error) {
@@ -351,7 +351,7 @@ func SearchBreachDirectory(username string, apikey string, wg *sync.WaitGroup) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	
+
 	fmt.Println(Yellow + "[*] Searching " + username + " on Breach Directory for any compromised passwords..." + Reset)
 
 	// For some reason, gobreach is not updating so we will settle for SearchEmail which does the same thing; it searches a term that doesn't have to be an email or username.
@@ -366,14 +366,14 @@ func SearchBreachDirectory(username string, apikey string, wg *sync.WaitGroup) {
 
 	fmt.Printf(Green+"[+] Found %d breaches for %s:\n", response.Found, username+Reset)
 	for _, entry := range response.Result {
-		
+
 		pass := CrackHash(entry.Hash)
 		if pass != "" {
-			fmt.Println(Green+"[+] Password:",pass+Reset)
+			fmt.Println(Green+"[+] Password:", pass+Reset)
 		} else {
 			fmt.Println(Green+"[+] Password:", entry.Password+Reset)
 		}
-		
+
 		fmt.Println(Green+"[+] SHA1:", entry.Sha1+Reset)
 		fmt.Println(Green+"[+] Source:", entry.Sources+Reset)
 	}
@@ -620,8 +620,8 @@ func Search(data Data, username string, wg *sync.WaitGroup) {
 }
 
 func DeleteOldFile(username string) {
-    filename := fmt.Sprintf("%s.txt", username)
-    _ = os.Remove(filename)
+	filename := fmt.Sprintf("%s.txt", username)
+	os.Remove(filename)
 }
 
 func main() {
