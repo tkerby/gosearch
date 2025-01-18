@@ -52,7 +52,7 @@ func Mode0(url string) {
 	defer res.Body.Close()
 
 	fmt.Println(Green+"[+] Response:", res.Status+Reset)
-	fmt.Println(Green+"[+] Response URL:", res.Request.URL.String()+Reset)
+	fmt.Println(Green+"[+] Response URL:", res.Request.URL.String() + Reset)
 }
 
 func Mode1(url string) {
@@ -91,7 +91,7 @@ func Mode1(url string) {
 
 	os.WriteFile("response.txt", body, os.ModePerm)
 	fmt.Println(Green+"[+] Response:", res.Status+Reset)
-	fmt.Println(Green+"[+] Response URL:", res.Request.URL)
+	fmt.Println(Green+"[+] Response URL:", res.Request.URL.String() + Reset)
 	fmt.Println(Green + "[+] Saved response to response.txt" + Reset)
 }
 
@@ -129,7 +129,7 @@ func Mode2(url string) {
 	defer res.Body.Close()
 
 	fmt.Println(Green+"[+] Response:", res.Status+Reset)
-	fmt.Println(Green+"[+] Response URL:", res.Request.URL)
+	fmt.Println(Green+"[+] Response URL:", res.Request.URL.String() + Reset)
 }
 
 func Mode3(url string) {
@@ -172,7 +172,7 @@ func Mode3(url string) {
 
 	os.WriteFile("response.txt", body, os.ModePerm)
 	fmt.Println(Green+"[+] Response:", res.Status+Reset)
-	fmt.Println(Green+"[+] Response URL:", res.Request.URL)
+	fmt.Println(Green+"[+] Response URL:", res.Request.URL.String() + Reset)
 	fmt.Println(Green + "[+] Saved response to response.txt" + Reset)
 }
 
@@ -213,7 +213,7 @@ func Mode4(url string, errorMsg string) {
 
 	bodyStr := string(body)
 	fmt.Println(Green+"[+] Response:", res.Status+Reset)
-	fmt.Println(Green+"[+] Response URL:", res.Request.URL.String()+Reset)
+	fmt.Println(Green+"[+] Response URL:", res.Request.URL.String() + Reset)
 
 	if strings.Contains(bodyStr, errorMsg) {
 		  fmt.Println(Green+"[+] Error message found in response body: " + errorMsg + "\n[+] This means if a profile does not exist on %s", url, "I can detect it!" + Reset)
