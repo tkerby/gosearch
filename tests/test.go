@@ -205,6 +205,12 @@ func main() {
 		Mode2(url)
 	} else if mode == "3" {
 		Mode3(url)
+	} else if mode == "4" {
+
+		var errorMsg string
+		fmt.Print(Yellow + "[*] Please provide an error message found in the response body for me to check if I can detect it for invalid usernames: " + Reset)
+		fmt.Scan(&errorMsg)
+
 	} else {
 		fmt.Println(Red + "Invalid mode. Please provide either 0, 1, 2, or 3. Exiting..." + Reset)
 		os.Exit(1)
