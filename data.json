@@ -459,8 +459,8 @@
       "name": "Daily.dev",
       "base_url": "https://app.daily.dev/{}",
       "follow_redirects": true,
-      "errorType": "errorMsg",
-      "errorMsg": "Page not found"
+      "errorType": "profilePresence",
+      "errorMsg": "{\"props\":{\"pageProps\":{\"user\":{\"id\":"
     },
     {
       "name": "HackerNews",
