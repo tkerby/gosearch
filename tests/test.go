@@ -260,7 +260,7 @@ func main() {
 		Mode4(url, errorMsg)
 
 	} else {
-		fmt.Println(Red + "Invalid mode. Please provide either 0, 1, 2, or 3. Exiting..." + Reset)
+		fmt.Println(Red + "Invalid mode. Please provide either 0, 1, 2, 3 or 4. Exiting..." + Reset)
 		os.Exit(1)
 	}
 }
