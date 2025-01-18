@@ -1420,6 +1420,14 @@
       "follow_redirects": true,
       "errorType": "status_code",
       "errorCode": 404
+    },
+    {
+      "name": "Quizlet",
+      "base_url": "https://quizlet.com/user/{}/sets",
+      "url_probe": "",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
     }
     ]
 }
