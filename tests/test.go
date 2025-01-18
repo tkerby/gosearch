@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"time"
+	"strings"
 )
 
 // Color output constants.
@@ -175,6 +176,52 @@ func Mode3(url string) {
 	fmt.Println(Green + "[+] Saved response to response.txt" + Reset)
 }
 
+func Mode4(url string, errorMsg string) {
+	fmt.Println(Yellow+"[*] Testing URL:", url+Reset)
+	fmt.Println(Yellow+"[*] Testing error message:", errorMsg+Reset)
+	fmt.Println(Yellow + "[*] Mode: 4 (Error Message Check)" + Reset)
+
+	transport := &http.Transport{
+		TLSClientConfig: &tls.Config{
+			MinVersion: tls.VersionTLS12,
+		},
+	}
+
+	client := &http.Client{
+		Timeout:   85 * time.Second,
+		Transport: transport,
+	}
+
+	req, err := http.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	req.Header.Set("User-Agent", UserAgent)
+
+	res, err := client.Do(req)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer res.Body.Close()
+
+	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	bodyStr := string(body)
+	fmt.Println(Green+"[+] Response:", res.Status+Reset)
+	fmt.Println(Green+"[+] Response URL:", res.Request.URL.String()+Reset)
+
+	if strings.Contains(bodyStr, errorMsg) {
+		  fmt.Println(Green+"[+] Error message found in response body: " + errorMsg + "\n[+] This means if a profile does not exist on %s", url, "I can detect it!" + Reset)
+    } else {
+      fmt.Println(Red+"[-] Error message not found in response body: " + errorMsg + "\n[-] This means if a profile does not exist on %s", url, "I CANNOT detect it!" + Reset)
+    }
+	}
+
 func main() {
 	if len(os.Args) == 1 {
 		fmt.Println(Yellow + "Welcome to GoSearch's testing binary." + Reset)
@@ -210,6 +257,7 @@ func main() {
 		var errorMsg string
 		fmt.Print(Yellow + "[*] Please provide an error message found in the response body for me to check if I can detect it for invalid usernames: " + Reset)
 		fmt.Scan(&errorMsg)
+		Mode4(url, errorMsg)
 
 	} else {
 		fmt.Println(Red + "Invalid mode. Please provide either 0, 1, 2, or 3. Exiting..." + Reset)
