@@ -496,7 +496,7 @@
       "url_probe": "https://8tracks.com/users/check_username?login={}&format=jsonh",
       "follow_redirects": true,
       "errorType": "errorMsg",
-      "errorMsg": "{\"available\":true}"
+      "errorMsg": "{\"available\":true"
     },
     {
       "name": "All My Links",
