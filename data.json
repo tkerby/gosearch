@@ -1428,6 +1428,14 @@
       "follow_redirects": true,
       "errorType": "status_code",
       "errorCode": 404
+    },
+    {
+      "name": "PyPi",
+      "base_url": "https://pypi.org/user/{}",
+      "url_probe":"https://pypi.org/_includes/administer-user-include/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
     }
     ]
 }
