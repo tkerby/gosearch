@@ -1392,7 +1392,6 @@
     {
       "name": "Guns.lol",
       "base_url": "https://guns.lol/{}",
-      "url_probe": "",
       "follow_redirects": true,
       "errorType": "unknown",
       "errorCode": 307
@@ -1400,7 +1399,6 @@
     {
       "name": "OpenAI Community",
       "base_url": "https://community.openai.com/u/{}",
-      "url_probe": "",
       "follow_redirects": true,
       "errorType": "status_code",
       "errorCode": 404
@@ -1408,7 +1406,6 @@
     {
       "name": "OMG.lol",
       "base_url": "https://{}.omg.lol",
-      "url_probe": "",
       "follow_redirects": true,
       "errorType": "status_code",
       "errorCode": 404
@@ -1416,7 +1413,6 @@
     {
       "name": "Polar",
       "base_url": "https://polar.sh/{}",
-      "url_probe": "",
       "follow_redirects": true,
       "errorType": "status_code",
       "errorCode": 404
@@ -1424,7 +1420,6 @@
     {
       "name": "Quizlet",
       "base_url": "https://quizlet.com/user/{}/sets",
-      "url_probe": "",
       "follow_redirects": true,
       "errorType": "status_code",
       "errorCode": 404
