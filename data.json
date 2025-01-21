@@ -3,9 +3,9 @@
     {
       "name": "Instagram",
       "base_url": "https://instagram.com/{}",
-      "follow_redirects": true,
-      "errorType": "errorMsg",
-      "errorMsg": "<title>Page not found • Instagram</title>"
+      "follow_redirects": false,
+      "errorType": "status_code",
+      "errorCode": 200
     },
     {
       "name": "Twitter/X",
