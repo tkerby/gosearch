@@ -1438,6 +1438,191 @@
       "follow_redirects": true,
       "errorType": "status_code",
       "errorCode": 404
+    },
+    {
+      "name": "Instructables",
+      "base_url": "https://www.instructables.com/member/{}",
+      "url_probe": "https://www.instructables.com/json-api/showAuthorExists?screenName={}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Intigriti",
+      "base_url": "https://app.intigriti.com/profile/{}",
+      "url_probe": "https://api.intigriti.com/user/public/profile/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Ionic Forum",
+      "base_url": "https://forum.ionicframework.com/u/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Issuu",
+      "base_url": "https://issuu.com/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Itch.io",
+      "base_url": "https://{}.itch.io/",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Itemfix",
+      "base_url": "https://www.itemfix.com/c/{}",
+      "follow_redirects": true,
+      "errorType": "errorMsg",
+      "errorMsg": "<title>ItemFix - Channel: </title>"
+    },
+    {
+      "name": "Jellyfin Weblate",
+      "base_url": "https://translate.jellyfin.org/user/{}/",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Jimdo",
+      "base_url": "https://{}.jimdosite.com",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Joplin Forum",
+      "base_url": "https://discourse.joplinapp.org/u/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Kaggle",
+      "base_url": "https://www.kaggle.com/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Kaskus",
+      "base_url": "https://www.kaskus.co.id/@{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Kick",
+      "base_url": "https://kick.com/{}",
+      "url_probe": "https://kick.com/api/v2/channels/{}",
+      "follow_redirects": true,
+      "errorType": "unknown",
+      "errorCode": 403
+    },
+    {
+      "name": "Kongregate",
+      "base_url": "https://www.kongregate.com/accounts/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "LOR",
+      "base_url": "https://www.linux.org.ru/people/{}/profile",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Launchpad",
+      "base_url": "https://launchpad.net/~{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "LessWrong",
+      "base_url": "https://www.lesswrong.com/users/@{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Letterboxd",
+      "base_url": "https://letterboxd.com/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "LibraryThing",
+      "base_url": "https://www.librarything.com/profile/{}",
+      "follow_redirects": true,
+      "errorType": "errorMsg",
+      "errorMsg": "<p>Error: This user doesn't exist</p>"
+    },
+    {
+      "name": "Lichess",
+      "base_url": "https://lichess.org/@/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Listed",
+      "base_url": "https://listed.to/@{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "LiveJournal",
+      "base_url": "https://{}.livejournal.com",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Lobsters",
+      "base_url": "https://lobste.rs/u/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "LottieFiles",
+      "base_url": "https://lottiefiles.com/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "MMORPG Forum",
+      "base_url": "https://forums.mmorpg.com/profile/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Memrise",
+      "base_url": "https://www.memrise.com/user/{}/",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Minecraft",
+      "base_url": "https://api.mojang.com/users/profiles/minecraft/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 204
     }
     ]
 }
