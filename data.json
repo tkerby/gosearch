@@ -1623,6 +1623,226 @@
       "follow_redirects": true,
       "errorType": "status_code",
       "errorCode": 204
+    },
+    {
+      "name": "MixCloud",
+      "base_url": "https://www.mixcloud.com/{}/",
+      "url_probe": "https://api.mixcloud.com/{}/",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Monkeytype",
+      "base_url": "https://monkeytype.com/profile/{}",
+      "url_probe": "https://api.monkeytype.com/users/{}/profile",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Motorradfrage",
+      "base_url": "https://www.motorradfrage.net/nutzer/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "MyAnimeList",
+      "base_url": "https://myanimelist.net/profile/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "MyMiniFactory",
+      "base_url": "https://www.myminifactory.com/users/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "MyDramaList",
+      "base_url": "https://www.mydramalist.com/profile/{}",
+      "follow_redirects": true,
+      "errorType": "errorMsg",
+      "errorMsg": "Sign in - MyDramaList"
+    },
+    {
+      "name": "Myspace",
+      "base_url": "https://myspace.com/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "NICommunityForum",
+      "base_url": "https://community.native-instruments.com/profile/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "NationStates Nation",
+      "base_url": "https://nationstates.net/nation={}",
+      "follow_redirects": true,
+      "errorType": "errorMsg",
+      "errorMsg": "<title>NationStates | Not Found</title>"
+    },
+    {
+      "name": "NationStates Region",
+      "base_url": "https://nationstates.net/region={}",
+      "follow_redirects": true,
+      "errorType": "errorMsg",
+      "errorMsg": "<title>NationStates | Not Found</title>"
+    },
+    {
+      "name": "Naver",
+      "base_url": "https://blog.naver.com/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Needrom",
+      "base_url": "https://www.needrom.com/author/{}/",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Newgrounds",
+      "base_url": "https://{}.newgrounds.com",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Nextcloud Forum",
+      "base_url": "https://help.nextcloud.com/u/{}/summary",
+      "follow_redirects": true,
+      "errorType": "unknown",
+      "errorCode": 403
+    },
+    {
+      "name": "Nightbot",
+      "base_url": "https://nightbot.tv/t/{}/commands",
+      "url_probe": "https://api.nightbot.tv/1/channels/t/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "NintendoLife",
+      "base_url": "https://www.nintendolife.com/users/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "NitroType",
+      "base_url": "https://www.nitrotype.com/racer/{}",
+      "follow_redirects": true,
+      "errorType": "errorMsg",
+      "errorMsg": "<title>Nitro Type | Competitive Typing Game | Race Your Friends</title>"
+    },
+    {
+      "name": "NotABug.org",
+      "base_url": "https://notabug.org/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Nyaa.si",
+      "base_url": "https://nyaa.si/user/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "OpenStreetMap",
+      "base_url": "https://www.openstreetmap.org/user/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Opensource",
+      "base_url": "https://opensource.com/users/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "OurDJTalk",
+      "base_url": "https://ourdjtalk.com/members?username={}",
+      "follow_redirects": false,
+      "errorType": "status_code",
+      "errorCode": 301
+    },
+    {
+      "name": "PCGamer",
+      "base_url": "https://forums.pcgamer.com/members/?username={}",
+      "follow_redirects": false,
+      "errorType": "status_code",
+      "errorCode": 200
+    },
+    {
+      "name": "PSNProfiles Forum",
+      "base_url": "https://forum.psnprofiles.com/profile/{}",
+      "follow_redirects": true,
+      "errorType": "unknown",
+      "errorCode": 403
+    },
+    {
+      "name": "Packagist",
+      "base_url": "https://packagist.org/packages/{}/",
+      "follow_redirects": true,
+      "errorType": "response_url",
+      "errorMsg": "https://packagist.org/search/?q={}&reason=vendor_not_found"
+    },
+    {
+      "name": "Pastebin",
+      "base_url": "https://pastebin.com/u/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "PentesterLab",
+      "base_url": "https://pentesterlab.com/profile/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "PepperIT",
+      "base_url": "https://www.pepper.it/profile/{}/",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 410
+    },
+    {
+      "name": "Periscope",
+      "base_url": "https://www.periscope.tv/{}/",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Pinkbike",
+      "base_url": "https://www.pinkbike.com/u/{}/",
+      "follow_redirects": true,
+      "errorType": "unknown",
+      "errorCode": 403
+    },
+    {
+      "name": "PlayStore",
+      "base_url": "https://play.google.com/store/apps/developer?id={}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
     }
     ]
 }
