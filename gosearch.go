@@ -12,6 +12,7 @@ import (
 	"sync"
 	"sync/atomic"
 	"time"
+	"strconv"
 
 	"github.com/ibnaleem/gobreach"
 	"github.com/inancgumus/screen"
@@ -332,14 +333,17 @@ func SearchDomains(username string, domains []string, wg *sync.WaitGroup) {
 
 		if resp.StatusCode == http.StatusOK {
 			fmt.Println(Green+"[+] 200 OK:", domain+Reset)
+			WriteToFile(username, "[+] 200 OK: " + domain)
 			domaincount++
 		}
 	}
 
 	if domaincount > 0 {
 		fmt.Println(Green+"[+] Found", domaincount, "domains with the username", username+Reset)
+		WriteToFile(username, "[+] Found "+ strconv.Itoa(domaincount)+" domains with the username: "+username)
 	} else {
 		fmt.Println(Red+"[-] No domains found with the username", username+Reset)
+		WriteToFile(username, "[-] No domains found with the username: "+username)
 	}
 }
 
@@ -361,6 +365,7 @@ func SearchBreachDirectory(username string, apikey string, wg *sync.WaitGroup) {
 
 	if response.Found == 0 {
 		fmt.Printf(Red+"[-] No breaches found for %s.", username+Reset)
+		WriteToFile(username, "[-] No breaches found on Breach Directory for: "+username)
 	}
 
 	fmt.Printf(Green+"[+] Found %d breaches for %s:\n", response.Found, username+Reset)
@@ -369,12 +374,16 @@ func SearchBreachDirectory(username string, apikey string, wg *sync.WaitGroup) {
 		pass := CrackHash(entry.Hash)
 		if pass != "" {
 			fmt.Println(Green+"[+] Password:", pass+Reset)
+			WriteToFile(username, "[+] Password: "+pass)
 		} else {
 			fmt.Println(Green+"[+] Password:", entry.Password+Reset)
+			WriteToFile(username, "[+] Password: "+entry.Password)
 		}
 
 		fmt.Println(Green+"[+] SHA1:", entry.Sha1+Reset)
 		fmt.Println(Green+"[+] Source:", entry.Sources+Reset)
+		fmt.Println(Green+"[+] SHA1:", entry.Sha1)
+		WriteToFile(username, "[+] Source: "+entry.Sources)
 	}
 }
 
@@ -656,6 +665,7 @@ func main() {
 
 	wg.Add(1)
 	fmt.Println(strings.Repeat("⎯", 85))
+	WriteToFile(username, strings.Repeat("⎯", 85))
 	fmt.Println(Yellow + "[*] Searching HudsonRock's Cybercrime Intelligence Database..." + Reset)
 	go HudsonRock(username, &wg)
 	wg.Wait()
@@ -663,6 +673,7 @@ func main() {
 	if len(os.Args) == 3 {
 		apikey := os.Args[2]
 		fmt.Println(strings.Repeat("⎯", 85))
+		strings.Repeat("⎯", 85)
 		wg.Add(1)
 		go SearchBreachDirectory(username, apikey, &wg)
 		wg.Wait()
@@ -670,12 +681,16 @@ func main() {
 
 	domains := BuildDomains(username)
 	fmt.Println(strings.Repeat("⎯", 85))
+	strings.Repeat("⎯", 85)
 	wg.Add(1)
 	go SearchDomains(username, domains, &wg)
 	wg.Wait()
 
 	elapsed := time.Since(start)
 	fmt.Println(strings.Repeat("⎯", 85))
+	WriteToFile(username, strings.Repeat("⎯", 85))
 	fmt.Println(":: Number of profiles found              : ", count.Load())
 	fmt.Println(":: Total time taken                      : ", elapsed)
+	WriteToFile(username, ":: Number of profiles found              : "+ strconv.Itoa(int(count.Load())))
+	WriteToFile(username, ":: Total time taken                      : "+ elapsed.String())
 }
