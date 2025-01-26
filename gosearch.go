@@ -2,7 +2,6 @@ package main
 
 import (
 	"crypto/tls"
-	"encoding/json"
 	"fmt"
 	"io"
 	"log"
@@ -16,6 +15,7 @@ import (
 
 	"github.com/ibnaleem/gobreach"
 	"github.com/inancgumus/screen"
+	"github.com/bytedance/sonic"
 )
 
 // Color output constants.
