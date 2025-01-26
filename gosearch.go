@@ -122,7 +122,7 @@ func UnmarshalJSON() (Data, error) {
 	}
 
 	var data Data
-	err = json.Unmarshal(jsonData, &data)
+	err = sonic.Unmarshal(jsonData, &data)
 	if err != nil {
 		return Data{}, fmt.Errorf("error unmarshalling JSON: %w", err)
 	}
