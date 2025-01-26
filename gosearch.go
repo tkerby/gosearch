@@ -168,7 +168,7 @@ func HudsonRock(username string, wg *sync.WaitGroup) {
 	}
 
 	var response HudsonRockResponse
-	err = json.Unmarshal(body, &response)
+	err = sonic.Unmarshal(body, &response)
 	if err != nil {
 		fmt.Println("Error parsing JSON in HudsonRock function:", err)
 		return
@@ -409,7 +409,7 @@ func CrackHash(hash string) string {
 	}
 
 	var weakpass WeakpassResponse
-	err = json.Unmarshal(jsonData, &weakpass)
+	err = sonic.Unmarshal(jsonData, &weakpass)
 	if err != nil {
 		fmt.Printf("Error unmarshalling JSON: %v\n", err)
 		return ""
