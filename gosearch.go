@@ -2,7 +2,6 @@ package main
 
 import (
 	"crypto/tls"
-	"encoding/json"
 	"fmt"
 	"io"
 	"log"
@@ -16,6 +15,7 @@ import (
 
 	"github.com/ibnaleem/gobreach"
 	"github.com/inancgumus/screen"
+	"github.com/bytedance/sonic"
 )
 
 // Color output constants.
@@ -122,7 +122,7 @@ func UnmarshalJSON() (Data, error) {
 	}
 
 	var data Data
-	err = json.Unmarshal(jsonData, &data)
+	err = sonic.Unmarshal(jsonData, &data)
 	if err != nil {
 		return Data{}, fmt.Errorf("error unmarshalling JSON: %w", err)
 	}
@@ -168,7 +168,7 @@ func HudsonRock(username string, wg *sync.WaitGroup) {
 	}
 
 	var response HudsonRockResponse
-	err = json.Unmarshal(body, &response)
+	err = sonic.Unmarshal(body, &response)
 	if err != nil {
 		fmt.Println("Error parsing JSON in HudsonRock function:", err)
 		return
@@ -409,7 +409,7 @@ func CrackHash(hash string) string {
 	}
 
 	var weakpass WeakpassResponse
-	err = json.Unmarshal(jsonData, &weakpass)
+	err = sonic.Unmarshal(jsonData, &weakpass)
 	if err != nil {
 		fmt.Printf("Error unmarshalling JSON: %v\n", err)
 		return ""
