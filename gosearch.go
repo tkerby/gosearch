@@ -41,7 +41,7 @@ const ASCII = `
 `
 
 // User-Agent header used in requests.
-const UserAgent = "Mozilla/5.0 (X11; Linux x86_64; rv:125.0) Gecko/20100101 Firefox/125.0"
+var UserAgent = "Mozilla/5.0 (X11; Linux x86_64; rv:125.0) Gecko/20100101 Firefox/125.0"
 
 // GoSearch version.
 const VERSION = "v1.0.0"
