@@ -445,6 +445,10 @@ func MakeRequestWithErrorCode(website Website, url string, username string) {
 		}
 	}
 
+	if website.UserAgent != "" {
+		UserAgent = website.UserAgent
+	}
+
 	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		fmt.Printf("Error creating request in function MakeRequestWithErrorCode: %v\n", err)
@@ -494,6 +498,10 @@ func MakeRequestWithErrorMsg(website Website, url string, username string) {
 		client.CheckRedirect = func(req *http.Request, via []*http.Request) error {
 			return http.ErrUseLastResponse
 		}
+	}
+
+	if website.UserAgent != "" {
+		UserAgent = website.UserAgent
 	}
 
 	req, err := http.NewRequest(http.MethodGet, url, nil)
@@ -557,6 +565,10 @@ func MakeRequestWithProfilePresence(website Website, url string, username string
 		client.CheckRedirect = func(req *http.Request, via []*http.Request) error {
 			return http.ErrUseLastResponse
 		}
+	}
+
+	if website.UserAgent != "" {
+		UserAgent = website.UserAgent
 	}
 
 	req, err := http.NewRequest(http.MethodGet, url, nil)
