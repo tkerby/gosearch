@@ -41,7 +41,7 @@ const ASCII = `
 `
 
 // User-Agent header used in requests.
-const UserAgent = "Mozilla/5.0 (X11; Linux x86_64; rv:125.0) Gecko/20100101 Firefox/125.0"
+var UserAgent = "Mozilla/5.0 (X11; Linux x86_64; rv:125.0) Gecko/20100101 Firefox/125.0"
 
 // GoSearch version.
 const VERSION = "v1.0.0"
@@ -53,6 +53,7 @@ type Website struct {
 	BaseURL         string   `json:"base_url"`
 	URLProbe        string   `json:"url_probe,omitempty"`
 	FollowRedirects bool     `json:"follow_redirects,omitempty"`
+	UserAgent       string   `json:"user_agent,omitempty"`
 	ErrorType       string   `json:"errorType"`
 	ErrorMsg        string   `json:"errorMsg,omitempty"`
 	ErrorCode       int      `json:"errorCode,omitempty"`
@@ -444,6 +445,10 @@ func MakeRequestWithErrorCode(website Website, url string, username string) {
 		}
 	}
 
+	if website.UserAgent != "" {
+		UserAgent = website.UserAgent
+	}
+
 	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		fmt.Printf("Error creating request in function MakeRequestWithErrorCode: %v\n", err)
@@ -493,6 +498,10 @@ func MakeRequestWithErrorMsg(website Website, url string, username string) {
 		client.CheckRedirect = func(req *http.Request, via []*http.Request) error {
 			return http.ErrUseLastResponse
 		}
+	}
+
+	if website.UserAgent != "" {
+		UserAgent = website.UserAgent
 	}
 
 	req, err := http.NewRequest(http.MethodGet, url, nil)
@@ -556,6 +565,10 @@ func MakeRequestWithProfilePresence(website Website, url string, username string
 		client.CheckRedirect = func(req *http.Request, via []*http.Request) error {
 			return http.ErrUseLastResponse
 		}
+	}
+
+	if website.UserAgent != "" {
+		UserAgent = website.UserAgent
 	}
 
 	req, err := http.NewRequest(http.MethodGet, url, nil)
