@@ -8,15 +8,15 @@ import (
 	"net"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 	"sync"
 	"sync/atomic"
 	"time"
-	"strconv"
 
+	"github.com/bytedance/sonic"
 	"github.com/ibnaleem/gobreach"
 	"github.com/inancgumus/screen"
-	"github.com/bytedance/sonic"
 )
 
 // Color output constants.
@@ -41,7 +41,7 @@ const ASCII = `
 `
 
 // User-Agent header used in requests.
-var UserAgent = "Mozilla/5.0 (X11; Linux x86_64; rv:125.0) Gecko/20100101 Firefox/125.0"
+const DefaultUserAgent = "Mozilla/5.0 (X11; Linux x86_64; rv:125.0) Gecko/20100101 Firefox/125.0"
 
 // GoSearch version.
 const VERSION = "v1.0.0"
@@ -314,7 +314,7 @@ func SearchDomains(username string, domains []string, wg *sync.WaitGroup) {
 			fmt.Printf("Error creating request for %s: %v\n", domain, err)
 			continue
 		}
-		req.Header.Set("User-Agent", UserAgent)
+		req.Header.Set("User-Agent", DefaultUserAgent)
 
 		resp, err := client.Do(req)
 		if err != nil {
@@ -334,14 +334,14 @@ func SearchDomains(username string, domains []string, wg *sync.WaitGroup) {
 
 		if resp.StatusCode == http.StatusOK {
 			fmt.Println(Green+"[+] 200 OK:", domain+Reset)
-			WriteToFile(username, "[+] 200 OK: " + domain)
+			WriteToFile(username, "[+] 200 OK: "+domain)
 			domaincount++
 		}
 	}
 
 	if domaincount > 0 {
 		fmt.Println(Green+"[+] Found", domaincount, "domains with the username", username+Reset)
-		WriteToFile(username, "[+] Found "+ strconv.Itoa(domaincount)+" domains with the username: "+username)
+		WriteToFile(username, "[+] Found "+strconv.Itoa(domaincount)+" domains with the username: "+username)
 	} else {
 		fmt.Println(Red+"[-] No domains found with the username", username+Reset)
 		WriteToFile(username, "[-] No domains found with the username: "+username)
@@ -401,7 +401,7 @@ func CrackHash(hash string) string {
 		return ""
 	}
 
-	req.Header.Set("User-Agent", UserAgent)
+	req.Header.Set("User-Agent", DefaultUserAgent)
 	req.Header.Set("accept:", "application/json")
 
 	res, err := client.Do(req)
@@ -445,8 +445,9 @@ func MakeRequestWithErrorCode(website Website, url string, username string) {
 		}
 	}
 
+	userAgent := DefaultUserAgent
 	if website.UserAgent != "" {
-		UserAgent = website.UserAgent
+		userAgent = website.UserAgent
 	}
 
 	req, err := http.NewRequest(http.MethodGet, url, nil)
@@ -455,7 +456,7 @@ func MakeRequestWithErrorCode(website Website, url string, username string) {
 		return
 	}
 
-	req.Header.Set("User-Agent", UserAgent)
+	req.Header.Set("User-Agent", userAgent)
 
 	if website.Cookies != nil {
 		for _, cookie := range website.Cookies {
@@ -500,8 +501,9 @@ func MakeRequestWithErrorMsg(website Website, url string, username string) {
 		}
 	}
 
+	userAgent := DefaultUserAgent
 	if website.UserAgent != "" {
-		UserAgent = website.UserAgent
+		userAgent = website.UserAgent
 	}
 
 	req, err := http.NewRequest(http.MethodGet, url, nil)
@@ -510,7 +512,7 @@ func MakeRequestWithErrorMsg(website Website, url string, username string) {
 		return
 	}
 
-	req.Header.Set("User-Agent", UserAgent)
+	req.Header.Set("User-Agent", userAgent)
 
 	if website.Cookies != nil {
 		for _, cookie := range website.Cookies {
@@ -567,8 +569,9 @@ func MakeRequestWithProfilePresence(website Website, url string, username string
 		}
 	}
 
+	userAgent := DefaultUserAgent
 	if website.UserAgent != "" {
-		UserAgent = website.UserAgent
+		userAgent = website.UserAgent
 	}
 
 	req, err := http.NewRequest(http.MethodGet, url, nil)
@@ -577,7 +580,7 @@ func MakeRequestWithProfilePresence(website Website, url string, username string
 		return
 	}
 
-	req.Header.Set("User-Agent", UserAgent)
+	req.Header.Set("User-Agent", userAgent)
 
 	if website.Cookies != nil {
 		for _, cookie := range website.Cookies {
@@ -704,6 +707,6 @@ func main() {
 	WriteToFile(username, strings.Repeat("⎯", 85))
 	fmt.Println(":: Number of profiles found              : ", count.Load())
 	fmt.Println(":: Total time taken                      : ", elapsed)
-	WriteToFile(username, ":: Number of profiles found              : "+ strconv.Itoa(int(count.Load())))
-	WriteToFile(username, ":: Total time taken                      : "+ elapsed.String())
+	WriteToFile(username, ":: Number of profiles found              : "+strconv.Itoa(int(count.Load())))
+	WriteToFile(username, ":: Total time taken                      : "+elapsed.String())
 }
