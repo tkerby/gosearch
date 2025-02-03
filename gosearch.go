@@ -95,6 +95,11 @@ type WeakpassResponse struct {
 	Pass string `json:"pass"`
 }
 
+type ProxyNova struct {
+	Count int `json:"count"`
+	Lines []ProxyNovaLine `json:"lines"`
+}
+
 func UnmarshalJSON() (Data, error) {
 	// GoSearch relies on data.json to determine the websites to search for.
 	// Instead of forcing users to manually download the data.json file, we will fetch the latest version from the repository.
