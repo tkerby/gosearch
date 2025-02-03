@@ -57,6 +57,7 @@ type Website struct {
 	ErrorType       string   `json:"errorType"`
 	ErrorMsg        string   `json:"errorMsg,omitempty"`
 	ErrorCode       int      `json:"errorCode,omitempty"`
+	ResponseURL     string   `json:"response_url,omitempty"`
 	Cookies         []Cookie `json:"cookies,omitempty"`
 }
 
