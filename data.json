@@ -403,8 +403,8 @@
       "name": "Beacons.ai",
       "base_url": "https://beacons.ai/{}",
       "follow_redirects": true,
-      "errorType": "status_code",
-      "errorCode": 403
+      "errorType": "errorMsg",
+      "errorMsg": "Beacons | Mobile Websites for Creators"
     },
     {
       "name": "Bio.link",
