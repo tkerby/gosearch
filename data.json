@@ -442,7 +442,7 @@
       "errorCode": 404
     },
     {
-      "name": "Steam",
+      "name": "Steam Community (User)",
       "base_url": "https://steamcommunity.com/id/{}",
       "follow_redirects": true,
       "errorType": "errorMsg",
@@ -2067,6 +2067,85 @@
     {
       "name": "Spells8",
       "base_url": "https://forum.spells8.com/u/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Splits.io",
+      "base_url": "https://splits.io/users/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Sporcle",
+      "base_url": "https://www.sporcle.com/user/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Sportlerfrage",
+      "base_url": "https://www.sportlerfrage.net/nutzer/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "SportsRU",
+      "base_url": "https://www.sports.ru/profile/{}/",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Star Citizen",
+      "base_url": "https://robertsspaceindustries.com/citizens/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Steam Community (Group)",
+      "base_url": "https://steamcommunity.com/groups/{}",
+      "follow_redirects": true,
+      "errorType": "errorMsg",
+      "errorMsg": "No group could be retrieved for the given URL"
+    },
+    {
+      "name": "SublimeForum",
+      "base_url": "https://forum.sublimetext.com/u/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "TETR.IO",
+      "base_url": "https://ch.tetr.io/u/{}",
+      "url_probe": "https://ch.tetr.io/api/users/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Tiendanube",
+      "base_url": "https://{}.mitiendanube.com/",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 410
+    },
+    {
+      "name": "Topcoder",
+      "base_url": "https://profiles.topcoder.com/{}/",
+      "url_probe": "https://api.topcoder.com/v5/members/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "TRAKTRAIN",
+      "base_url": "https://traktrain.com/{}",
       "follow_redirects": true,
       "errorType": "status_code",
       "errorCode": 404
