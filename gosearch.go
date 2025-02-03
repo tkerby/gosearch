@@ -97,7 +97,7 @@ type WeakpassResponse struct {
 
 type ProxyNova struct {
 	Count int `json:"count"`
-	Lines []ProxyNovaLine `json:"lines"`
+	Lines []string `json:"lines"`
 }
 
 func UnmarshalJSON() (Data, error) {
@@ -351,6 +351,60 @@ func SearchDomains(username string, domains []string, wg *sync.WaitGroup) {
 	} else {
 		fmt.Println(Red+"[-] No domains found with the username", username+Reset)
 		WriteToFile(username, "[-] No domains found with the username: "+username)
+	}
+}
+
+func SearchProxyNova(username string, wg *sync.WaitGroup) {
+
+	defer wg.Done()
+
+  fmt.Println(Yellow + "[*] Searching " + username + " on ProxyNova for any compromised passwords..." + Reset)
+
+  client := &http.Client{}
+
+  req, err := http.NewRequest(http.MethodGet, "https://api.proxynova.com/comb?query="+username, nil)
+  if err!= nil {
+    fmt.Printf("Error creating request: %v\n", err)
+    return
+  }
+
+  resp, err := client.Do(req)
+  if err!= nil {
+    fmt.Printf("Error sending request: %v\n", err)
+    return
+  }
+  defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println("Error reading response in SearchProxyNova function:", err)
+		return
+	}
+
+	var response ProxyNova
+	err = sonic.Unmarshal(body, &response)
+	if err != nil {
+		fmt.Println("Error parsing JSON in SearchProxyNova function:", err)
+		return
+	}
+
+	if response.Count > 0 {
+		fmt.Printf(Green+"[+] Found %d compromised passwords for %s:\n", response.Count, username+Reset)
+		for _, element := range response.Lines {
+			parts := strings.Split(element, ":")
+	
+			if len(parts) == 2 {
+					email := parts[0]
+					password := parts[1]
+	
+					fmt.Printf(Green + "::    Email: %s\n", email + Reset)
+					fmt.Printf(Green + "::    Password: %s\n\n", password + Reset)
+	
+					WriteToFile(username, "[+] Email: "+email+"\n"+"[+] Password: "+password+"\n\n")
+			}
+		}	
+		} else {
+			fmt.Println(Red+"[-] No compromised passwords found for " + username + "." + Reset)
 	}
 }
 
@@ -772,6 +826,12 @@ func main() {
 		go SearchBreachDirectory(username, apikey, &wg)
 		wg.Wait()
 	}
+
+	wg.Add(1)
+	fmt.Println(strings.Repeat("⎯", 85))
+	WriteToFile(username, strings.Repeat("⎯", 85))
+	go SearchProxyNova(username, &wg)
+	wg.Wait()
 
 	domains := BuildDomains(username)
 	fmt.Println(strings.Repeat("⎯", 85))
