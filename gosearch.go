@@ -705,6 +705,8 @@ func Search(data Data, username string, wg *sync.WaitGroup) {
 				MakeRequestWithErrorMsg(website, url, username)
 			case "profilePresence":
 				MakeRequestWithProfilePresence(website, url, username)
+			case "response_url":
+				MakeRequestWithResponseURL(website, url, username)
 			default:
 				fmt.Println(Yellow+"[?]", website.Name+":", url+Reset)
 				WriteToFile(username, "[?] "+url+"\n")
