@@ -256,7 +256,7 @@ func main() {
 
 		var errorMsg string
 		fmt.Print(Yellow + "[*] Please provide an error message found in the response body for me to check if I can detect it for invalid usernames: " + Reset)
-		fmt.Scan(&errorMsg)
+		fmt.Scanln(&errorMsg)
 		Mode4(url, errorMsg)
 
 	} else {
