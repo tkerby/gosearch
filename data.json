@@ -1951,6 +1951,125 @@
       "follow_redirects": true,
       "errorType": "errorMsg",
       "errorMsg": "{\"error\":\"NO_PROFILE\",\"loggedIn\":\"false\"}"
+    },
+    {
+      "name": "SWAPD",
+      "base_url": "https://swapd.co/u/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Sbazar.cz",
+      "base_url": "https://www.sbazar.cz/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Scratch",
+      "base_url": "https://scratch.mit.edu/users/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Scribd",
+      "base_url": "https://www.scribd.com/{}",
+      "follow_redirects": true,
+      "errorType": "errorMsg",
+      "errorMsg": "Page not found"
+    },
+    {
+      "name": "ShitpostBot5000",
+      "base_url": "https://www.shitpostbot.com/user/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Signal",
+      "base_url": "https://community.signalusers.org/u/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Sketchfab",
+      "base_url": "https://sketchfab.com/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Slack",
+      "base_url": "https://{}.slack.com",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Slant",
+      "base_url": "https://www.slant.co/users/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Slashdot",
+      "base_url": "https://slashdot.org/~{}",
+      "follow_redirects": true,
+      "errorType": "errorMsg",
+      "errorMsg": "user you requested does not exist"
+    },
+    {
+      "name": "SlideShare",
+      "base_url": "https://slideshare.net/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Slides",
+      "base_url": "https://slides.com/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "SmugMug",
+      "base_url": "https://{}.smugmug.com",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Smule",
+      "base_url": "https://www.smule.com/{}",
+      "follow_redirects": true,
+      "errorType": "errorMsg",
+      "errorMsg": "Smule | Page Not Found (404)"
+    },
+    {
+      "name": "SoylentNews",
+      "base_url": "https://soylentnews.org/~{}",
+      "follow_redirects": true,
+      "errorType": "errorMsg",
+      "errorMsg": "The user you requested does not exist, no matter how much you wish this might be the case."
+    },
+    {
+      "name": "Speedrun.com",
+      "base_url": "https://speedrun.com/users/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Spells8",
+      "base_url": "https://forum.spells8.com/u/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
     }
     ]
 }
