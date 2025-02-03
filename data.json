@@ -1837,12 +1837,5 @@
       "errorType": "unknown",
       "errorCode": 403
     },
-    {
-      "name": "PlayStore",
-      "base_url": "https://play.google.com/store/apps/developer?id={}",
-      "follow_redirects": true,
-      "errorType": "status_code",
-      "errorCode": 404
-    }
     ]
 }
