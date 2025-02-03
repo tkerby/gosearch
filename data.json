@@ -1837,5 +1837,120 @@
       "errorType": "unknown",
       "errorCode": 403
     },
+    {
+      "name": "Pokemon Showdown",
+      "base_url": "https://pokemonshowdown.com/users/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Polarsteps",
+      "base_url": "https://polarsteps.com/{}",
+      "url_probe": "https://api.polarsteps.com/users/byusername/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Polymart",
+      "base_url": "https://polymart.org/user/{}",
+      "follow_redirects": true,
+      "errorType": "unknown",
+      "errorCode": 403
+    },
+    {
+      "name": "PromoDJ",
+      "base_url": "http://promodj.com/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Rajce.net",
+      "base_url": "https://{}.rajce.idnes.cz/",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 410
+    },
+    {
+      "name": "Rarible",
+      "base_url": "https://rarible.com/{}",
+      "url_probe": "https://rarible.com/marketplace/api/v4/urls/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Rate Your Music",
+      "base_url": "https://rateyourmusic.com/~{}",
+      "follow_redirects": true,
+      "errorType": "unknown",
+      "errorCode": 403
+    },
+    {
+      "name": "Rclone Forum",
+      "base_url": "https://forum.rclone.org/u/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Redbubble",
+      "base_url": "https://www.redbubble.com/people/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Reisefrage",
+      "base_url": "https://www.reisefrage.net/nutzer/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Replit.com",
+      "base_url": "https://replit.com/@{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "ResearchGate",
+      "base_url": "https://www.researchgate.net/profile/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 403
+    },
+    {
+      "name": "ReverbNation",
+      "base_url": "https://www.reverbnation.com/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "Roblox",
+      "base_url": "https://www.roblox.com/user.aspx?username={}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "RubyGems",
+      "base_url": "https://rubygems.org/profiles/{}",
+      "follow_redirects": true,
+      "errorType": "status_code",
+      "errorCode": 404
+    },
+    {
+      "name": "RuneScape",
+      "base_url": "https://apps.runescape.com/runemetrics/app/overview/player/{}",
+      "url_probe": "https://apps.runescape.com/runemetrics/profile/profile?user={}",
+      "follow_redirects": true,
+      "errorType": "errorMsg",
+      "errorMsg": "{\"error\":\"NO_PROFILE\",\"loggedIn\":\"false\"}"
+    }
     ]
 }
