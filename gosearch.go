@@ -428,6 +428,76 @@ func CrackHash(hash string) string {
 	return weakpass.Pass
 }
 
+func MakeRequestWithResponseURL(website Website, url string, username string) {
+	
+	// Some websites always return a 200 for existing and non-existing profiles.
+	// If we do not follow redirects, we could get a 301 for existing profiles and 302 for non-existing profiles.
+	// That is why we have the follow_redirects in our website struct.
+	// However, sometimes the website returns 301 for existing profiles and non-existing profiles.
+	// This means even if we do not follow redirects, we still get false positives.
+	// To mitigate this, we can examine the response url to check for non-existing profiles.
+	// Usually, a response url pointing to where the profile should be is returned for existing profiles.
+	// If the response url is not pointing to where the profile should be, then the profile does not exist.
+	
+	transport := &http.Transport{
+		TLSClientConfig: &tls.Config{
+			MinVersion: tls.VersionTLS12,
+		},
+	}
+
+	client := &http.Client{
+		Timeout:   85 * time.Second,
+		Transport: transport,
+	}
+
+	if !website.FollowRedirects {
+		client.CheckRedirect = func(req *http.Request, via []*http.Request) error {
+			return http.ErrUseLastResponse
+		}
+	}
+
+	userAgent := DefaultUserAgent
+	if website.UserAgent != "" {
+		userAgent = website.UserAgent
+	}
+
+	req, err := http.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		fmt.Printf("Error creating request in function MakeRequestWithResponseURL: %v\n", err)
+		return
+	}
+
+	req.Header.Set("User-Agent", userAgent)
+
+	if website.Cookies != nil {
+		for _, cookie := range website.Cookies {
+			cookieObj := &http.Cookie{
+				Name:  cookie.Name,
+				Value: cookie.Value,
+			}
+			req.AddCookie(cookieObj)
+		}
+	}
+
+	res, err := client.Do(req)
+	if err != nil {
+		fmt.Printf("Error making GET request to %s: %v\n", url, err)
+		return
+	}
+
+	defer res.Body.Close()
+
+	formattedResponseURL := BuildURL(website.ResponseURL, username)
+
+	if !(res.Request.URL.String() == formattedResponseURL) {
+		url = BuildURL(website.BaseURL, username)
+		fmt.Println(Green+"[+]", website.Name+":", url+Reset)
+		WriteToFile(username, url+"\n")
+		count.Add(1)
+	}
+}
+
+
 func MakeRequestWithErrorCode(website Website, url string, username string) {
 	transport := &http.Transport{
 		TLSClientConfig: &tls.Config{
