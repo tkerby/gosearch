@@ -255,3 +255,5 @@ This project is licensed under the GNU General Public License - see the [LICENSE
 ```
 bc1qjrtyq8m7urapu7cvmvrrs6m7qkh2jpn5wqezfl
 ```
+## Stargazers Over Time
+[![Stargazers over time](https://starchart.cc/ibnaleem/gosearch.svg?variant=adaptive)](https://starchart.cc/ibnaleem/gosearch)
