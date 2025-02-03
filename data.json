@@ -1800,7 +1800,7 @@
       "base_url": "https://packagist.org/packages/{}/",
       "follow_redirects": true,
       "errorType": "response_url",
-      "errorMsg": "https://packagist.org/search/?q={}&reason=vendor_not_found"
+      "response_url": "https://packagist.org/search/?q={}&reason=vendor_not_found"
     },
     {
       "name": "Pastebin",
