@@ -9,6 +9,7 @@ import (
 	"os"
 	"time"
 	"strings"
+	"bufio"
 )
 
 // Color output constants.
@@ -254,10 +255,20 @@ func main() {
 		Mode3(url)
 	} else if mode == "4" {
 
+		scanner := bufio.NewScanner(os.Stdin)
+
 		var errorMsg string
 		fmt.Print(Yellow + "[*] Please provide an error message found in the response body for me to check if I can detect it for invalid usernames: " + Reset)
-		fmt.Scanln(&errorMsg)
-		Mode4(url, errorMsg)
+		
+		if scanner.Scan() {
+			errorMsg = scanner.Text()
+			Mode4(url, errorMsg)
+		}
+
+		if err:= scanner.Err(); err != nil {
+			fmt.Println(Red + "Error reading input: " + err.Error() + Reset)
+			os.Exit(1)
+		}
 
 	} else {
 		fmt.Println(Red + "Invalid mode. Please provide either 0, 1, 2, 3 or 4. Exiting..." + Reset)
