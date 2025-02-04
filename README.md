@@ -14,6 +14,7 @@
 <img src='img/1.png' height=80% width=80%><br>
 <img src='img/2.png' height=80% width=80%><br>
 <img src='img/3.png' height=80% width=80%><br>
+<img src='img/4.png' height=80% width=80%><br>
 </p>
 
 `GoSearch` is an efficient and reliable OSINT tool designed for uncovering digital footprints associated with a given username. It's fast, straightforward, and dependable, enabling users to track an individual's online presence across multiple platforms. `GoSearch` also integrates data from HudsonRock's Cybercrime Intelligence Database to provide insights into cybercrime-related information. It also taps into [`BreachDirectory.org`](https://breachdirectory.org)'s database offering access to a comprehensive list of data breaches, plain-text and hashed passwords linked to the username. This tool is ideal for those needing accurate, no-frills results when investigating online identities.
