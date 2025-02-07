@@ -784,11 +784,13 @@ func DeleteOldFile(username string) {
 func main() {
 
 	var username string
-	var noFalsePositives bool
+	var apikey string
 
 	usernameFlag := flag.String("u", "", "Username to search")
 	usernameFlagLong := flag.String("username", "", "Username to search")
 	noFalsePositivesFlag := flag.Bool("no-false-positives", false, "Do not show false positives")
+	breachDirectoryAPIKey := flag.String("b", "", "Search Breach Directory with an API Key")
+	breachDirectoryAPIKeyLong := flag.String("breach-directory-api-key", "", "Search Breach Directory with an API Key")
 
 	flag.Parse()
 
@@ -799,12 +801,6 @@ func main() {
 	} else {
 		fmt.Println("Usage: gosearch -u <username>\nIssues: https://github.com/ibnaleem/gosearch/issues")
 		os.Exit(1)
-	}
-
-	if *noFalsePositivesFlag {
-		noFalsePositives = true
-	} else {
-		noFalsePositives = false
 	}
 
 	DeleteOldFile(username)
@@ -824,14 +820,14 @@ func main() {
 	fmt.Println(":: Websites                              : ", len(data.Websites))
 	
 	// if the false positive flag is true, then specify that false positives are not shown
-	if noFalsePositives {
+	if *noFalsePositivesFlag {
 		fmt.Println(":: No False Positives                    : ", noFalsePositives)
 	}
 
 	fmt.Println(strings.Repeat("⎯", 85))
 
 	// if the false positive flag is not set, then show a message
-	if !noFalsePositives {
+	if !*noFalsePositivesFlag {
 		fmt.Println("[!] A yellow link indicates that I was unable to verify whether the username exists on the platform.")
 	}
 
@@ -848,8 +844,12 @@ func main() {
 	go HudsonRock(username, &wg)
 	wg.Wait()
 
-	if len(os.Args) == 3 {
-		apikey := os.Args[2]
+	if *breachDirectoryAPIKey != "" || *breachDirectoryAPIKeyLong != "" {
+		if *breachDirectoryAPIKey != "" {
+			apikey = *breachDirectoryAPIKey
+		} else {
+			apikey = *breachDirectoryAPIKeyLong
+		}
 		fmt.Println(strings.Repeat("⎯", 85))
 		strings.Repeat("⎯", 85)
 		wg.Add(1)
