@@ -1,18 +1,19 @@
 package main
 
 import (
-	"crypto/tls"
-	"fmt"
 	"io"
+	"os"
+	"fmt"
 	"log"
 	"net"
-	"net/http"
-	"os"
-	"strconv"
-	"strings"
+	"flag"
 	"sync"
-	"sync/atomic"
 	"time"
+	"strings"
+	"strconv"
+	"net/http"
+	"crypto/tls"
+	"sync/atomic"
 
 	"github.com/bytedance/sonic"
 	"github.com/ibnaleem/gobreach"
@@ -744,7 +745,7 @@ func MakeRequestWithProfilePresence(website Website, url string, username string
 	}
 }
 
-func Search(data Data, username string, wg *sync.WaitGroup) {
+func Search(data Data, username string, noFalsePositives bool, wg *sync.WaitGroup) {
 	for _, website := range data.Websites {
 		go func(website Website) {
 			var url string
@@ -767,9 +768,12 @@ func Search(data Data, username string, wg *sync.WaitGroup) {
 			case "response_url":
 				MakeRequestWithResponseURL(website, url, username)
 			default:
-				fmt.Println(Yellow+"[?]", website.Name+":", url+Reset)
-				WriteToFile(username, "[?] "+url+"\n")
-				count.Add(1)
+				// if false positives are disabled, then we can print false positives
+				if !noFalsePositives {
+					fmt.Println(Yellow+"[?]", website.Name+":", url+Reset)
+					WriteToFile(username, "[?] "+url+"\n")
+					count.Add(1)
+				}
 			}
 		}(website)
 	}
@@ -781,12 +785,31 @@ func DeleteOldFile(username string) {
 }
 
 func main() {
-	if len(os.Args) < 2 {
-		fmt.Println("Usage: gosearch <username>\nIssues: https://github.com/ibnaleem/gosearch/issues")
-		os.Exit(1)
+
+	var username string
+	var apikey string
+
+	usernameFlag := flag.String("u", "", "Username to search")
+	usernameFlagLong := flag.String("username", "", "Username to search")
+	noFalsePositivesFlag := flag.Bool("no-false-positives", false, "Do not show false positives")
+	breachDirectoryAPIKey := flag.String("b", "", "Search Breach Directory with an API Key")
+	breachDirectoryAPIKeyLong := flag.String("breach-directory", "", "Search Breach Directory with an API Key")
+
+	flag.Parse()
+
+	if *usernameFlag != "" {
+		username = *usernameFlag
+	} else if *usernameFlagLong != "" {
+		username = *usernameFlagLong
+	} else {
+		if len(os.Args) > 1 {
+			username = os.Args[1]
+		} else {
+			fmt.Println("Usage: gosearch -u <username>\nIssues: https://github.com/ibnaleem/gosearch/issues")
+			os.Exit(1)
+		}
 	}
 
-	var username = os.Args[1]
 	DeleteOldFile(username)
 	var wg sync.WaitGroup
 
@@ -802,13 +825,23 @@ func main() {
 	fmt.Println(strings.Repeat("⎯", 85))
 	fmt.Println(":: Username                              : ", username)
 	fmt.Println(":: Websites                              : ", len(data.Websites))
+	
+	// if the false positive flag is true, then specify that false positives are not shown
+	if *noFalsePositivesFlag {
+		fmt.Println(":: No False Positives                    : ", *noFalsePositivesFlag)
+	}
+
 	fmt.Println(strings.Repeat("⎯", 85))
-	fmt.Println("[!] A yellow link indicates that I was unable to verify whether the username exists on the platform.")
+
+	// if the false positive flag is not set, then show a message
+	if !*noFalsePositivesFlag {
+		fmt.Println("[!] A yellow link indicates that I was unable to verify whether the username exists on the platform.")
+	}
 
 	start := time.Now()
 
 	wg.Add(len(data.Websites))
-	go Search(data, username, &wg)
+	go Search(data, username, *noFalsePositivesFlag, &wg)
 	wg.Wait()
 
 	wg.Add(1)
@@ -818,8 +851,12 @@ func main() {
 	go HudsonRock(username, &wg)
 	wg.Wait()
 
-	if len(os.Args) == 3 {
-		apikey := os.Args[2]
+	if *breachDirectoryAPIKey != "" || *breachDirectoryAPIKeyLong != "" {
+		if *breachDirectoryAPIKey != "" {
+			apikey = *breachDirectoryAPIKey
+		} else {
+			apikey = *breachDirectoryAPIKeyLong
+		}
 		fmt.Println(strings.Repeat("⎯", 85))
 		strings.Repeat("⎯", 85)
 		wg.Add(1)
