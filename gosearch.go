@@ -793,7 +793,7 @@ func main() {
 	usernameFlagLong := flag.String("username", "", "Username to search")
 	noFalsePositivesFlag := flag.Bool("no-false-positives", false, "Do not show false positives")
 	breachDirectoryAPIKey := flag.String("b", "", "Search Breach Directory with an API Key")
-	breachDirectoryAPIKeyLong := flag.String("breach-directory-api-key", "", "Search Breach Directory with an API Key")
+	breachDirectoryAPIKeyLong := flag.String("breach-directory", "", "Search Breach Directory with an API Key")
 
 	flag.Parse()
 
