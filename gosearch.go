@@ -821,7 +821,7 @@ func main() {
 	
 	// if the false positive flag is true, then specify that false positives are not shown
 	if *noFalsePositivesFlag {
-		fmt.Println(":: No False Positives                    : ", noFalsePositives)
+		fmt.Println(":: No False Positives                    : ", *noFalsePositivesFlag)
 	}
 
 	fmt.Println(strings.Repeat("⎯", 85))
