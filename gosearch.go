@@ -1,18 +1,18 @@
 package main
 
 import (
-	"crypto/tls"
-	"fmt"
 	"io"
+	"os"
+	"fmt"
 	"log"
 	"net"
-	"net/http"
-	"os"
-	"strconv"
-	"strings"
 	"sync"
-	"sync/atomic"
 	"time"
+	"strings"
+	"strconv"
+	"net/http"
+	"crypto/tls"
+	"sync/atomic"
 
 	"github.com/bytedance/sonic"
 	"github.com/ibnaleem/gobreach"
