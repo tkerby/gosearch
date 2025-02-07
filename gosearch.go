@@ -799,8 +799,12 @@ func main() {
 	} else if *usernameFlagLong != "" {
 		username = *usernameFlagLong
 	} else {
-		fmt.Println("Usage: gosearch -u <username>\nIssues: https://github.com/ibnaleem/gosearch/issues")
-		os.Exit(1)
+		if len(os.Args) > 1 {
+			username = os.Args[1]
+		} else {
+			fmt.Println("Usage: gosearch -u <username>\nIssues: https://github.com/ibnaleem/gosearch/issues")
+			os.Exit(1)
+		}
 	}
 
 	DeleteOldFile(username)
