@@ -745,7 +745,7 @@ func MakeRequestWithProfilePresence(website Website, url string, username string
 	}
 }
 
-func Search(data Data, username string, wg *sync.WaitGroup) {
+func Search(data Data, username string, noFalsePositives bool, wg *sync.WaitGroup) {
 	for _, website := range data.Websites {
 		go func(website Website) {
 			var url string
@@ -768,9 +768,12 @@ func Search(data Data, username string, wg *sync.WaitGroup) {
 			case "response_url":
 				MakeRequestWithResponseURL(website, url, username)
 			default:
-				fmt.Println(Yellow+"[?]", website.Name+":", url+Reset)
-				WriteToFile(username, "[?] "+url+"\n")
-				count.Add(1)
+				// if false positives are disabled, then we can print false positives
+				if !noFalsePositives {
+					fmt.Println(Yellow+"[?]", website.Name+":", url+Reset)
+					WriteToFile(username, "[?] "+url+"\n")
+					count.Add(1)
+				}
 			}
 		}(website)
 	}
@@ -838,7 +841,7 @@ func main() {
 	start := time.Now()
 
 	wg.Add(len(data.Websites))
-	go Search(data, username, &wg)
+	go Search(data, username, *noFalsePositivesFlag, &wg)
 	wg.Wait()
 
 	wg.Add(1)
