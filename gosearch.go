@@ -558,6 +558,10 @@ func MakeRequestWithResponseURL(website Website, url string, username string) {
 
 	defer res.Body.Close()
 
+	if res.StatusCode == 502 {
+		return
+	}
+
 	formattedResponseURL := BuildURL(website.ResponseURL, username)
 
 	if !(res.Request.URL.String() == formattedResponseURL) {
@@ -615,6 +619,11 @@ func MakeRequestWithErrorCode(website Website, url string, username string) {
 	}
 	defer res.Body.Close()
 
+	if res.StatusCode == 502 {
+		return
+	}
+
+
 	if res.StatusCode != website.ErrorCode {
 		url = BuildURL(website.BaseURL, username)
 		fmt.Println(Green+"[+]", website.Name+":", url+Reset)
@@ -668,6 +677,10 @@ func MakeRequestWithErrorMsg(website Website, url string, username string) {
 		return
 	}
 	defer res.Body.Close()
+
+	if res.StatusCode == 502 {
+		return
+	}
 
 	body, err := io.ReadAll(res.Body)
 	if err != nil {
@@ -734,6 +747,10 @@ func MakeRequestWithProfilePresence(website Website, url string, username string
 		return
 	}
 	defer res.Body.Close()
+
+	if res.StatusCode == 502 {
+		return
+	}
 
 	body, err := io.ReadAll(res.Body)
 	if err != nil {
