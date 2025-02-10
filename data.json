@@ -3,6 +3,7 @@
     {
       "name": "Instagram",
       "base_url": "https://instagram.com/{}",
+      "url_probe": "https://imginn.com/{}",
       "follow_redirects": false,
       "errorType": "status_code",
       "errorCode": 200
