@@ -47,6 +47,19 @@ const DefaultUserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:135.0) Ge
 // GoSearch version.
 const VERSION = "v1.0.0"
 
+var tlsConfig = &tls.Config{
+	MinVersion: tls.VersionTLS12,
+	CipherSuites: []uint16{
+			tls.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
+			tls.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
+			tls.TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,
+			tls.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
+			tls.TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256,
+			tls.TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256,
+	},
+	CurvePreferences:         []tls.CurveID{tls.X25519, tls.CurveP256, tls.CurveP384},
+}
+
 var count atomic.Uint32
 
 type Website struct {
@@ -500,9 +513,7 @@ func MakeRequestWithResponseURL(website Website, url string, username string) {
 	// If the response url is not pointing to where the profile should be, then the profile does not exist.
 	
 	transport := &http.Transport{
-		TLSClientConfig: &tls.Config{
-			MinVersion: tls.VersionTLS12,
-		},
+		TLSClientConfig: tlsConfig,
 	}
 
 	client := &http.Client{
@@ -560,9 +571,7 @@ func MakeRequestWithResponseURL(website Website, url string, username string) {
 
 func MakeRequestWithErrorCode(website Website, url string, username string) {
 	transport := &http.Transport{
-		TLSClientConfig: &tls.Config{
-			MinVersion: tls.VersionTLS12,
-		},
+		TLSClientConfig: tlsConfig,
 	}
 
 	client := &http.Client{
@@ -616,9 +625,7 @@ func MakeRequestWithErrorCode(website Website, url string, username string) {
 
 func MakeRequestWithErrorMsg(website Website, url string, username string) {
 	transport := &http.Transport{
-		TLSClientConfig: &tls.Config{
-			MinVersion: tls.VersionTLS12,
-		},
+		TLSClientConfig: tlsConfig,
 	}
 
 	client := &http.Client{
@@ -684,9 +691,7 @@ func MakeRequestWithProfilePresence(website Website, url string, username string
 	// If a profile indicator is not found, we can assume that the profile does not exist.
 
 	transport := &http.Transport{
-		TLSClientConfig: &tls.Config{
-			MinVersion: tls.VersionTLS12,
-		},
+		TLSClientConfig: tlsConfig,
 	}
 
 	client := &http.Client{
