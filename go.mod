@@ -1,6 +1,6 @@
 module github.com/ibnaleem/gosearch
 
-go 1.23.4
+go 1.23.6
 
 require (
 	github.com/bytedance/sonic v1.12.8
