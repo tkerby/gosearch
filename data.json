@@ -6,7 +6,7 @@
       "url_probe": "https://imginn.com/{}",
       "follow_redirects": false,
       "errorType": "status_code",
-      "errorCode": 200
+      "errorCode": 404
     },
     {
       "name": "Twitter/X",
