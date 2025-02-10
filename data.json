@@ -1495,8 +1495,8 @@
       "name": "Jimdo",
       "base_url": "https://{}.jimdosite.com",
       "follow_redirects": true,
-      "errorType": "status_code",
-      "errorCode": 404
+      "errorType": "errorMsg",
+      "errorMsg": "Not Found"
     },
     {
       "name": "Joplin Forum",
