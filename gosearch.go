@@ -558,7 +558,7 @@ func MakeRequestWithResponseURL(website Website, url string, username string) {
 
 	defer res.Body.Close()
 
-	if res.StatusCode == 502 {
+	if res.StatusCode == 502 || res.StatusCode == 404 {
 		return
 	}
 
@@ -619,7 +619,7 @@ func MakeRequestWithErrorCode(website Website, url string, username string) {
 	}
 	defer res.Body.Close()
 
-	if res.StatusCode == 502 {
+	if res.StatusCode == 502 || res.StatusCode == 404 {
 		return
 	}
 
@@ -678,7 +678,7 @@ func MakeRequestWithErrorMsg(website Website, url string, username string) {
 	}
 	defer res.Body.Close()
 
-	if res.StatusCode == 502 {
+	if res.StatusCode == 502 || res.StatusCode == 404 {
 		return
 	}
 
@@ -748,7 +748,7 @@ func MakeRequestWithProfilePresence(website Website, url string, username string
 	}
 	defer res.Body.Close()
 
-	if res.StatusCode == 502 {
+	if res.StatusCode == 502 || res.StatusCode == 404 {
 		return
 	}
 
