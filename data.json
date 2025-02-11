@@ -1623,7 +1623,7 @@
       "base_url": "https://api.mojang.com/users/profiles/minecraft/{}",
       "follow_redirects": true,
       "errorType": "status_code",
-      "errorCode": 204
+      "errorCode": 404
     },
     {
       "name": "MixCloud",
