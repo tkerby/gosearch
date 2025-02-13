@@ -310,9 +310,9 @@ func main() {
 			}
 	
 			fmt.Println(Green + "Number of websites I can search: " + strconv.Itoa(len(data.Websites)) + Reset)
+		} else {
+			fmt.Println(Red + "Mode not provided. Please provide either 0, 1, 2, or 3. Exiting..." + Reset)
 		}
-		
-		fmt.Println(Red + "Mode not provided. Please provide either 0, 1, 2, or 3. Exiting..." + Reset)
 		os.Exit(1)
 	} else if len(os.Args) > 3 {
 		fmt.Println(Red + "Usage: gosearch <url> <mode>\nIssues: https://github.com/ibnaleem/gosearch/issues" + Reset)
