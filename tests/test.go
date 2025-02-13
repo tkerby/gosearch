@@ -7,10 +7,11 @@ import (
 	"log"
 	"time"
 	"bufio"
+	"strconv"
 	"strings"
 	"net/http"
 	"crypto/tls"
-	
+
 	"github.com/bytedance/sonic"
 )
 
@@ -335,8 +336,14 @@ func main() {
 		}
 
 	} else if mode == "count" {
-
+		data, err := UnmarshalJSON()
+		if err != nil {
+			fmt.Printf("Error unmarshalling json: %v\n", err)
+			os.Exit(1)
+		}
 	
+		fmt.Println(Green + "Number of websites I can search: " + strconv.Itoa(len(data.Websites)) + Reset)
+
 	} else {
 		fmt.Println(Red + "Invalid mode. Please provide either 0, 1, 2, 3 or 4. Exiting..." + Reset)
 		os.Exit(1)
