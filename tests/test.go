@@ -300,6 +300,18 @@ func main() {
 		fmt.Println(Yellow + "count: Number of websites I can search" + Reset)		
 		os.Exit(1)
 	} else if len(os.Args) == 2 {
+		mode := os.Args[1]
+		
+		if mode == "count" {
+			data, err := UnmarshalJSON()
+			if err != nil {
+				fmt.Printf("Error unmarshalling json: %v\n", err)
+				os.Exit(1)
+			}
+	
+			fmt.Println(Green + "Number of websites I can search: " + strconv.Itoa(len(data.Websites)) + Reset)
+		}
+		
 		fmt.Println(Red + "Mode not provided. Please provide either 0, 1, 2, or 3. Exiting..." + Reset)
 		os.Exit(1)
 	} else if len(os.Args) > 3 {
@@ -334,15 +346,6 @@ func main() {
 			fmt.Println(Red + "Error reading input: " + err.Error() + Reset)
 			os.Exit(1)
 		}
-
-	} else if mode == "count" {
-		data, err := UnmarshalJSON()
-		if err != nil {
-			fmt.Printf("Error unmarshalling json: %v\n", err)
-			os.Exit(1)
-		}
-	
-		fmt.Println(Green + "Number of websites I can search: " + strconv.Itoa(len(data.Websites)) + Reset)
 
 	} else {
 		fmt.Println(Red + "Invalid mode. Please provide either 0, 1, 2, 3 or 4. Exiting..." + Reset)
