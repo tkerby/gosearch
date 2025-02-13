@@ -1,15 +1,15 @@
 package main
 
 import (
-	"crypto/tls"
-	"fmt"
 	"io"
-	"log"
-	"net/http"
 	"os"
+	"fmt"
+	"log"
 	"time"
-	"strings"
 	"bufio"
+	"strings"
+	"net/http"
+	"crypto/tls"
 )
 
 // Color output constants.
