@@ -10,6 +10,8 @@ import (
 	"strings"
 	"net/http"
 	"crypto/tls"
+	
+	"github.com/bytedance/sonic"
 )
 
 // Color output constants.
@@ -43,6 +45,44 @@ type Data struct {
 type Cookie struct {
 	Name  string `json:"name"`
 	Value string `json:"value"`
+}
+
+func UnmarshalJSON() (Data, error) {
+	// GoSearch relies on data.json to determine the websites to search for.
+	// Instead of forcing users to manually download the data.json file, we will fetch the latest version from the repository.
+	// Therefore, we will do the following:
+	// 1. Delete the existing data.json file if it exists as it will be outdated in the future
+	// 2. Read the latest data.json file from the repository
+	// Bonus: it does not download the data.json file, it just reads it from the repository.
+
+	err := os.Remove("data.json")
+	if err != nil && !os.IsNotExist(err) {
+		return Data{}, fmt.Errorf("error deleting old data.json: %w", err)
+	}
+
+	url := "https://raw.githubusercontent.com/ibnaleem/gosearch/refs/heads/main/data.json"
+	resp, err := http.Get(url)
+	if err != nil {
+		return Data{}, fmt.Errorf("error downloading data.json: %w", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return Data{}, fmt.Errorf("failed to download data.json, status code: %d", resp.StatusCode)
+	}
+
+	jsonData, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return Data{}, fmt.Errorf("error reading downloaded content: %w", err)
+	}
+
+	var data Data
+	err = sonic.Unmarshal(jsonData, &data)
+	if err != nil {
+		return Data{}, fmt.Errorf("error unmarshalling JSON: %w", err)
+	}
+
+	return data, nil
 }
 
 func Mode0(url string) {
