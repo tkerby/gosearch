@@ -517,7 +517,7 @@ func MakeRequestWithResponseURL(website Website, url string, username string) {
 	}
 
 	client := &http.Client{
-		Timeout:   85 * time.Second,
+		Timeout:   120 * time.Second,
 		Transport: transport,
 	}
 
@@ -579,7 +579,7 @@ func MakeRequestWithErrorCode(website Website, url string, username string) {
 	}
 
 	client := &http.Client{
-		Timeout:   85 * time.Second,
+		Timeout:   120 * time.Second,
 		Transport: transport,
 	}
 
@@ -638,7 +638,7 @@ func MakeRequestWithErrorMsg(website Website, url string, username string) {
 	}
 
 	client := &http.Client{
-		Timeout:   85 * time.Second,
+		Timeout:   120 * time.Second,
 		Transport: transport,
 	}
 
@@ -708,7 +708,7 @@ func MakeRequestWithProfilePresence(website Website, url string, username string
 	}
 
 	client := &http.Client{
-		Timeout:   85 * time.Second,
+		Timeout:   120 * time.Second,
 		Transport: transport,
 	}
 
