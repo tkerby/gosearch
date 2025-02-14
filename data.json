@@ -1495,14 +1495,14 @@
       "name": "NationStates Nation",
       "base_url": "https://nationstates.net/nation={}",
       "follow_redirects": true,
-      "errorType": "errorMsg",
+      "errorType": "unknown",
       "errorMsg": "<title>NationStates | Not Found</title>"
     },
     {
       "name": "NationStates Region",
       "base_url": "https://nationstates.net/region={}",
       "follow_redirects": true,
-      "errorType": "errorMsg",
+      "errorType": "unknown",
       "errorMsg": "<title>NationStates | Not Found</title>"
     },
     {
