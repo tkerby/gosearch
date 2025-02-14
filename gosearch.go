@@ -66,7 +66,7 @@ type Website struct {
 	Name            string   `json:"name"`
 	BaseURL         string   `json:"base_url"`
 	URLProbe        string   `json:"url_probe,omitempty"`
-	FollowRedirects bool     `json:"follow_redirects,omitempty"`
+	FollowRedirects bool     `json:"follow_redirects"`
 	UserAgent       string   `json:"user_agent,omitempty"`
 	ErrorType       string   `json:"errorType"`
 	ErrorMsg        string   `json:"errorMsg,omitempty"`
@@ -558,7 +558,7 @@ func MakeRequestWithResponseURL(website Website, url string, username string) {
 
 	defer res.Body.Close()
 
-	if res.StatusCode == 502 || res.StatusCode == 404 {
+	if res.StatusCode >= 400 {
 		return
 	}
 
@@ -619,7 +619,7 @@ func MakeRequestWithErrorCode(website Website, url string, username string) {
 	}
 	defer res.Body.Close()
 
-	if res.StatusCode == 502 || res.StatusCode == 404 {
+	if res.StatusCode >= 400 {
 		return
 	}
 
@@ -678,7 +678,7 @@ func MakeRequestWithErrorMsg(website Website, url string, username string) {
 	}
 	defer res.Body.Close()
 
-	if res.StatusCode == 502 || res.StatusCode == 404 {
+	if res.StatusCode >= 400 {
 		return
 	}
 
@@ -748,7 +748,7 @@ func MakeRequestWithProfilePresence(website Website, url string, username string
 	}
 	defer res.Body.Close()
 
-	if res.StatusCode == 502 || res.StatusCode == 404 {
+	if res.StatusCode >= 400 {
 		return
 	}
 
