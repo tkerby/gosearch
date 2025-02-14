@@ -1,15 +1,18 @@
 package main
 
 import (
-	"crypto/tls"
-	"fmt"
 	"io"
-	"log"
-	"net/http"
 	"os"
+	"fmt"
+	"log"
 	"time"
-	"strings"
 	"bufio"
+	"strconv"
+	"strings"
+	"net/http"
+	"crypto/tls"
+
+	"github.com/bytedance/sonic"
 )
 
 // Color output constants.
@@ -22,6 +25,66 @@ const (
 
 // User-Agent header used in requests.
 const UserAgent = "Mozilla/5.0 (X11; Linux x86_64; rv:125.0) Gecko/20100101 Firefox/125.0"
+
+type Website struct {
+	Name            string   `json:"name"`
+	BaseURL         string   `json:"base_url"`
+	URLProbe        string   `json:"url_probe,omitempty"`
+	FollowRedirects bool     `json:"follow_redirects,omitempty"`
+	UserAgent       string   `json:"user_agent,omitempty"`
+	ErrorType       string   `json:"errorType"`
+	ErrorMsg        string   `json:"errorMsg,omitempty"`
+	ErrorCode       int      `json:"errorCode,omitempty"`
+	ResponseURL     string   `json:"response_url,omitempty"`
+	Cookies         []Cookie `json:"cookies,omitempty"`
+}
+
+type Data struct {
+	Websites []Website `json:"websites"`
+}
+
+type Cookie struct {
+	Name  string `json:"name"`
+	Value string `json:"value"`
+}
+
+func UnmarshalJSON() (Data, error) {
+	// GoSearch relies on data.json to determine the websites to search for.
+	// Instead of forcing users to manually download the data.json file, we will fetch the latest version from the repository.
+	// Therefore, we will do the following:
+	// 1. Delete the existing data.json file if it exists as it will be outdated in the future
+	// 2. Read the latest data.json file from the repository
+	// Bonus: it does not download the data.json file, it just reads it from the repository.
+
+	err := os.Remove("data.json")
+	if err != nil && !os.IsNotExist(err) {
+		return Data{}, fmt.Errorf("error deleting old data.json: %w", err)
+	}
+
+	url := "https://raw.githubusercontent.com/ibnaleem/gosearch/refs/heads/main/data.json"
+	resp, err := http.Get(url)
+	if err != nil {
+		return Data{}, fmt.Errorf("error downloading data.json: %w", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return Data{}, fmt.Errorf("failed to download data.json, status code: %d", resp.StatusCode)
+	}
+
+	jsonData, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return Data{}, fmt.Errorf("error reading downloaded content: %w", err)
+	}
+
+	var data Data
+	err = sonic.Unmarshal(jsonData, &data)
+	if err != nil {
+		return Data{}, fmt.Errorf("error unmarshalling JSON: %w", err)
+	}
+
+	return data, nil
+}
 
 func Mode0(url string) {
 	fmt.Println(Yellow+"[*] Testing URL:", url+Reset)
@@ -224,6 +287,7 @@ func Mode4(url string, errorMsg string) {
 	}
 
 func main() {
+
 	if len(os.Args) == 1 {
 		fmt.Println(Yellow + "Welcome to GoSearch's testing binary." + Reset)
 		fmt.Println(Yellow + "First, find a url containing a username." + Red + "Eg. https://instagram.com/zuck" + Reset)
@@ -232,10 +296,23 @@ func main() {
 		fmt.Println(Yellow + "1: Response Body - Manually check if the response body contains any errors for invalid usernames (e.g 'username not found')")
 		fmt.Println(Yellow + "2: Status Code (No Redirects) - Manually check if a website throws any status code errors for invalid usernames without following redirects")
 		fmt.Println(Yellow + "3: Response Body (No Redirects) - Manually check if the response body contains any errors for invalid usernames (e.g 'username not found') without following redirects")
-		fmt.Println(Yellow + "4: Error Message Detection - Actively test for and attempt to find any specific error messages in the response body for invalid usernames (e.g. 'user not found' or similar).")		
+		fmt.Println(Yellow + "4: Error Message Detection - Actively test for and attempt to find any specific error messages in the response body for invalid usernames (e.g. 'user not found' or similar).")
+		fmt.Println(Yellow + "count: Number of websites I can search" + Reset)		
 		os.Exit(1)
 	} else if len(os.Args) == 2 {
-		fmt.Println(Red + "Mode not provided. Please provide either 0, 1, 2, or 3. Exiting..." + Reset)
+		mode := os.Args[1]
+		
+		if mode == "count" {
+			data, err := UnmarshalJSON()
+			if err != nil {
+				fmt.Printf("Error unmarshalling json: %v\n", err)
+				os.Exit(1)
+			}
+	
+			fmt.Println(Green + "Number of websites I can search: " + strconv.Itoa(len(data.Websites)) + Reset)
+		} else {
+			fmt.Println(Red + "Mode not provided. Please provide either 0, 1, 2, or 3. Exiting..." + Reset)
+		}
 		os.Exit(1)
 	} else if len(os.Args) > 3 {
 		fmt.Println(Red + "Usage: gosearch <url> <mode>\nIssues: https://github.com/ibnaleem/gosearch/issues" + Reset)

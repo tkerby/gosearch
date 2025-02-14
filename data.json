@@ -1905,6 +1905,13 @@
       "base_url": "https://traktrain.com/{}",
       "follow_redirects": true,
       "errorType": "status_code"
+    },
+    {
+      "name": "Monzo Bank",
+      "base_url": "https://monzo.me/{}",
+      "follow_redirects": true,
+      "errorType": "errorMsg",
+      "errorMsg": "<title>Monzo.me – Send money instantly through a link</title>"
     }
     ]
 }
