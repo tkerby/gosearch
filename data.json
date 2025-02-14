@@ -528,7 +528,7 @@
         "name": "sourcehut",
         "base_url": "https://sr.ht/~{}/",
         "follow_redirects": true,
-        "errorType": "status_code",
+        "errorType": "status_code"
     },
     {
       "name": "Disqus",
