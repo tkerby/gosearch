@@ -66,7 +66,7 @@ type Website struct {
 	Name            string   `json:"name"`
 	BaseURL         string   `json:"base_url"`
 	URLProbe        string   `json:"url_probe,omitempty"`
-	FollowRedirects bool     `json:"follow_redirects,omitempty"`
+	FollowRedirects bool     `json:"follow_redirects"`
 	UserAgent       string   `json:"user_agent,omitempty"`
 	ErrorType       string   `json:"errorType"`
 	ErrorMsg        string   `json:"errorMsg,omitempty"`
