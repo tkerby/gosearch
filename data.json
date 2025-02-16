@@ -5,7 +5,8 @@
       "base_url": "https://instagram.com/{}",
       "url_probe": "https://imginn.com/{}",
       "follow_redirects": true,
-      "errorType": "status_code"
+      "errorType": "errorMsg",
+      "errorMsg":"<title>Page Not Found - imginn.com</title>"
     },
     {
       "name": "Twitter/X",
