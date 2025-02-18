@@ -17,7 +17,7 @@
 <img src='img/4.png' height=80% width=80%><br>
 </p>
 
-`GoSearch` is an efficient and reliable OSINT tool designed for uncovering digital footprints associated with a given username. It's fast, straightforward, and dependable, enabling users to track an individual's online presence across multiple platforms. `GoSearch` also integrates data from HudsonRock's Cybercrime Intelligence Database to provide insights into cybercrime-related information. It also taps into [`BreachDirectory.org`](https://breachdirectory.org)'s database offering access to a comprehensive list of data breaches, plain-text and hashed passwords linked to the username. This tool is ideal for those needing accurate, no-frills results when investigating online identities.
+`GoSearch` is an efficient and reliable OSINT tool designed for uncovering digital footprints associated with a given username. It's fast, straightforward, and dependable, enabling users to track an individual's online presence across multiple platforms. `GoSearch` also integrates data from HudsonRock's Cybercrime Intelligence Database to provide insights into cybercrime-related information. It also taps into [`BreachDirectory.org`](https://breachdirectory.org)'s and [ProxyNova's](https://www.proxynova.com/tools/comb/) database offering access to a comprehensive list of data breaches, plain-text and hashed passwords linked to the username. This tool is ideal for those needing accurate, no-frills results when investigating online identities.
 
 ## Installation & Usage
 ```
@@ -32,14 +32,17 @@ $ gosearch [username]
 C:\Users\Bob> gosearch.exe [username]
 ```
 ## Use Cases
-GoSearch allows you to search [BreachDirectory](https://breachdirectory.org) for compromised passwords associated with a specific username. To fully utilise GoSearch, follow these steps:
+Ideally, it is best practice to run GoSearch with the `--no-false-positives` flag:
+```
+$ gosearch -u [USERNAME] --no-false-positives
+```
+This will display profiles GoSearch is confident exist on a platform. GoSearch also allows you to search [BreachDirectory](https://breachdirectory.org) for compromised passwords associated with a specific username. For this, you must [obtain an API key](https://rapidapi.com/rohan-patra/api/breachdirectory) and provide it with the `-b` flag:
+```
+$ gosearch -u [USERNAME] -b [API-KEY] --no-false-positives
+```
+If GoSearch finds password hashes, it will attempt to crack them using [Weakpass](https://weakpass.com). The success rate is nearly 100%, as Weakpass uses a large wordlist of common data-wells, which align with the breaches reported by [BreachDirectory](https://breachdirectory.org). Every single password hash that's been found in [BreachDirectory](https://breachdirectory.org) has been cracked by [Weakpass](https://weakpass.com). 
 
-1. Obtain a **free** API key from `https://rapidapi.com/rohan-patra/api/breachdirectory`.
-2. Include the API key in the command arguments like this:
-```
-$ gosearch [username] [api-key]
-```
-If GoSearch finds password hashes, it will attempt to crack them using [Weakpass](https://weakpass.com). The success rate is nearly 100%, as Weakpass uses a large wordlist of common data-wells, which align with the breaches reported by [BreachDirectory](https://breachdirectory.org). Every single password hash that's been found in [BreachDirectory](https://breachdirectory.org) has been cracked by [Weakpass](https://weakpass.com).
+If you're not using BreachDirectory, GoSearch will search for breaches on HudsonRock's Cybercrime Intelligence & ProxyNova's Databases, respectively. It will also search common TLDs for any domains associated with a given username. This is done whether BreachDirectory is searched or not.
 
 ## I Don't Have a Username
 If you're uncertain about a person's username, you could try generating some by using [urbanadventurer/username-anarchy](https://github.com/urbanadventurer/username-anarchy). Note that `username-anarchy` can only be run in Unix terminals (Mac/Linux)
@@ -55,6 +58,9 @@ $ (username-anarchy) ./username-anarchy firstname lastname
 2. Sherlock is outdated and lacks updates.
 3. Sherlock sometimes reports false positives as valid results.
 4. Sherlock frequently misses actual usernames, leading to false negatives.
+5. Sherlock does not search HudsonRock's Cybercrime Intelligence database
+6. Sherlock does not search ProxyNova's database
+7. Sherlock does not search BreachDirectory's database
 
 The primary issue with Sherlock is false negatives—when a username exists on a platform but is not detected. The secondary issue is false positives, where a username is incorrectly flagged as available. `GoSearch` tackles these problems by colour-coding uncertain results as yellow which indicates potential false positives. This allows users to easily filter out irrelevant links. If there's enough demand, we might implement an option to report only confirmed results or focus solely on detecting false negatives.
 
