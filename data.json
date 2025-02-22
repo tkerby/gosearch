@@ -1913,6 +1913,12 @@
       "follow_redirects": true,
       "errorType": "errorMsg",
       "errorMsg": "<title>Monzo.me – Send money instantly through a link</title>"
-    }
+    },
+    {
+      "name": "Modrinth",
+      "base_url": "https://modrinth.com/user/{}",
+      "follow_redirects": true,
+      "errorType": "status_code"
+    },
     ]
 }
