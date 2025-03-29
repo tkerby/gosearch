@@ -20,6 +20,8 @@
 `GoSearch` is an efficient and reliable OSINT tool designed for uncovering digital footprints associated with a given username. It's fast, straightforward, and dependable, enabling users to track an individual's online presence across multiple platforms. `GoSearch` also integrates data from HudsonRock's Cybercrime Intelligence Database to provide insights into cybercrime-related information. It also taps into [`BreachDirectory.org`](https://breachdirectory.org)'s and [ProxyNova's](https://www.proxynova.com/tools/comb/) database offering access to a comprehensive list of data breaches, plain-text and hashed passwords linked to the username. This tool is ideal for those needing accurate, no-frills results when investigating online identities.
 
 ## Installation & Usage
+> [!WARNING]  
+> If you are on 32-bit architecture, please [use this branch](https://github.com/ibnaleem/gosearch/tree/32-bit) or GoSearch will fail to build. For an in-depth overview of this issue, please see [#72](https://github.com/ibnaleem/gosearch/issues/72)
 ```
 $ go install github.com/ibnaleem/gosearch@latest
 ```
