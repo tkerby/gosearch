@@ -552,7 +552,6 @@ func MakeRequestWithResponseURL(website Website, url string, username string) {
 
 	res, err := client.Do(req)
 	if err != nil {
-		fmt.Printf("Error making GET request to %s: %v\n", url, err)
 		return
 	}
 
@@ -614,7 +613,6 @@ func MakeRequestWithErrorCode(website Website, url string, username string) {
 
 	res, err := client.Do(req)
 	if err != nil {
-		fmt.Printf("Error making GET request to %s: %v\n", url, err)
 		return
 	}
 	defer res.Body.Close()
@@ -673,7 +671,6 @@ func MakeRequestWithErrorMsg(website Website, url string, username string) {
 
 	res, err := client.Do(req)
 	if err != nil {
-		fmt.Printf("Error making GET request to %s: %v\n", url, err)
 		return
 	}
 	defer res.Body.Close()
@@ -743,7 +740,6 @@ func MakeRequestWithProfilePresence(website Website, url string, username string
 
 	res, err := client.Do(req)
 	if err != nil {
-		fmt.Printf("Error making GET request to %s: %v\n", url, err)
 		return
 	}
 	defer res.Body.Close()
