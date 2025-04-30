@@ -515,14 +515,23 @@ func MakeRequestWithResponseURL(website Website, url string, username string) {
 	// To mitigate this, we can examine the response url to check for non-existing profiles.
 	// Usually, a response url pointing to where the profile should be is returned for existing profiles.
 	// If the response url is not pointing to where the profile should be, then the profile does not exist.
-	
-	transport := &http.Transport{
-		TLSClientConfig: tlsConfig,
-	}
 
 	client := &http.Client{
-		Timeout:   120 * time.Second,
-		Transport: transport,
+    Timeout: 120 * time.Second,
+    Transport: &http.Transport {
+        TLSClientConfig: tlsConfig,
+        Proxy: http.ProxyFromEnvironment,
+        DialContext: (&net.Dialer{
+            Timeout:   30 * time.Second,
+            KeepAlive: 30 * time.Second,
+            DualStack: true,
+        }).DialContext,
+        MaxIdleConns:          100,
+        IdleConnTimeout:       90 * time.Second,
+        TLSHandshakeTimeout:   10 * time.Second,
+        ExpectContinueTimeout: 1 * time.Second,
+    	},
+    	Jar: nil,
 	}
 
 	if !website.FollowRedirects {
@@ -577,13 +586,23 @@ func MakeRequestWithResponseURL(website Website, url string, username string) {
 
 
 func MakeRequestWithErrorCode(website Website, url string, username string) {
-	transport := &http.Transport{
-		TLSClientConfig: tlsConfig,
-	}
 
 	client := &http.Client{
-		Timeout:   120 * time.Second,
-		Transport: transport,
+    Timeout: 120 * time.Second,
+    Transport: &http.Transport {
+        TLSClientConfig: tlsConfig,
+        Proxy: http.ProxyFromEnvironment,
+        DialContext: (&net.Dialer{
+            Timeout:   30 * time.Second,
+            KeepAlive: 30 * time.Second,
+            DualStack: true,
+        }).DialContext,
+        MaxIdleConns:          100,
+        IdleConnTimeout:       90 * time.Second,
+        TLSHandshakeTimeout:   10 * time.Second,
+        ExpectContinueTimeout: 1 * time.Second,
+    	},
+    	Jar: nil,
 	}
 
 	if !website.FollowRedirects {
@@ -635,13 +654,23 @@ func MakeRequestWithErrorCode(website Website, url string, username string) {
 }
 
 func MakeRequestWithErrorMsg(website Website, url string, username string) {
-	transport := &http.Transport{
-		TLSClientConfig: tlsConfig,
-	}
 
 	client := &http.Client{
-		Timeout:   120 * time.Second,
-		Transport: transport,
+    Timeout: 120 * time.Second,
+    Transport: &http.Transport {
+        TLSClientConfig: tlsConfig,
+        Proxy: http.ProxyFromEnvironment,
+        DialContext: (&net.Dialer{
+            Timeout:   30 * time.Second,
+            KeepAlive: 30 * time.Second,
+            DualStack: true,
+        }).DialContext,
+        MaxIdleConns:          100,
+        IdleConnTimeout:       90 * time.Second,
+        TLSHandshakeTimeout:   10 * time.Second,
+        ExpectContinueTimeout: 1 * time.Second,
+    	},
+    	Jar: nil,
 	}
 
 	if !website.FollowRedirects {
@@ -704,13 +733,22 @@ func MakeRequestWithProfilePresence(website Website, url string, username string
 	// but do not have an indicator when a profile does not exist.
 	// If a profile indicator is not found, we can assume that the profile does not exist.
 
-	transport := &http.Transport{
-		TLSClientConfig: tlsConfig,
-	}
-
 	client := &http.Client{
-		Timeout:   120 * time.Second,
-		Transport: transport,
+    Timeout: 120 * time.Second,
+    Transport: &http.Transport {
+        TLSClientConfig: tlsConfig,
+        Proxy: http.ProxyFromEnvironment,
+        DialContext: (&net.Dialer{
+            Timeout:   30 * time.Second,
+            KeepAlive: 30 * time.Second,
+            DualStack: true,
+        }).DialContext,
+        MaxIdleConns:          100,
+        IdleConnTimeout:       90 * time.Second,
+        TLSHandshakeTimeout:   10 * time.Second,
+        ExpectContinueTimeout: 1 * time.Second,
+    	},
+    	Jar: nil,
 	}
 
 	if !website.FollowRedirects {

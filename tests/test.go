@@ -5,6 +5,7 @@ import (
 	"os"
 	"fmt"
 	"log"
+	"net"
 	"time"
 	"bufio"
 	"strconv"
@@ -107,15 +108,22 @@ func Mode0(url string) {
 	fmt.Println(Yellow+"[*] Testing URL:", url+Reset)
 	fmt.Println(Yellow + "[*] Mode: 0 (Status Code)" + Reset)
 
-	transport := &http.Transport{
-		TLSClientConfig: &tls.Config{
-			MinVersion: tls.VersionTLS12,
-		},
-	}
-
 	client := &http.Client{
-		Timeout:   85 * time.Second,
-		Transport: transport,
+    Timeout: 120 * time.Second,
+    Transport: &http.Transport {
+        TLSClientConfig: tlsConfig,
+        Proxy: http.ProxyFromEnvironment,
+        DialContext: (&net.Dialer{
+            Timeout:   30 * time.Second,
+            KeepAlive: 30 * time.Second,
+            DualStack: true,
+        }).DialContext,
+        MaxIdleConns:          100,
+        IdleConnTimeout:       90 * time.Second,
+        TLSHandshakeTimeout:   10 * time.Second,
+        ExpectContinueTimeout: 1 * time.Second,
+    	},
+    	Jar: nil,
 	}
 
 	req, err := http.NewRequest(http.MethodGet, url, nil)
@@ -140,15 +148,22 @@ func Mode1(url string) {
 	fmt.Println(Yellow+"[*] Testing URL:", url+Reset)
 	fmt.Println(Yellow + "[*] Mode: 1 (Response Body)" + Reset)
 
-	transport := &http.Transport{
-		TLSClientConfig: &tls.Config{
-			MinVersion: tls.VersionTLS12,
-		},
-	}
-
 	client := &http.Client{
-		Timeout:   85 * time.Second,
-		Transport: transport,
+    Timeout: 120 * time.Second,
+    Transport: &http.Transport {
+        TLSClientConfig: tlsConfig,
+        Proxy: http.ProxyFromEnvironment,
+        DialContext: (&net.Dialer{
+            Timeout:   30 * time.Second,
+            KeepAlive: 30 * time.Second,
+            DualStack: true,
+        }).DialContext,
+        MaxIdleConns:          100,
+        IdleConnTimeout:       90 * time.Second,
+        TLSHandshakeTimeout:   10 * time.Second,
+        ExpectContinueTimeout: 1 * time.Second,
+    	},
+    	Jar: nil,
 	}
 
 	req, err := http.NewRequest(http.MethodGet, url, nil)
@@ -217,15 +232,23 @@ func Mode3(url string) {
 	fmt.Println(Yellow+"[*] Testing URL:", url+Reset)
 	fmt.Println(Yellow + "[*] Mode: 3 (Response Body Without Following Redirects)" + Reset)
 
-	transport := &http.Transport{
-		TLSClientConfig: &tls.Config{
-			MinVersion: tls.VersionTLS12,
-		},
-	}
 
 	client := &http.Client{
-		Timeout:   85 * time.Second,
-		Transport: transport,
+    Timeout: 120 * time.Second,
+    Transport: &http.Transport {
+        TLSClientConfig: tlsConfig,
+        Proxy: http.ProxyFromEnvironment,
+        DialContext: (&net.Dialer{
+            Timeout:   30 * time.Second,
+            KeepAlive: 30 * time.Second,
+            DualStack: true,
+        }).DialContext,
+        MaxIdleConns:          100,
+        IdleConnTimeout:       90 * time.Second,
+        TLSHandshakeTimeout:   10 * time.Second,
+        ExpectContinueTimeout: 1 * time.Second,
+    	},
+    	Jar: nil,
 	}
 
 	client.CheckRedirect = func(req *http.Request, via []*http.Request) error {
@@ -262,15 +285,23 @@ func Mode4(url string, errorMsg string) {
 	fmt.Println(Yellow+"[*] Testing error message:", errorMsg+Reset)
 	fmt.Println(Yellow + "[*] Mode: 4 (Error Message Check)" + Reset)
 
-	transport := &http.Transport{
-		TLSClientConfig: &tls.Config{
-			MinVersion: tls.VersionTLS12,
-		},
-	}
 
 	client := &http.Client{
-		Timeout:   85 * time.Second,
-		Transport: transport,
+    Timeout: 120 * time.Second,
+    Transport: &http.Transport {
+        TLSClientConfig: tlsConfig,
+        Proxy: http.ProxyFromEnvironment,
+        DialContext: (&net.Dialer{
+            Timeout:   30 * time.Second,
+            KeepAlive: 30 * time.Second,
+            DualStack: true,
+        }).DialContext,
+        MaxIdleConns:          100,
+        IdleConnTimeout:       90 * time.Second,
+        TLSHandshakeTimeout:   10 * time.Second,
+        ExpectContinueTimeout: 1 * time.Second,
+    	},
+    	Jar: nil,
 	}
 
 	req, err := http.NewRequest(http.MethodGet, url, nil)
