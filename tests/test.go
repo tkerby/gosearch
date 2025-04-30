@@ -5,6 +5,7 @@ import (
 	"os"
 	"fmt"
 	"log"
+	"net"
 	"time"
 	"bufio"
 	"strconv"
@@ -24,7 +25,24 @@ const (
 )
 
 // User-Agent header used in requests.
-const UserAgent = "Mozilla/5.0 (X11; Linux x86_64; rv:125.0) Gecko/20100101 Firefox/125.0"
+const UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:138.0) Gecko/20100101 Firefox/138.0"
+
+var tlsConfig = &tls.Config{
+    MinVersion: tls.VersionTLS12,
+    CipherSuites: []uint16{
+        tls.TLS_AES_128_GCM_SHA256,
+        tls.TLS_AES_256_GCM_SHA384,
+        tls.TLS_CHACHA20_POLY1305_SHA256,
+        tls.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
+        tls.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
+        tls.TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,
+        tls.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
+        tls.TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256,
+        tls.TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256,
+    },
+    CurvePreferences: []tls.CurveID{tls.X25519, tls.CurveP256, tls.CurveP384},
+    NextProtos: []string{"http/1.1"},
+}
 
 type Website struct {
 	Name            string   `json:"name"`
@@ -90,15 +108,22 @@ func Mode0(url string) {
 	fmt.Println(Yellow+"[*] Testing URL:", url+Reset)
 	fmt.Println(Yellow + "[*] Mode: 0 (Status Code)" + Reset)
 
-	transport := &http.Transport{
-		TLSClientConfig: &tls.Config{
-			MinVersion: tls.VersionTLS12,
-		},
-	}
-
 	client := &http.Client{
-		Timeout:   85 * time.Second,
-		Transport: transport,
+    Timeout: 120 * time.Second,
+    Transport: &http.Transport {
+        TLSClientConfig: tlsConfig,
+        Proxy: http.ProxyFromEnvironment,
+        DialContext: (&net.Dialer{
+            Timeout:   30 * time.Second,
+            KeepAlive: 30 * time.Second,
+            DualStack: true,
+        }).DialContext,
+        MaxIdleConns:          100,
+        IdleConnTimeout:       90 * time.Second,
+        TLSHandshakeTimeout:   10 * time.Second,
+        ExpectContinueTimeout: 1 * time.Second,
+    	},
+    	Jar: nil,
 	}
 
 	req, err := http.NewRequest(http.MethodGet, url, nil)
@@ -107,6 +132,16 @@ func Mode0(url string) {
 	}
 
 	req.Header.Set("User-Agent", UserAgent)
+	req.Header.Set("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8")
+	req.Header.Set("Accept-Language", "en-US,en;q=0.5")
+	req.Header.Set("Accept-Encoding", "gzip, deflate, br")
+	req.Header.Set("Connection", "keep-alive")
+	req.Header.Set("Upgrade-Insecure-Requests", "1")
+	req.Header.Set("Sec-Fetch-Dest", "document")
+	req.Header.Set("Sec-Fetch-Mode", "navigate")
+	req.Header.Set("Sec-Fetch-Site", "none")
+	req.Header.Set("Sec-Fetch-User", "?1")
+	req.Header.Set("Cache-Control", "max-age=0")
 
 	res, err := client.Do(req)
 	if err != nil {
@@ -123,15 +158,22 @@ func Mode1(url string) {
 	fmt.Println(Yellow+"[*] Testing URL:", url+Reset)
 	fmt.Println(Yellow + "[*] Mode: 1 (Response Body)" + Reset)
 
-	transport := &http.Transport{
-		TLSClientConfig: &tls.Config{
-			MinVersion: tls.VersionTLS12,
-		},
-	}
-
 	client := &http.Client{
-		Timeout:   85 * time.Second,
-		Transport: transport,
+    Timeout: 120 * time.Second,
+    Transport: &http.Transport {
+        TLSClientConfig: tlsConfig,
+        Proxy: http.ProxyFromEnvironment,
+        DialContext: (&net.Dialer{
+            Timeout:   30 * time.Second,
+            KeepAlive: 30 * time.Second,
+            DualStack: true,
+        }).DialContext,
+        MaxIdleConns:          100,
+        IdleConnTimeout:       90 * time.Second,
+        TLSHandshakeTimeout:   10 * time.Second,
+        ExpectContinueTimeout: 1 * time.Second,
+    	},
+    	Jar: nil,
 	}
 
 	req, err := http.NewRequest(http.MethodGet, url, nil)
@@ -140,6 +182,16 @@ func Mode1(url string) {
 	}
 
 	req.Header.Set("User-Agent", UserAgent)
+	req.Header.Set("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8")
+	req.Header.Set("Accept-Language", "en-US,en;q=0.5")
+	req.Header.Set("Accept-Encoding", "gzip, deflate, br")
+	req.Header.Set("Connection", "keep-alive")
+	req.Header.Set("Upgrade-Insecure-Requests", "1")
+	req.Header.Set("Sec-Fetch-Dest", "document")
+	req.Header.Set("Sec-Fetch-Mode", "navigate")
+	req.Header.Set("Sec-Fetch-Site", "none")
+	req.Header.Set("Sec-Fetch-User", "?1")
+	req.Header.Set("Cache-Control", "max-age=0")
 
 	res, err := client.Do(req)
 	if err != nil {
@@ -184,6 +236,16 @@ func Mode2(url string) {
 	}
 
 	req.Header.Set("User-Agent", UserAgent)
+	req.Header.Set("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8")
+	req.Header.Set("Accept-Language", "en-US,en;q=0.5")
+	req.Header.Set("Accept-Encoding", "gzip, deflate, br")
+	req.Header.Set("Connection", "keep-alive")
+	req.Header.Set("Upgrade-Insecure-Requests", "1")
+	req.Header.Set("Sec-Fetch-Dest", "document")
+	req.Header.Set("Sec-Fetch-Mode", "navigate")
+	req.Header.Set("Sec-Fetch-Site", "none")
+	req.Header.Set("Sec-Fetch-User", "?1")
+	req.Header.Set("Cache-Control", "max-age=0")
 
 	res, err := client.Do(req)
 	if err != nil {
@@ -200,15 +262,23 @@ func Mode3(url string) {
 	fmt.Println(Yellow+"[*] Testing URL:", url+Reset)
 	fmt.Println(Yellow + "[*] Mode: 3 (Response Body Without Following Redirects)" + Reset)
 
-	transport := &http.Transport{
-		TLSClientConfig: &tls.Config{
-			MinVersion: tls.VersionTLS12,
-		},
-	}
 
 	client := &http.Client{
-		Timeout:   85 * time.Second,
-		Transport: transport,
+    Timeout: 120 * time.Second,
+    Transport: &http.Transport {
+        TLSClientConfig: tlsConfig,
+        Proxy: http.ProxyFromEnvironment,
+        DialContext: (&net.Dialer{
+            Timeout:   30 * time.Second,
+            KeepAlive: 30 * time.Second,
+            DualStack: true,
+        }).DialContext,
+        MaxIdleConns:          100,
+        IdleConnTimeout:       90 * time.Second,
+        TLSHandshakeTimeout:   10 * time.Second,
+        ExpectContinueTimeout: 1 * time.Second,
+    	},
+    	Jar: nil,
 	}
 
 	client.CheckRedirect = func(req *http.Request, via []*http.Request) error {
@@ -221,6 +291,16 @@ func Mode3(url string) {
 	}
 
 	req.Header.Set("User-Agent", UserAgent)
+	req.Header.Set("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8")
+	req.Header.Set("Accept-Language", "en-US,en;q=0.5")
+	req.Header.Set("Accept-Encoding", "gzip, deflate, br")
+	req.Header.Set("Connection", "keep-alive")
+	req.Header.Set("Upgrade-Insecure-Requests", "1")
+	req.Header.Set("Sec-Fetch-Dest", "document")
+	req.Header.Set("Sec-Fetch-Mode", "navigate")
+	req.Header.Set("Sec-Fetch-Site", "none")
+	req.Header.Set("Sec-Fetch-User", "?1")
+	req.Header.Set("Cache-Control", "max-age=0")
 
 	res, err := client.Do(req)
 	if err != nil {
@@ -245,15 +325,23 @@ func Mode4(url string, errorMsg string) {
 	fmt.Println(Yellow+"[*] Testing error message:", errorMsg+Reset)
 	fmt.Println(Yellow + "[*] Mode: 4 (Error Message Check)" + Reset)
 
-	transport := &http.Transport{
-		TLSClientConfig: &tls.Config{
-			MinVersion: tls.VersionTLS12,
-		},
-	}
 
 	client := &http.Client{
-		Timeout:   85 * time.Second,
-		Transport: transport,
+    Timeout: 120 * time.Second,
+    Transport: &http.Transport {
+        TLSClientConfig: tlsConfig,
+        Proxy: http.ProxyFromEnvironment,
+        DialContext: (&net.Dialer{
+            Timeout:   30 * time.Second,
+            KeepAlive: 30 * time.Second,
+            DualStack: true,
+        }).DialContext,
+        MaxIdleConns:          100,
+        IdleConnTimeout:       90 * time.Second,
+        TLSHandshakeTimeout:   10 * time.Second,
+        ExpectContinueTimeout: 1 * time.Second,
+    	},
+    	Jar: nil,
 	}
 
 	req, err := http.NewRequest(http.MethodGet, url, nil)
@@ -262,6 +350,16 @@ func Mode4(url string, errorMsg string) {
 	}
 
 	req.Header.Set("User-Agent", UserAgent)
+	req.Header.Set("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8")
+	req.Header.Set("Accept-Language", "en-US,en;q=0.5")
+	req.Header.Set("Accept-Encoding", "gzip, deflate, br")
+	req.Header.Set("Connection", "keep-alive")
+	req.Header.Set("Upgrade-Insecure-Requests", "1")
+	req.Header.Set("Sec-Fetch-Dest", "document")
+	req.Header.Set("Sec-Fetch-Mode", "navigate")
+	req.Header.Set("Sec-Fetch-Site", "none")
+	req.Header.Set("Sec-Fetch-User", "?1")
+	req.Header.Set("Cache-Control", "max-age=0")
 
 	res, err := client.Do(req)
 	if err != nil {

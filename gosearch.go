@@ -42,22 +42,26 @@ const ASCII = `
 `
 
 // User-Agent header used in requests.
-const DefaultUserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:135.0) Gecko/20100101 Firefox/135.0"
+const DefaultUserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:138.0) Gecko/20100101 Firefox/138.0"
 
 // GoSearch version.
 const VERSION = "v1.0.0"
 
 var tlsConfig = &tls.Config{
-	MinVersion: tls.VersionTLS12,
-	CipherSuites: []uint16{
-			tls.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
-			tls.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
-			tls.TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,
-			tls.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
-			tls.TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256,
-			tls.TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256,
-	},
-	CurvePreferences:         []tls.CurveID{tls.X25519, tls.CurveP256, tls.CurveP384},
+    MinVersion: tls.VersionTLS12,
+    CipherSuites: []uint16{
+        tls.TLS_AES_128_GCM_SHA256,
+        tls.TLS_AES_256_GCM_SHA384,
+        tls.TLS_CHACHA20_POLY1305_SHA256,
+        tls.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
+        tls.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
+        tls.TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,
+        tls.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
+        tls.TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256,
+        tls.TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256,
+    },
+    CurvePreferences: []tls.CurveID{tls.X25519, tls.CurveP256, tls.CurveP384},
+    NextProtos: []string{"http/1.1"},
 }
 
 var count atomic.Uint32
@@ -335,6 +339,16 @@ func SearchDomains(username string, domains []string, wg *sync.WaitGroup) {
 			continue
 		}
 		req.Header.Set("User-Agent", DefaultUserAgent)
+		req.Header.Set("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8")
+		req.Header.Set("Accept-Language", "en-US,en;q=0.5")
+		req.Header.Set("Accept-Encoding", "gzip, deflate, br")
+		req.Header.Set("Connection", "keep-alive")
+		req.Header.Set("Upgrade-Insecure-Requests", "1")
+		req.Header.Set("Sec-Fetch-Dest", "document")
+		req.Header.Set("Sec-Fetch-Mode", "navigate")
+		req.Header.Set("Sec-Fetch-Site", "none")
+		req.Header.Set("Sec-Fetch-User", "?1")
+		req.Header.Set("Cache-Control", "max-age=0")
 
 		resp, err := client.Do(req)
 		if err != nil {
@@ -511,14 +525,23 @@ func MakeRequestWithResponseURL(website Website, url string, username string) {
 	// To mitigate this, we can examine the response url to check for non-existing profiles.
 	// Usually, a response url pointing to where the profile should be is returned for existing profiles.
 	// If the response url is not pointing to where the profile should be, then the profile does not exist.
-	
-	transport := &http.Transport{
-		TLSClientConfig: tlsConfig,
-	}
 
 	client := &http.Client{
-		Timeout:   120 * time.Second,
-		Transport: transport,
+    Timeout: 120 * time.Second,
+    Transport: &http.Transport {
+        TLSClientConfig: tlsConfig,
+        Proxy: http.ProxyFromEnvironment,
+        DialContext: (&net.Dialer{
+            Timeout:   30 * time.Second,
+            KeepAlive: 30 * time.Second,
+            DualStack: true,
+        }).DialContext,
+        MaxIdleConns:          100,
+        IdleConnTimeout:       90 * time.Second,
+        TLSHandshakeTimeout:   10 * time.Second,
+        ExpectContinueTimeout: 1 * time.Second,
+    	},
+    	Jar: nil,
 	}
 
 	if !website.FollowRedirects {
@@ -539,6 +562,16 @@ func MakeRequestWithResponseURL(website Website, url string, username string) {
 	}
 
 	req.Header.Set("User-Agent", userAgent)
+	req.Header.Set("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8")
+	req.Header.Set("Accept-Language", "en-US,en;q=0.5")
+	req.Header.Set("Accept-Encoding", "gzip, deflate, br")
+	req.Header.Set("Connection", "keep-alive")
+	req.Header.Set("Upgrade-Insecure-Requests", "1")
+	req.Header.Set("Sec-Fetch-Dest", "document")
+	req.Header.Set("Sec-Fetch-Mode", "navigate")
+	req.Header.Set("Sec-Fetch-Site", "none")
+	req.Header.Set("Sec-Fetch-User", "?1")
+	req.Header.Set("Cache-Control", "max-age=0")
 
 	if website.Cookies != nil {
 		for _, cookie := range website.Cookies {
@@ -573,13 +606,23 @@ func MakeRequestWithResponseURL(website Website, url string, username string) {
 
 
 func MakeRequestWithErrorCode(website Website, url string, username string) {
-	transport := &http.Transport{
-		TLSClientConfig: tlsConfig,
-	}
 
 	client := &http.Client{
-		Timeout:   120 * time.Second,
-		Transport: transport,
+    Timeout: 120 * time.Second,
+    Transport: &http.Transport {
+        TLSClientConfig: tlsConfig,
+        Proxy: http.ProxyFromEnvironment,
+        DialContext: (&net.Dialer{
+            Timeout:   30 * time.Second,
+            KeepAlive: 30 * time.Second,
+            DualStack: true,
+        }).DialContext,
+        MaxIdleConns:          100,
+        IdleConnTimeout:       90 * time.Second,
+        TLSHandshakeTimeout:   10 * time.Second,
+        ExpectContinueTimeout: 1 * time.Second,
+    	},
+    	Jar: nil,
 	}
 
 	if !website.FollowRedirects {
@@ -600,6 +643,16 @@ func MakeRequestWithErrorCode(website Website, url string, username string) {
 	}
 
 	req.Header.Set("User-Agent", userAgent)
+	req.Header.Set("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8")
+	req.Header.Set("Accept-Language", "en-US,en;q=0.5")
+	req.Header.Set("Accept-Encoding", "gzip, deflate, br")
+	req.Header.Set("Connection", "keep-alive")
+	req.Header.Set("Upgrade-Insecure-Requests", "1")
+	req.Header.Set("Sec-Fetch-Dest", "document")
+	req.Header.Set("Sec-Fetch-Mode", "navigate")
+	req.Header.Set("Sec-Fetch-Site", "none")
+	req.Header.Set("Sec-Fetch-User", "?1")
+	req.Header.Set("Cache-Control", "max-age=0")
 
 	if website.Cookies != nil {
 		for _, cookie := range website.Cookies {
@@ -631,13 +684,23 @@ func MakeRequestWithErrorCode(website Website, url string, username string) {
 }
 
 func MakeRequestWithErrorMsg(website Website, url string, username string) {
-	transport := &http.Transport{
-		TLSClientConfig: tlsConfig,
-	}
 
 	client := &http.Client{
-		Timeout:   120 * time.Second,
-		Transport: transport,
+    Timeout: 120 * time.Second,
+    Transport: &http.Transport {
+        TLSClientConfig: tlsConfig,
+        Proxy: http.ProxyFromEnvironment,
+        DialContext: (&net.Dialer{
+            Timeout:   30 * time.Second,
+            KeepAlive: 30 * time.Second,
+            DualStack: true,
+        }).DialContext,
+        MaxIdleConns:          100,
+        IdleConnTimeout:       90 * time.Second,
+        TLSHandshakeTimeout:   10 * time.Second,
+        ExpectContinueTimeout: 1 * time.Second,
+    	},
+    	Jar: nil,
 	}
 
 	if !website.FollowRedirects {
@@ -658,6 +721,16 @@ func MakeRequestWithErrorMsg(website Website, url string, username string) {
 	}
 
 	req.Header.Set("User-Agent", userAgent)
+	req.Header.Set("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8")
+	req.Header.Set("Accept-Language", "en-US,en;q=0.5")
+	req.Header.Set("Accept-Encoding", "gzip, deflate, br")
+	req.Header.Set("Connection", "keep-alive")
+	req.Header.Set("Upgrade-Insecure-Requests", "1")
+	req.Header.Set("Sec-Fetch-Dest", "document")
+	req.Header.Set("Sec-Fetch-Mode", "navigate")
+	req.Header.Set("Sec-Fetch-Site", "none")
+	req.Header.Set("Sec-Fetch-User", "?1")
+	req.Header.Set("Cache-Control", "max-age=0")
 
 	if website.Cookies != nil {
 		for _, cookie := range website.Cookies {
@@ -700,13 +773,22 @@ func MakeRequestWithProfilePresence(website Website, url string, username string
 	// but do not have an indicator when a profile does not exist.
 	// If a profile indicator is not found, we can assume that the profile does not exist.
 
-	transport := &http.Transport{
-		TLSClientConfig: tlsConfig,
-	}
-
 	client := &http.Client{
-		Timeout:   120 * time.Second,
-		Transport: transport,
+    Timeout: 120 * time.Second,
+    Transport: &http.Transport {
+        TLSClientConfig: tlsConfig,
+        Proxy: http.ProxyFromEnvironment,
+        DialContext: (&net.Dialer{
+            Timeout:   30 * time.Second,
+            KeepAlive: 30 * time.Second,
+            DualStack: true,
+        }).DialContext,
+        MaxIdleConns:          100,
+        IdleConnTimeout:       90 * time.Second,
+        TLSHandshakeTimeout:   10 * time.Second,
+        ExpectContinueTimeout: 1 * time.Second,
+    	},
+    	Jar: nil,
 	}
 
 	if !website.FollowRedirects {
@@ -727,6 +809,16 @@ func MakeRequestWithProfilePresence(website Website, url string, username string
 	}
 
 	req.Header.Set("User-Agent", userAgent)
+	req.Header.Set("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8")
+	req.Header.Set("Accept-Language", "en-US,en;q=0.5")
+	req.Header.Set("Accept-Encoding", "gzip, deflate, br")
+	req.Header.Set("Connection", "keep-alive")
+	req.Header.Set("Upgrade-Insecure-Requests", "1")
+	req.Header.Set("Sec-Fetch-Dest", "document")
+	req.Header.Set("Sec-Fetch-Mode", "navigate")
+	req.Header.Set("Sec-Fetch-Site", "none")
+	req.Header.Set("Sec-Fetch-User", "?1")
+	req.Header.Set("Cache-Control", "max-age=0")
 
 	if website.Cookies != nil {
 		for _, cookie := range website.Cookies {
