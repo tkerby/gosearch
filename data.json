@@ -403,12 +403,6 @@
       "errorMsg": "<title>Steam Community :: Error</title>"
     },
     {
-      "name": "Dev Community",
-      "base_url": "https://dev.to/{}",
-      "follow_redirects": true,
-      "errorType": "status_code"
-    },
-    {
       "name": "Daily.dev",
       "base_url": "https://app.daily.dev/{}",
       "follow_redirects": true,
