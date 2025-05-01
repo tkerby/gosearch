@@ -12,6 +12,10 @@ import (
 	"strings"
 	"net/http"
 	"crypto/tls"
+	"compress/gzip"
+	"compress/zlib"
+
+	"github.com/andybalholm/brotli"
 
 	"github.com/bytedance/sonic"
 )
@@ -198,12 +202,40 @@ func Mode1(url string) {
 		log.Fatal(err)
 	}
 
+	var reader io.ReadCloser
+
+	switch res.Header.Get("Content-Encoding") {
+	case "gzip":
+		gzReader, err := gzip.NewReader(res.Body)
+		if err != nil {
+			fmt.Printf("Error creating gzip reader: %v\n", err)
+			return
+		}
+		reader = gzReader
+	case "deflate":
+		zlibReader, err := zlib.NewReader(res.Body)
+		if err != nil {
+			fmt.Printf("Error creating deflate reader: %v\n", err)
+			return
+		}
+		reader = zlibReader
+	case "br":
+		reader = io.NopCloser(brotli.NewReader(res.Body))
+	default:
+		reader = res.Body
+	}
 	defer res.Body.Close()
 
-	body, err := io.ReadAll(res.Body)
-	if err != nil {
-		log.Fatal(err)
+	if res.StatusCode >= 400 {
+		return
 	}
+
+	body, err := io.ReadAll(reader)
+	if err != nil {
+		fmt.Printf("Error reading response body: %v\n", err)
+		return
+	}
+
 
 	os.WriteFile("response.txt", body, os.ModePerm)
 	fmt.Println(Green+"[+] Response:", res.Status+Reset)
@@ -307,11 +339,38 @@ func Mode3(url string) {
 		log.Fatal(err)
 	}
 
+	var reader io.ReadCloser
+
+	switch res.Header.Get("Content-Encoding") {
+	case "gzip":
+		gzReader, err := gzip.NewReader(res.Body)
+		if err != nil {
+			fmt.Printf("Error creating gzip reader: %v\n", err)
+			return
+		}
+		reader = gzReader
+	case "deflate":
+		zlibReader, err := zlib.NewReader(res.Body)
+		if err != nil {
+			fmt.Printf("Error creating deflate reader: %v\n", err)
+			return
+		}
+		reader = zlibReader
+	case "br":
+		reader = io.NopCloser(brotli.NewReader(res.Body))
+	default:
+		reader = res.Body
+	}
 	defer res.Body.Close()
 
-	body, err := io.ReadAll(res.Body)
+	if res.StatusCode >= 400 {
+		return
+	}
+
+	body, err := io.ReadAll(reader)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Printf("Error reading response body: %v\n", err)
+		return
 	}
 
 	os.WriteFile("response.txt", body, os.ModePerm)
@@ -320,7 +379,7 @@ func Mode3(url string) {
 	fmt.Println(Green + "[+] Saved response to response.txt" + Reset)
 }
 
-func Mode4(url string, errorMsg string) {
+ffunc Mode4(url string, errorMsg string) {
 	fmt.Println(Yellow+"[*] Testing URL:", url+Reset)
 	fmt.Println(Yellow+"[*] Testing error message:", errorMsg+Reset)
 	fmt.Println(Yellow + "[*] Mode: 4 (Error Message Check)" + Reset)
@@ -366,11 +425,38 @@ func Mode4(url string, errorMsg string) {
 		log.Fatal(err)
 	}
 
+	var reader io.ReadCloser
+
+	switch res.Header.Get("Content-Encoding") {
+	case "gzip":
+		gzReader, err := gzip.NewReader(res.Body)
+		if err != nil {
+			fmt.Printf("Error creating gzip reader: %v\n", err)
+			return
+		}
+		reader = gzReader
+	case "deflate":
+		zlibReader, err := zlib.NewReader(res.Body)
+		if err != nil {
+			fmt.Printf("Error creating deflate reader: %v\n", err)
+			return
+		}
+		reader = zlibReader
+	case "br":
+		reader = io.NopCloser(brotli.NewReader(res.Body))
+	default:
+		reader = res.Body
+	}
 	defer res.Body.Close()
 
-	body, err := io.ReadAll(res.Body)
+	if res.StatusCode >= 400 {
+		return
+	}
+
+	body, err := io.ReadAll(reader)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Printf("Error reading response body: %v\n", err)
+		return
 	}
 
 	bodyStr := string(body)
@@ -382,7 +468,7 @@ func Mode4(url string, errorMsg string) {
     } else {
       fmt.Println(Red+"[-] Error message not found in response body: " + errorMsg + "\n[-] This means if a profile does not exist on %s", url, "I CANNOT detect it!" + Reset)
     }
-	}
+}
 
 func main() {
 
