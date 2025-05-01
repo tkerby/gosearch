@@ -751,9 +751,19 @@ func MakeRequestWithErrorMsg(website Website, url string, username string) {
 
 	switch res.Header.Get("Content-Encoding") {
 	case "gzip":
-		reader, err = gzip.NewReader(res.Body)
+		gzReader, err := gzip.NewReader(res.Body)
+		if err != nil {
+			fmt.Printf("Error creating gzip reader: %v\n", err)
+			return
+		}
+		reader = gzReader
 	case "deflate":
-		reader, err = zlib.NewReader(res.Body)
+		zlibReader, err := zlib.NewReader(res.Body)
+		if err != nil {
+			fmt.Printf("Error creating deflate reader: %v\n", err)
+			return
+		}
+		reader = zlibReader
 	case "br":
 		reader = io.NopCloser(brotli.NewReader(res.Body))
 	default:
