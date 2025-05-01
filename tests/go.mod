@@ -2,7 +2,10 @@ module tests
 
 go 1.23.3
 
-require github.com/bytedance/sonic v1.12.8
+require (
+	github.com/andybalholm/brotli v1.1.1
+	github.com/bytedance/sonic v1.12.8
+)
 
 require (
 	github.com/bytedance/sonic/loader v0.2.3 // indirect
