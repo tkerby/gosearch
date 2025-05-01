@@ -129,7 +129,7 @@ func UnmarshalJSON() (Data, error) {
 	// 2. Read the latest data.json file from the repository
 	// Bonus: it does not download the data.json file, it just reads it from the repository.
 
-	// err := os.Remove("data.json")
+	err := os.Remove("data.json")
 	if err != nil && !os.IsNotExist(err) {
 		return Data{}, fmt.Errorf("error deleting old data.json: %w", err)
 	}
