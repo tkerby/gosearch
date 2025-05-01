@@ -379,7 +379,7 @@ func Mode3(url string) {
 	fmt.Println(Green + "[+] Saved response to response.txt" + Reset)
 }
 
-ffunc Mode4(url string, errorMsg string) {
+func Mode4(url string, errorMsg string) {
 	fmt.Println(Yellow+"[*] Testing URL:", url+Reset)
 	fmt.Println(Yellow+"[*] Testing error message:", errorMsg+Reset)
 	fmt.Println(Yellow + "[*] Mode: 4 (Error Message Check)" + Reset)
