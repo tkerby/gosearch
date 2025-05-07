@@ -22,6 +22,9 @@
 ## Installation & Usage
 > [!WARNING]  
 > If you are on 32-bit architecture, please [use this branch](https://github.com/ibnaleem/gosearch/tree/32-bit) or GoSearch will fail to build. For an in-depth overview of this issue, please see [#72](https://github.com/ibnaleem/gosearch/issues/72)
+
+> [!WARNING]  
+> If you're using Windows Defender, it might mistakenly flag GoSearch as malware. Rest assured, GoSearch is not malicious; you can review the full source code yourself to verify this. For an in-depth overview of this issue, please see [#90](https://github.com/ibnaleem/gosearch/issues/90)
 ```
 $ go install github.com/ibnaleem/gosearch@latest
 ```
