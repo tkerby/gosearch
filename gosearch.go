@@ -48,29 +48,35 @@ const DefaultUserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:138.0) Ge
 // GoSearch version number.
 const VERSION = "v1.0.0"
 
-// tlsConfig defines the TLS configuration for secure HTTP requests.
-var tlsConfig = &tls.Config{
-	MinVersion: tls.VersionTLS12, // Minimum TLS version
-	CipherSuites: []uint16{ // Supported cipher suites
-		tls.TLS_AES_128_GCM_SHA256,
-		tls.TLS_AES_256_GCM_SHA384,
-		tls.TLS_CHACHA20_POLY1305_SHA256,
-		tls.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
-		tls.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
-		tls.TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,
-		tls.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
-		tls.TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256,
-		tls.TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256,
-	},
-	CurvePreferences: []tls.CurveID{tls.X25519, tls.CurveP256, tls.CurveP384}, // Preferred elliptic curves
-	NextProtos:       []string{"http/1.1"},                                    // Supported protocols
-}
+var (
 
-// count tracks the number of found profiles using atomic operations for thread safety.
-var count atomic.Uint32
+	// tlsConfig defines the TLS configuration for secure HTTP requests.
+	tlsConfig = &tls.Config{
+		MinVersion: tls.VersionTLS12, // Minimum TLS version
+		CipherSuites: []uint16{ // Supported cipher suites
+			tls.TLS_AES_128_GCM_SHA256,
+			tls.TLS_AES_256_GCM_SHA384,
+			tls.TLS_CHACHA20_POLY1305_SHA256,
+			tls.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
+			tls.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
+			tls.TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,
+			tls.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
+			tls.TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256,
+			tls.TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256,
+		},
+		CurvePreferences: []tls.CurveID{tls.X25519, tls.CurveP256, tls.CurveP384}, // Preferred elliptic curves
+		NextProtos:       []string{"http/1.1"},                                    // Supported protocols
+	}
 
-// CurrentTheme holds the active color theme for terminal output.
-var CurrentTheme = DarkTheme
+	// count tracks the number of found profiles using atomic operations for thread safety.
+	count atomic.Uint32
+
+	// CurrentTheme holds the active color theme for terminal output.
+	CurrentTheme = DarkTheme
+
+	// file mutext
+	mu sync.Mutex
+)
 
 // Theme defines color codes for terminal output styling.
 type Theme struct {
@@ -302,8 +308,12 @@ func main() {
 		} else {
 			apikey = *breachDirectoryAPIKeyLong
 		}
-		fmt.Println(strings.Repeat("⎯", 85))
-		strings.Repeat("⎯", 85)
+
+		fmt.Println()
+		fmt.Println()
+
+		//fmt.Println(strings.Repeat("⎯", 85))
+		//strings.Repeat("⎯", 85)
 		wg.Add(1)
 		go SearchBreachDirectory(username, apikey, &wg)
 		wg.Wait()
@@ -338,7 +348,9 @@ func main() {
 	table := tablewriter.NewTable(os.Stdout, tablewriter.WithRenderer(renderer.NewBlueprint(tw.Rendition{Borders: tw.BorderNone})))
 	table.Append(Bold("Number of profiles found"), Red(count.Load()))
 	table.Append(Bold("Total time taken"), Green(elapsed))
-	table.Render()
+	if err := table.Render(); err != nil {
+		log.Printf("table render failed: %v", err)
+	}
 	// fmt.Println(strings.Repeat("⎯", 85))
 
 	WriteToFile(username, ":: Number of profiles found              : "+strconv.Itoa(int(count.Load())))
@@ -391,6 +403,9 @@ func UnmarshalJSON() (Data, error) {
 
 // WriteToFile appends content to a file named after the username.
 func WriteToFile(username string, content string) {
+	mu.Lock()
+	defer mu.Unlock()
+
 	// Construct filename
 	filename := fmt.Sprintf("%s.txt", username)
 
@@ -524,7 +539,9 @@ func HudsonRock(username string, wg *sync.WaitGroup) {
 	}
 
 	// Render table to terminal
-	table.Render()
+	if err := table.Render(); err != nil {
+		log.Printf("table render failed: %v", err)
+	}
 
 	// Write all content to file
 	WriteToFile(username, fileContent.String())
@@ -637,7 +654,9 @@ func SearchDomains(username string, domains []string, wg *sync.WaitGroup) {
 	}
 
 	// Render table
-	table.Render()
+	if err := table.Render(); err != nil {
+		log.Printf("table render failed: %v", err)
+	}
 	// Display results
 	if domainCount > 0 {
 		Greenf("[+] Found %d domains with the username %s", domainCount, username).Println()
@@ -703,7 +722,9 @@ func SearchProxyNova(username string, wg *sync.WaitGroup) {
 				WriteToFile(username, "[+] Email: "+email+"\n"+"[+] Password: "+password+"\n\n")
 			}
 		}
-		table.Render()
+		if err := table.Render(); err != nil {
+			log.Printf("table render failed: %v", err)
+		}
 	} else {
 		Red("[-] No compromised passwords found for ", username, ".").Println()
 	}
