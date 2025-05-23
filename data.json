@@ -557,12 +557,6 @@
       "errorType": "status_code"
     },
     {
-      "name": "KASKUS",
-      "base_url": "https://www.kaskus.co.id/@{}",
-      "follow_redirects": true,
-      "errorType": "status_code"
-    },
-    {
       "name": "TripAdvisor Forums",
       "base_url": "https://www.tripadvisor.com/Profile/{}",
       "follow_redirects": true,
