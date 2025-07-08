@@ -1334,6 +1334,7 @@
     {
       "name": "Kaskus",
       "base_url": "https://www.kaskus.co.id/@{}",
+      "url_probe": "https://www.kaskus.co.id/api/users?username={}",
       "follow_redirects": true,
       "errorType": "status_code"
     },
