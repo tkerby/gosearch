@@ -1,4 +1,4 @@
-module github.com/ibnaleem/gosearch
+module github.com/tkerby/gosearch
 
 go 1.24.1
 
